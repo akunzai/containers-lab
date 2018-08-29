@@ -36,7 +36,7 @@ services:
   #   networks:
   #     - app-network
   web:
-    image: 'nginx'
+    image: 'nginx:stable'
     restart: always
     # 如果開放本機連接埠發生衝突,請自行調整埠號
     ports:
