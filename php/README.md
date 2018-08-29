@@ -64,8 +64,6 @@ docker-compose exec db mysql_secure_installation
 - 可調整 `docker-compose.yml` 開放 `db` 容器的本機連接埠，利用本機工具來管理資料庫
 - 可利用 `db` 容器本身的工具來管理資料庫
 
-> 己知管線指令目前在 Docker for Windows 的 Shell 環境可能無法正確地運作
-
 ```sh
 # 建立名為 test 的資料庫
 docker-compose exec db mysqladmin -u root create test

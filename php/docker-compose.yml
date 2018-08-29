@@ -56,9 +56,8 @@ services:
     restart: always
     # 如果要啟用 XDebug 遠端偵錯的話
     # environment:
-    #   # 如果 Docker 宿主(docker.for.win.localhost,docker.for.mac.localhost) 
-    #   # 不是 192.168.65.1 或不是偵錯本機容器時才需要修改
-    #   - XDEBUG_CONFIG=remote_host=192.168.65.1
+    #   # 如果不是偵錯本機容器時才需要修改
+    #   - XDEBUG_CONFIG=remote_host=host.docker.internal
     volumes:
       - ./web:/var/www/html
       - ./etc/php/php.ini:/usr/local/etc/php/php.ini:ro
