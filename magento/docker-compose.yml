@@ -2,7 +2,7 @@
 
 services:
   db:
-    image: 'mariadb:latest'
+    image: 'mariadb:10.3'
     restart: always
     environment:
       # 設定空密碼 (不建議用於正式環境)
@@ -14,10 +14,13 @@ services:
     # 如果要開放透過本機連接埠存取容器內的資料庫的話
     # ports:
     #  - '3306:3306'
+    # 當宿主是 Windows 作業系統時,需要以下配置以正確掛載 /var/lib/mysql
+    # https://github.com/docker-library/mariadb/issues/38#issuecomment-385845282
+    command: mysqld --innodb-flush-method=littlesync --innodb-use-native-aio=OFF --log_bin=ON
     volumes:
       - ./etc/mysql/conf.d:/etc/mysql/mariadb.conf.d:ro
       - ./etc/mysql/initdb.d:/docker-entrypoint-initdb.d
-      - magento-db:/var/lib/mysql
+      - ./db:/var/lib/mysql
     networks:
       - magento-network
   # 如果要使用 phpmyadmin 管理介面的話
@@ -97,9 +100,6 @@ services:
   #   networks:
   #     - magento-network
   #   command: cron -f
-    
-volumes:
-  magento-db:
 
 networks:
   magento-network:
