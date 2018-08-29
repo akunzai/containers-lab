@@ -166,8 +166,6 @@ modman clone git@git.gss.com.tw:gsscloud/Spgateway_MPG_Magento.git
 modman clone https://github.com/yireo/MageBridgeCore.git
 modman clone https://github.com/yireo/Yireo_CheckoutTester
 modman clone https://github.com/jacquesbh/jbh_cartmerge.git
-# 此模組應該已不需要安裝
-modman clone https://github.com/buric/Inchoo_FeaturedProducts.git
 # 列出己安裝的 modman 模組
 modman list
 ```
