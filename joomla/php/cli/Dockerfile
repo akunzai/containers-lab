@@ -4,23 +4,10 @@ RUN set -ex; \
   apt-get install -y --no-install-recommends \
     ca-certificates cron curl git mysql-client openssh-client unzip vim-tiny \
     libfreetype6 libjpeg62-turbo libpng16-16 libicu57 libmcrypt4 libxml2 libxslt1.1; \
-  buildDeps="gnupg2 dirmngr libfreetype6-dev libjpeg62-turbo-dev libpng-dev \
+  buildDeps="libfreetype6-dev libjpeg62-turbo-dev libpng-dev \
     libmcrypt-dev libicu-dev \
     libxml2-dev libxslt1-dev"; \
   apt-get install -y --no-install-recommends $buildDeps; \
-  ## Install gosu
-  GOSU_VERSION="1.10"; \
-  dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')"; \
-  curl -fSL -o /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch"; \
-  curl -fSL -o /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch.asc"; \
-  export GNUPGHOME="$(mktemp -d)"; \
-  # https://github.com/tianon/gosu/issues/39
-  for server in ha.pool.sks-keyservers.net hkp://p80.pool.sks-keyservers.net:80 keyserver.ubuntu.com hkp://keyserver.ubuntu.com:80 pgp.mit.edu; do \
-    gpg --keyserver "$server" --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 && break; \
-  done; \
-  gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu; \
-  rm -r "$GNUPGHOME" /usr/local/bin/gosu.asc; \
-  chmod +x /usr/local/bin/gosu; \
   ## Install PHP Extensions
   docker-php-ext-install -j$(nproc) \
     gd mcrypt mysqli opcache zip \
