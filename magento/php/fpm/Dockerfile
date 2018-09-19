@@ -1,4 +1,4 @@
-FROM php:7.0-fpm-alpine
+FROM php:7.2-fpm-alpine
 ENV LANG=C.UTF-8 \
     LC_ALL=C.UTF-8
 RUN set -ex; \
@@ -10,11 +10,11 @@ RUN set -ex; \
     icu-dev libxml2-dev libxslt-dev; \
   # Install PHP Extensions
   docker-php-ext-install -j$(getconf _NPROCESSORS_ONLN) \
-    gd mbstring mcrypt mysqli opcache zip \
+    gd mbstring mysqli opcache zip \
     intl pcntl pdo_mysql soap xsl; \
   # Install PECL Extensions
-  echo no | pecl install xdebug redis; \
-  docker-php-ext-enable xdebug redis; \
+  echo no | pecl install mcrypt-1.0.1 redis xdebug; \
+  docker-php-ext-enable mcrypt redis xdebug; \
   rm -rf /tmp/pear; \
   # Cleanup
   apk del .build-deps; \

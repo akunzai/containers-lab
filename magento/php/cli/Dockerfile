@@ -1,4 +1,4 @@
-FROM php:7.0-cli
+FROM php:7.2-cli
 ENV LANG=C.UTF-8 \
     LC_ALL=C.UTF-8
 RUN set -ex; \
@@ -12,11 +12,11 @@ RUN set -ex; \
   apt-get install -y --no-install-recommends $buildDeps; \
   ## Install PHP Extensions
   docker-php-ext-install -j$(nproc) \
-    gd mcrypt mysqli opcache zip \
+    gd mysqli opcache zip \
     intl pcntl pdo_mysql soap xsl; \
   ## Install PECL Extensions
-  echo no | pecl install redis; \
-  docker-php-ext-enable redis; \
+  echo no | pecl install mcrypt-1.0.1 redis; \
+  docker-php-ext-enable mcrypt redis; \
   rm -rf /tmp/pear; \
   ## Install Composer
   curl -fSL -o /tmp/composer-setup.php https://getcomposer.org/installer; \
