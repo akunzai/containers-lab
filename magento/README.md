@@ -66,11 +66,11 @@ docker-compose exec db mysql_secure_installation
 
 ```sh
 # 建立名為 magento 的資料庫
-docker-compose db mysqladmin -u root create magento
+docker-compose exec db mysqladmin -u root create magento
 # 匯入本機的 magento.sql 至容器內名為 magento 的資料庫內
-docker-compose db mysql -u root magento < magento.sql
+cat magento.sql | docker exec -i $(docker-compose ps -q db) mysql -u root magento
 # 匯入 gzip 壓縮的備份檔
-gzip -dc magento.sql.gz | docker-compose db mysql -u root magento
+gzip -dc magento.sql.gz | docker exec -i $(docker-compose ps -q db) mysql -u root magento
 ```
 
 ## PHP XDebug 遠端偵錯

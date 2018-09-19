@@ -68,9 +68,9 @@ docker-compose exec db mysql_secure_installation
 # 建立名為 test 的資料庫
 docker-compose exec db mysqladmin -u root create test
 # 匯入本機的 test.sql 至容器內名為 test 的資料庫內
-docker-compose exec db mysql -u root test < test.sql
+cat test.sql | docker exec -i $(docker-compose ps -q db) mysql -u root test
 # 匯入 gzip 壓縮的備份檔
-gzip -dc test.sql.gz | docker-compose exec db mysql -u root test
+gzip -dc test.sql.gz | docker exec -i $(docker-compose ps -q db) mysql -u root test
 ```
 
 ## PHP XDebug 遠端偵錯
