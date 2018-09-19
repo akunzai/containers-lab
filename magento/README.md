@@ -100,10 +100,17 @@ $ docker-compose run --rm cli bash
 
 ## 安裝 Magento
 
-> 請先啟動並執行完整應用
+> 建議安裝 magento >= 1.9.3.9 的版本以[相容 PHP 7.2](https://inchoo.net/magento/magento-1-official-php-7-2-patches/)
 
 ```sh
-# 以互動模式安裝 Magento
+# 直接至官網下載安裝檔後解壓縮
+tar xvjf ./magento-1.9.3.10-2018-09-18-03-21-10.tar.bz2
+rm -rf web
+mv magento web
+# 可能需要重啟應用
+docker-compose restart
+
+# 或是以互動模式安裝 Magento
 docker-compose run --rm cli n98-magerun install
 ```
 
@@ -135,14 +142,6 @@ docker-compose run --rm --user root cli bash
 > 以下指令請進入 cli 容器內執行
 
 ```sh
-# 初始化 mage 配置
-/var/www/html/mage mage-setup /var/www/html
-/var/www/html/mage config-set preferred_state stable
-# 利用 mage 安裝模組
-/var/www/html/mage install http://connect20.magentocommerce.com/community ASchroder_SMTPPro
-# 列出己安裝的 mage 模組
-/var/www/html/mage list-installed
-
 # 初始化 modman 配置
 modman init
 # 確保 ssh id 的權限
