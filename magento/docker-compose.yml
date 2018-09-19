@@ -79,8 +79,8 @@ services:
       - ./etc/php/php.ini:/usr/local/etc/php/php.ini:ro
       - ./etc/php/log.conf:/usr/local/etc/php-fpm.d/zz-log.conf:ro
       # 用來放置 git 相關配置檔以簽出非公開的 git 檔案庫
-      # - ./etc/git/.gitconfig:/var/www/.gitconfig
-      # - ./etc/git/.ssh:/var/www/.ssh
+      # - ~/.gitconfig:/var/www/.gitconfig
+      # - ~/.ssh:/var/www/.ssh
     depends_on:
       - db
     networks:
