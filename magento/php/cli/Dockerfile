@@ -1,4 +1,6 @@
 FROM php:7.0-cli
+ENV LANG C.UTF-8
+ENV LC_ALL C.UTF-8
 RUN set -ex; \
   apt-get update; \
   apt-get install -y --no-install-recommends \

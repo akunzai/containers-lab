@@ -1,4 +1,6 @@
 FROM php:7.0-fpm-alpine
+ENV LANG C.UTF-8
+ENV LC_ALL C.UTF-8
 RUN set -ex; \
   apk add --update freetype \
     libjpeg-turbo libmcrypt libpng \
