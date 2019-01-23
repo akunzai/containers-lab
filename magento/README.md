@@ -147,21 +147,21 @@ modman init
 # 確保 ssh id 的權限
 chmod 700 ~/.ssh/id_*
 # 利用 modman 安裝模組
-modman clone git@git.gss.com.tw:gsscloud/magento-translation-zh_TW.git
-modman clone git@git.gss.com.tw:gsscloud/magento-provisioning.git
-modman clone git@git.gss.com.tw:gsscloud/magento-priceRounding.git
-modman clone git@git.gss.com.tw:gsscloud/magento-ezCheckout.git
-modman clone git@git.gss.com.tw:gsscloud/magento-extapi2.git
-modman clone git@git.gss.com.tw:gsscloud/magento-enhancedEcommerce.git
-modman clone git@git.gss.com.tw:gsscloud/magento-customize-gsscloud.git
-modman clone git@git.gss.com.tw:gsscloud/magento-customerNotification.git
-modman clone git@git.gss.com.tw:gsscloud/magento-customerApi.git
-modman clone git@git.gss.com.tw:gsscloud/magento-affiliateplus-platinum.git
-modman clone git@git.gss.com.tw:gsscloud/magento-affiliateApi.git
-modman clone git@git.gss.com.tw:gsscloud/magento-affiliateplus-customize.git
+modman clone git@git.gss.com.tw:magento/magento-translation-zh_TW.git
+modman clone git@git.gss.com.tw:magento/magento-provisioning.git
+modman clone git@git.gss.com.tw:magento/magento-priceRounding.git
+modman clone git@git.gss.com.tw:magento/magento-ezCheckout.git
+modman clone git@git.gss.com.tw:magento/magento-extapi2.git
+modman clone git@git.gss.com.tw:magento/magento-enhancedEcommerce.git
+modman clone git@git.gss.com.tw:magento/magento-customize-gsscloud.git
+modman clone git@git.gss.com.tw:magento/magento-customerNotification.git
+modman clone git@git.gss.com.tw:magento/magento-customerApi.git
+modman clone git@git.gss.com.tw:magento/magento-affiliateplus-platinum.git
+modman clone git@git.gss.com.tw:magento/magento-affiliateApi.git
+modman clone git@git.gss.com.tw:magento/magento-affiliateplus-customize.git
 # 安裝此模組前需要先安裝並啟用 Aitoc Checkout Fields Manager (需升級以支援 Magento 1.9 最新版)
-modman clone git@git.gss.com.tw:gsscloud/magento-aitcheckoutfieldsApi2.git
-modman clone git@git.gss.com.tw:gsscloud/Spgateway_MPG_Magento.git
+modman clone git@git.gss.com.tw:magento/magento-aitcheckoutfieldsApi2.git
+modman clone git@git.gss.com.tw:magento/Spgateway_MPG_Magento.git
 modman clone https://github.com/yireo/MageBridgeCore.git
 modman clone https://github.com/yireo/Yireo_CheckoutTester
 modman clone https://github.com/jacquesbh/jbh_cartmerge.git
