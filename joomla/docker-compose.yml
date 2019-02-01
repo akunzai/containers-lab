@@ -53,6 +53,7 @@ services:
   fpm:
     build: ./php/fpm
     image: joomla:fpm
+    user: www-data
     restart: always
     # 如果要啟用 XDebug 遠端偵錯的話
     # environment:
