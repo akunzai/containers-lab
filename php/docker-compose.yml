@@ -1,4 +1,4 @@
-﻿version: '3'
+version: '3'
 
 services:
   db:
@@ -21,8 +21,6 @@ services:
       - ./etc/mysql/conf.d:/etc/mysql/mariadb.conf.d:ro
       - ./etc/mysql/initdb.d:/docker-entrypoint-initdb.d
       - ./db:/var/lib/mysql
-    networks:
-      - app-network
   # 如果要使用 phpmyadmin 管理介面的話
   # phpmyadmin:
   #   image: 'phpmyadmin/phpmyadmin'
@@ -33,8 +31,6 @@ services:
   #     # - '32780:80'
   #   depends_on:
   #     - db
-  #   networks:
-  #     - app-network
   web:
     image: 'nginx:stable'
     restart: always
@@ -51,8 +47,6 @@ services:
       # - ./etc/nginx/cert.key:/etc/nginx/cert.key:ro
     depends_on:
       - fpm
-    networks:
-      - app-network
   fpm:
     build: ./php/fpm
     image: app:fpm
@@ -68,8 +62,6 @@ services:
       - ./etc/php/log.conf:/usr/local/etc/php-fpm.d/zz-log.conf:ro
     depends_on:
       - db
-    networks:
-      - app-network
     # 如果要配置額外的主機名稱對應的話
     # extra_hosts:
     #   - "localhost:127.0.0.1"
@@ -84,9 +76,3 @@ services:
       - ./etc/php/log.conf:/usr/local/etc/php-fpm.d/zz-log.conf:ro
     depends_on:
       - db
-    networks:
-      - app-network
-
-networks:
-  app-network:
-    driver: bridge
