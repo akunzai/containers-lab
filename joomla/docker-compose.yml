@@ -40,12 +40,15 @@ services:
     restart: always
     # 如果開放本機連接埠發生衝突,請自行調整埠號
     ports:
-      - '8080:80'
-      - '8443:443'
+      - '80:80'
+      # 如果要啟用 HTTPS 連線的話
+      # - '443:443'
     volumes:
       - ./etc/nginx/conf.d:/etc/nginx/conf.d:ro
-      - ./etc/nginx/ssl:/etc/nginx/ssl:ro
       - ./web:/var/www/html
+      # 如果要啟用 HTTPS 連線的話
+      # - ./etc/nginx/cert.pem:/etc/nginx/cert.pem:ro
+      # - ./etc/nginx/cert.key:/etc/nginx/cert.key:ro
     depends_on:
       - fpm
     networks:

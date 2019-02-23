@@ -27,21 +27,38 @@ $ docker ps
 
 啟動環境後預設會開始監聽本機的以下連線埠
 
-- 8080: HTTP
-- 8443: HTTPS
+- 80: HTTP
 
-請參考 `docker-compose.yml` 的內容做調整
+> 請參考 `docker-compose.yml` 的內容做調整
 
-## SSL 憑證
+## 建立本機開發用的 SSL 憑證
 
-內含以下網域的 SSL 憑證
+可透過 [mkcert](https://github.com/FiloSottile/mkcert) 建立本機開發用的 SSL 憑證
 
-- `*.localhost`: `etc/nginx/ssl/_localhost/cert.*`
-- `*.test`: `etc/nginx/ssl/_test/cert.*`
-- `localhost`: `etc/nginx/ssl/localhost/cert.*`
+以網域名稱 `localhost` 為例
 
-預設是使用 `localhost` 的 SSL 憑證
-如需變更請調整 `etc/nginx/conf.d/default.conf` 中的 `server_name` 及以 `ssl_certificate`,`ssl_certificate_key` 等配置
+```sh
+# 安裝本機開發用的憑證簽發證書
+mkcert -install
+# 產生 SSL 憑證
+mkcert -cert-file etc/nginx/cert.pem -key-file etc/nginx/cert.key localhost
+```
+
+## 啟用 HTTPS 連線
+
+配置完成 SSL 憑證後，可修改 `etc/nginx/conf.d/default.conf` 以啟用 HTTPS 連線
+
+```nginx
+server {
+    server_name  _;
+    listen       80 default_server;
+    listen       443 ssl http2;
+    ssl_certificate      cert.pem;
+    ssl_certificate_key  cert.key;
+}
+```
+
+> 請記得調整 `docker-compose.yml` 以啟用 HTTPS 連線
 
 ## 初始化資料庫
 
