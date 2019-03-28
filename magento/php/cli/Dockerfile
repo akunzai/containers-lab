@@ -8,13 +8,18 @@ RUN set -ex; \
   apt-get update; \
   apt-get install -y --no-install-recommends \
     ca-certificates cron curl git mysql-client openssh-client unzip vim-tiny \
-    libfreetype6 libjpeg62-turbo libpng16-16 libicu57 libmcrypt4 libxml2 libxslt1.1; \
+    libfreetype6 libjpeg62-turbo libpng16-16 libicu57 libmcrypt4 libwebp6 libxml2 libxpm4 libxslt1.1; \
   # dependencies required for building
-  buildDeps="libfreetype6-dev libjpeg62-turbo-dev libpng-dev \
+  buildDeps="libfreetype6-dev libjpeg-dev libpng-dev \
     libmcrypt-dev libicu-dev \
-    libxml2-dev libxslt1-dev"; \
+    libwebp-dev libxml2-dev libxpm-dev libxslt1-dev"; \
   apt-get install -y --no-install-recommends $buildDeps; \
   # install PHP Extensions
+  docker-php-ext-configure gd \
+    --with-freetype-dir=/usr/include/ \
+    --with-jpeg-dir=/usr/include/ \
+    --with-xpm-dir=/usr/include/ \
+    --with-webp-dir=/usr/include/; \
   docker-php-ext-install -j$(nproc) \
     gd mysqli opcache zip \
     intl pcntl pdo_mysql soap xsl; \
