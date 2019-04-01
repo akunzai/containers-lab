@@ -10,17 +10,17 @@
 
 ```sh
 # 啟動並執行完整應用
-$ docker-compose up
+docker-compose up
 # 在背景啟動並執行完整應用
-$ docker-compose up -d
+docker-compose up -d
 # 顯示記錄
-$ docker-compose logs
+docker-compose logs
 # 持續顯示記錄
-$ docker-compose logs -f
+docker-compose logs -f
 # 關閉應用
-$ docker-compose down
+docker-compose down
 # 顯示所有啟動中的容器
-$ docker ps
+docker ps
 ```
 
 ## 連線埠配置
