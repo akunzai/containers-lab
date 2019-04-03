@@ -24,8 +24,6 @@ services:
     image: osixia/openldap:latest
     # https://github.com/osixia/docker-light-baseimage#run-command-line-options
     entrypoint: /container/tool/run --loglevel warning --skip-env-files --skip-startup-files --skip-process-files --
-    tty: true
-    stdin_open: true
     volumes:
       - ./data/ldap:/var/lib/ldap
       - ./etc/ldap/slapd.d:/etc/ldap/slapd.d
