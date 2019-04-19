@@ -24,7 +24,7 @@ RUN set -ex; \
     gd mysqli opcache zip \
     intl pcntl pdo_mysql soap xsl; \
   # install PECL Extensions
-  echo no | pecl install mcrypt-1.0.1 redis; \
+  echo no | pecl install mcrypt redis; \
   docker-php-ext-enable mcrypt redis; \
   rm -rf /tmp/pear; \
   # install PHP Composer
