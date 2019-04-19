@@ -23,8 +23,8 @@ RUN set -ex; \
     gd mysqli opcache zip \
     intl pcntl pdo_mysql soap xsl; \
   # install PECL Extensions
-  echo no | pecl install mcrypt-1.0.1 redis; \
-  docker-php-ext-enable mcrypt redis; \
+  echo no | pecl install mcrypt redis xdebug; \
+  docker-php-ext-enable mcrypt redis xdebug; \
   rm -rf /tmp/pear; \
   # cleanup
   apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false $buildDeps; \
