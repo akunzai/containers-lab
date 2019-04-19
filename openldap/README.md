@@ -33,8 +33,8 @@ docker ps
 
 ## 管理資料庫
 
-- 可利用本機工具直接存取 `openldap` 容器的本機連接埠來管理資料庫
-- 可利用 `openldap` 或 `cli` 容器本身的工具來管理資料庫
+- 可利用本機工具直接存取 `slapd` 容器的本機連接埠來管理資料庫
+- 可利用 `slapd` 或 `cli` 容器本身的工具來管理資料庫
 
 ```sh
 # 依據目錄後綴匯出為 LDIF (此例為 LDAP config files)
@@ -43,7 +43,7 @@ docker-compose run --rm cli slapcat -b cn=config > config.ldif
 # 依據資料庫索引匯出為 LDIF (此例為 LDAP database files)
 docker-compose run --rm cli slapcat -n 1 > data.ldif
 
-# 暫時關閉 openldap 容器以利還原資料庫
+# 暫時關閉 slapd 容器以利還原資料庫
 docker-compose down
 
 # 刪除 LDAP config files 以利還原
