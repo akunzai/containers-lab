@@ -206,7 +206,7 @@ modman clone git@git.gss.com.tw:magento/magento-customerApi.git
 modman clone git@git.gss.com.tw:magento/magento-affiliateplus-platinum.git
 modman clone git@git.gss.com.tw:magento/magento-affiliateApi.git
 modman clone git@git.gss.com.tw:magento/magento-affiliateplus-customize.git
-modman clone git@git.gss.com.tw:magento/AitCheckoutFields.git
+modman clone --copy git@git.gss.com.tw:magento/AitCheckoutFields.git
 modman clone git@git.gss.com.tw:magento/magento-aitcheckoutfieldsApi2.git
 modman clone git@git.gss.com.tw:magento/Spgateway_MPG_Magento.git
 modman clone https://github.com/yireo/MageBridgeCore.git
