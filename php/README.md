@@ -11,14 +11,19 @@
 ```sh
 # 啟動並執行完整應用
 docker-compose up
+
 # 在背景啟動並執行完整應用
 docker-compose up -d
+
 # 顯示記錄
 docker-compose logs
+
 # 持續顯示記錄
 docker-compose logs -f
+
 # 關閉應用
 docker-compose down
+
 # 顯示所有啟動中的容器
 docker ps
 ```
@@ -35,13 +40,14 @@ docker ps
 
 可透過 [mkcert](https://github.com/FiloSottile/mkcert) 建立本機開發用的 SSL 憑證
 
-以網域名稱 `localhost` 為例
+以網域名稱 `dev.php.test` 為例
 
 ```sh
 # 安裝本機開發用的憑證簽發證書
 mkcert -install
+
 # 產生 SSL 憑證
-mkcert -cert-file etc/nginx/cert.pem -key-file etc/nginx/cert.key localhost
+mkcert -cert-file etc/nginx/cert.pem -key-file etc/nginx/cert.key dev.php.test
 ```
 
 ## 啟用 HTTPS 連線
@@ -52,7 +58,7 @@ mkcert -cert-file etc/nginx/cert.pem -key-file etc/nginx/cert.key localhost
 
 ```nginx
 server {
-    server_name  _;
+    server_name  dev.php.test;
     listen       80 default_server;
     listen       443 ssl http2;
     ssl_certificate      cert.pem;
@@ -86,8 +92,10 @@ docker-compose exec db mysql_secure_installation
 ```sh
 # 建立名為 test 的資料庫
 docker-compose exec db mysqladmin -u root create test
+
 # 匯入本機的 test.sql 至容器內名為 test 的資料庫內
 cat test.sql | docker exec -i $(docker-compose ps -q db) mysql -u root test
+
 # 匯入 gzip 壓縮的備份檔
 gzip -dc test.sql.gz | docker exec -i $(docker-compose ps -q db) mysql -u root test
 ```
@@ -107,12 +115,15 @@ gzip -dc test.sql.gz | docker exec -i $(docker-compose ps -q db) mysql -u root t
 # 預設執行身份為 www-data
 $ docker-compose run --rm cli whoami
 www-data
+
 # 改用 root 身份執行指令
 $ docker-compose run --rm --user root cli whoami
 root
+
 # 顯示 composer 版本
 $ docker-compose run --rm cli composer -V
 Composer version 1.5.2 2017-09-11 16:59:25
+
 # 執行 bash shell
 $ docker-compose run --rm cli bash
 ```

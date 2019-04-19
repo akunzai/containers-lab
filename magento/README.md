@@ -11,14 +11,19 @@
 ```sh
 # 啟動並執行完整應用
 docker-compose up
+
 # 在背景啟動並執行完整應用
 docker-compose up -d
+
 # 顯示記錄
 docker-compose logs
+
 # 持續顯示記錄
 docker-compose logs -f
+
 # 關閉應用
 docker-compose down
+
 # 顯示所有啟動中的容器
 docker ps
 ```
@@ -35,13 +40,14 @@ docker ps
 
 可透過 [mkcert](https://github.com/FiloSottile/mkcert) 建立本機開發用的 SSL 憑證
 
-以網域名稱 `localhost` 為例
+以網域名稱 `dev.magento.test` 為例
 
 ```sh
 # 安裝本機開發用的憑證簽發證書
 mkcert -install
+
 # 產生 SSL 憑證
-mkcert -cert-file etc/nginx/cert.pem -key-file etc/nginx/cert.key localhost
+mkcert -cert-file etc/nginx/cert.pem -key-file etc/nginx/cert.key dev.magento.test
 ```
 
 ## 啟用 HTTPS 連線
@@ -52,7 +58,7 @@ mkcert -cert-file etc/nginx/cert.pem -key-file etc/nginx/cert.key localhost
 
 ```nginx
 server {
-    server_name  _;
+    server_name  dev.magento.test;
     listen       80 default_server;
     listen       443 ssl http2;
     ssl_certificate      cert.pem;
@@ -73,6 +79,7 @@ server {
 ```sh
 # 直接重設 root 帳號密碼
 docker-compose exec db mysqladmin -u root password 'new-password'
+
 # 或是透過以下互動程序來設定所有安全性選項
 docker-compose exec db mysql_secure_installation
 ```
@@ -86,8 +93,10 @@ docker-compose exec db mysql_secure_installation
 ```sh
 # 建立名為 magento 的資料庫
 docker-compose exec db mysqladmin -u root create magento
+
 # 匯入本機的 magento.sql 至容器內名為 magento 的資料庫內
 cat magento.sql | docker exec -i $(docker-compose ps -q db) mysql -u root magento
+
 # 匯入 gzip 壓縮的備份檔
 gzip -dc magento.sql.gz | docker exec -i $(docker-compose ps -q db) mysql -u root magento
 ```
@@ -107,12 +116,15 @@ gzip -dc magento.sql.gz | docker exec -i $(docker-compose ps -q db) mysql -u roo
 # 預設執行身份為 www-data
 $ docker-compose run --rm cli whoami
 www-data
+
 # 改用 root 身份執行指令
 $ docker-compose run --rm --user root cli whoami
 root
+
 # 顯示 composer 版本
 $ docker-compose run --rm cli composer -V
 Composer version 1.5.2 2017-09-11 16:59:25
+
 # 執行 bash shell
 $ docker-compose run --rm cli bash
 ```
@@ -123,9 +135,9 @@ $ docker-compose run --rm cli bash
 
 ```sh
 # 直接至官網下載安裝檔後解壓縮
-tar xvjf ./magento-1.9.3.10-2018-09-18-03-21-10.tar.bz2
-rm -rf web
-mv magento web
+tar xvjf ./magento-1.9.4.1-2019-03-22-09-05-11.tar.bz2
+[ -e "./web.orig" ] || mv ./web ./web.orig
+mv -f ./magento ./web
 # 可能需要重啟應用
 docker-compose restart
 
@@ -135,25 +147,38 @@ docker-compose run --rm cli n98-magerun install
 
 ## Magento 組態設定
 
-請將 Magento 組態檔還原至 `web` 目錄下的 `app/etc/local.xml`
+> 如果要連線本測試環境的 MariaDB 環境，請記得修改資料庫設定
 
-> 如果要連線本測試環境的 MariaDB 環境，請記得將資料庫主機設定為 `db`
+將 Magento 組態檔還原至 `web` 目錄下的 `app/etc/local.xml`
+
+```sh
+# 還原 Magento 組態檔
+[ -e "./web/app/etc/local.xml" ] || cp local.xml web/app/etc/local.xml
+```
 
 ## 開發環境調整
 
 > cli 容器預設會以 `www-data` 身份執行指令
 
 ```sh
-# 關閉快取
-docker-compose run --rm cli n98-magerun cache:disable
 # 設定未加密的基礎網址
-docker-compose run --rm cli n98-magerun config:set 'web/unsecure/base_url' 'http://dev.magento.test:8080/'
+docker-compose run --rm cli n98-magerun config:set 'web/unsecure/base_url' 'http://dev.magento.test/'
+
 # 設定加密的基礎網址
-docker-compose run --rm cli n98-magerun config:set 'web/secure/base_url' 'https://dev.magento.test:8443/'
-# 切換允許開發人員樣版的 "符號連結"
+docker-compose run --rm cli n98-magerun config:set 'web/secure/base_url' 'https://dev.magento.test/'
+
+# 清空或重設 cookie_domain 及 cookie_path 以避免登入失敗
+docker-compose run --rm cli n98-magerun config:set 'web/cookie/cookie_domain' dev.magento.test
+docker-compose run --rm cli n98-magerun config:delete 'web/cookie/cookie_path'
+
+# 切換允許開發人員樣版的 "符號連結" 以使用 modman 管理模組
 docker-compose run --rm cli n98-magerun config:set 'dev/template/allow_symlink' '1'
-# 以 root 身份執行指令
-docker-compose run --rm --user root cli bash
+
+# 視需要變更管理者密碼
+docker-compose run --rm cli n98-magerun admin:user:change-password
+
+# 視需要停用快取
+docker-compose run --rm cli n98-magerun cache:disable
 ```
 
 ## 模組管理
@@ -163,14 +188,17 @@ docker-compose run --rm --user root cli bash
 ```sh
 # 初始化 modman 配置
 modman init
+
 # 確保 ssh id 的權限
 chmod 700 ~/.ssh/id_*
+
 # 利用 modman 安裝模組
 modman clone git@git.gss.com.tw:magento/magento-translation-zh_TW.git
 modman clone git@git.gss.com.tw:magento/magento-provisioning.git
 modman clone git@git.gss.com.tw:magento/magento-priceRounding.git
 modman clone git@git.gss.com.tw:magento/magento-ezCheckout.git
 modman clone git@git.gss.com.tw:magento/magento-extapi2.git
+modman clone https://github.com/yireo/Yireo_GoogleTagManager
 modman clone git@git.gss.com.tw:magento/magento-enhancedEcommerce.git
 modman clone git@git.gss.com.tw:magento/magento-customize-gsscloud.git
 modman clone git@git.gss.com.tw:magento/magento-customerNotification.git
@@ -178,12 +206,13 @@ modman clone git@git.gss.com.tw:magento/magento-customerApi.git
 modman clone git@git.gss.com.tw:magento/magento-affiliateplus-platinum.git
 modman clone git@git.gss.com.tw:magento/magento-affiliateApi.git
 modman clone git@git.gss.com.tw:magento/magento-affiliateplus-customize.git
-# 安裝此模組前需要先安裝並啟用 Aitoc Checkout Fields Manager (需升級以支援 Magento 1.9 最新版)
+modman clone git@git.gss.com.tw:magento/AitCheckoutFields.git
 modman clone git@git.gss.com.tw:magento/magento-aitcheckoutfieldsApi2.git
 modman clone git@git.gss.com.tw:magento/Spgateway_MPG_Magento.git
 modman clone https://github.com/yireo/MageBridgeCore.git
 modman clone https://github.com/yireo/Yireo_CheckoutTester
 modman clone https://github.com/jacquesbh/jbh_cartmerge.git
+
 # 列出己安裝的 modman 模組
 modman list
 ```
