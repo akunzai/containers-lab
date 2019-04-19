@@ -23,7 +23,7 @@ RUN set -ex; \
     gd mysqli opcache zip \
     intl pcntl pdo_mysql soap xsl; \
   # install PECL Extensions
-  echo no | pecl install mcrypt redis xdebug; \
+  echo no | pecl install mcrypt-snapshot redis xdebug; \
   docker-php-ext-enable mcrypt redis xdebug; \
   rm -rf /tmp/pear; \
   # cleanup
