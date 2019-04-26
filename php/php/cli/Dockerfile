@@ -7,7 +7,7 @@ RUN set -ex; \
   # persistent / runtime deps
   apt-get update; \
   apt-get install -y --no-install-recommends \
-    ca-certificates cron curl git mysql-client openssh-client unzip vim-tiny \
+    ca-certificates cron curl git mysql-client openssh-client procps unzip vim-tiny \
     libfreetype6 libjpeg62-turbo libpng16-16 libicu57 libmcrypt4 libwebp6 libxml2 libxpm4 libxslt1.1; \
   # dependencies required for building
   buildDeps="libfreetype6-dev libjpeg-dev libpng-dev \
