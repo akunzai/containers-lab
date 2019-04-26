@@ -1,2 +1,4 @@
-# this file should end with UNIX new line (LF)
-* * * * * www-data /var/www/html/cron.sh >/proc/1/fd/1 2>/proc/1/fd/2
+* * * * * www-data /var/www/html/cron.sh
+# only ROOT can write to docker logs
+# * * * * * root date >/proc/1/fd/1 2>/proc/1/fd/2
+# this file MUST end with UNIX new line (LF)
