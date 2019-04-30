@@ -20,13 +20,13 @@ services:
       - ./etc/mysql/conf.d:/etc/mysql/mariadb.conf.d:ro
       - ./etc/mysql/initdb.d:/docker-entrypoint-initdb.d
       - ./db:/var/lib/mysql
-  # 如果要使用 phpmyadmin 管理介面的話
-  # phpmyadmin:
-  #   image: 'phpmyadmin/phpmyadmin'
-  #   ports:
-  #     # 如果不固定開放本機連接埠號的話
-  #     - '80'
-  #     # 如果要固定開放本機連接埠號的話
-  #     # - '32780:80'
-  #   depends_on:
-  #     - db
+  # 如果要使用 adminer 管理介面的話
+  adminer:
+    image: adminer
+    # environment:
+      # https://github.com/vrana/adminer/tree/master/plugins
+      # - ADMINER_PLUGINS=tables-filter tinymce
+    ports:
+      - '8080:8080'
+    depends_on:
+      - db

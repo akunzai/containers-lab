@@ -105,7 +105,7 @@ docker-compose exec db mysql_secure_installation
 
 ## 管理資料庫
 
-- 可調整 `docker-compose.yml` 啟用 `phpmyadmin` 容器來管理資料庫
+- 可調整 `docker-compose.yml` 啟用 `adminer` 容器來管理資料庫
 - 可調整 `docker-compose.yml` 開放 `db` 容器的本機連接埠，利用本機工具來管理資料庫
 - 可利用 `db` 容器本身的工具來管理資料庫
 
