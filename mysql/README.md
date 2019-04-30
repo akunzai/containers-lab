@@ -11,14 +11,19 @@
 ```sh
 # 啟動並執行完整應用
 docker-compose up
+
 # 在背景啟動並執行完整應用
 docker-compose up -d
+
 # 顯示記錄
 docker-compose logs
+
 # 持續顯示記錄
 docker-compose logs -f
+
 # 關閉應用
 docker-compose down
+
 # 顯示所有啟動中的容器
 docker ps
 ```
@@ -29,7 +34,7 @@ docker ps
 
 - 3306: MySQL
 
-請參考 `docker-compose.yml` 的內容做調整
+> 請參考 `docker-compose.yml` 的內容做調整
 
 ## 初始化資料庫
 
@@ -55,8 +60,10 @@ docker-compose exec db mysql_secure_installation
 ```sh
 # 建立名為 test 的資料庫
 docker-compose exec db mysqladmin -u root create test
+
 # 匯入本機的 test.sql 至容器內名為 test 的資料庫內
 cat test.sql | docker exec -i $(docker-compose ps -q db) mysql -u root test
+
 # 匯入 gzip 壓縮的備份檔
 gzip -dc test.sql.gz | docker exec -i $(docker-compose ps -q db) mysql -u root test
 ```
