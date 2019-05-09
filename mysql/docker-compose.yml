@@ -2,7 +2,7 @@ version: '3'
 
 services:
   db:
-    image: 'mariadb:latest'
+    image: mariadb
     restart: always
     environment:
       # 設定空密碼 (不建議用於正式環境)

@@ -3,7 +3,7 @@ version: '3'
 services:
   slapd:
     # https://github.com/osixia/docker-openldap
-    image: osixia/openldap:latest
+    image: osixia/openldap
     command: --loglevel warning
     environment:
       # https://github.com/osixia/docker-openldap/blob/stable/image/environment/default.startup.yaml
@@ -21,7 +21,7 @@ services:
     ports:
       - "389:389"
   cli:
-    image: osixia/openldap:latest
+    image: osixia/openldap
     # https://github.com/osixia/docker-light-baseimage#run-command-line-options
     entrypoint: /container/tool/run --loglevel warning --skip-env-files --skip-startup-files --skip-process-files --
     volumes:

@@ -2,7 +2,7 @@ version: '3'
 
 services:
   db:
-    image: 'mariadb:10.3'
+    image: mariadb
     restart: always
     environment:
       # 設定空密碼 (不建議用於正式環境)
@@ -29,7 +29,7 @@ services:
   #   depends_on:
   #     - db
   web:
-    image: 'nginx:stable'
+    image: nginx
     restart: always
     # 如果開放本機連接埠發生衝突,請自行調整埠號
     ports:
