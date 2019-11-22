@@ -15,6 +15,9 @@ docker-compose up
 # 在背景啟動並執行完整應用
 docker-compose up -d
 
+# 在背景啟動並執行指定服務
+docker-compose up -d db
+
 # 顯示記錄
 docker-compose logs
 
@@ -76,6 +79,8 @@ server {
 
 ## 重設資料庫密碼
 
+> 以下指令執行前請先啟動資料庫服務
+
 ```sh
 # 直接重設 root 帳號密碼
 docker-compose exec db mysqladmin -u root password 'new-password'
@@ -86,18 +91,23 @@ docker-compose exec db mysql_secure_installation
 
 ## 管理資料庫
 
+> 以下指令執行前請先啟動資料庫服務
+
 - 可調整 `docker-compose.yml` 啟用 `adminer` 容器來管理資料庫
 - 可調整 `docker-compose.yml` 開放 `db` 容器的本機連接埠，利用本機工具來管理資料庫
 - 可利用 `db` 容器本身的工具來管理資料庫
 
 ```sh
-# 建立名為 test 的資料庫
+# 刪除暨有資料庫
+docker-compose exec db mysqladmin -u root drop test
+
+# 創建新的資料庫
 docker-compose exec db mysqladmin -u root create test
 
-# 匯入本機的 test.sql 至容器內名為 test 的資料庫內
+# 匯入本機的 SQL 備份檔至容器內的資料庫內
 cat test.sql | docker exec -i $(docker-compose ps -q db) mysql -u root test
 
-# 匯入 gzip 壓縮的備份檔
+# 匯入本機壓縮的 SQL 備份檔至容器內的資料庫內
 gzip -dc test.sql.gz | docker exec -i $(docker-compose ps -q db) mysql -u root test
 ```
 

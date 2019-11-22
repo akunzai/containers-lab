@@ -15,6 +15,9 @@ docker-compose up
 # 在背景啟動並執行完整應用
 docker-compose up -d
 
+# 在背景啟動並執行指定服務
+docker-compose up -d db
+
 # 顯示記錄
 docker-compose logs
 
@@ -76,6 +79,8 @@ server {
 
 ## 重設資料庫密碼
 
+> 以下指令執行前請先啟動資料庫服務
+
 ```sh
 # 直接重設 root 帳號密碼
 docker-compose exec db mysqladmin -u root password 'new-password'
@@ -86,18 +91,23 @@ docker-compose exec db mysql_secure_installation
 
 ## 管理資料庫
 
+> 以下指令執行前請先啟動資料庫服務
+
 - 可調整 `docker-compose.yml` 啟用 `adminer` 容器來管理資料庫
 - 可調整 `docker-compose.yml` 開放 `db` 容器的本機連接埠，利用本機工具來管理資料庫
 - 可利用 `db` 容器本身的工具來管理資料庫
 
 ```sh
-# 建立名為 magento 的資料庫
+# 刪除暨有資料庫
+docker-compose exec db mysqladmin -u root drop magento
+
+# 創建新的資料庫
 docker-compose exec db mysqladmin -u root create magento
 
-# 匯入本機的 magento.sql 至容器內名為 magento 的資料庫內
+# 匯入本機的 SQL 備份檔至容器內的資料庫內
 cat magento.sql | docker exec -i $(docker-compose ps -q db) mysql -u root magento
 
-# 匯入 gzip 壓縮的備份檔
+# 匯入本機壓縮的 SQL 備份檔至容器內的資料庫內
 gzip -dc magento.sql.gz | docker exec -i $(docker-compose ps -q db) mysql -u root magento
 ```
 
@@ -135,7 +145,7 @@ $ docker-compose run --rm cli bash
 
 ```sh
 # 直接至官網下載安裝檔後解壓縮
-tar xvjf ./magento-1.9.4.1-2019-03-22-09-05-11.tar.bz2
+tar xvjf ./magento-1.9.4.3-2019-10-08-05-27-59.tar.bz2
 [ -e "./web.orig" ] || mv ./web ./web.orig
 mv -f ./magento ./web
 # 可能需要重啟應用
@@ -208,6 +218,7 @@ modman clone git@git.gss.com.tw:magento/magento-affiliateApi.git
 modman clone git@git.gss.com.tw:magento/magento-affiliateplus-customize.git
 modman clone --copy git@git.gss.com.tw:magento/AitCheckoutFields.git
 modman clone git@git.gss.com.tw:magento/magento-aitcheckoutfieldsApi2.git
+modman clone git@git.gss.com.tw:magento/aitcheckoutfields-customize.git
 modman clone git@git.gss.com.tw:magento/Spgateway_MPG_Magento.git
 modman clone https://github.com/yireo/MageBridgeCore.git
 modman clone https://github.com/yireo/Yireo_CheckoutTester

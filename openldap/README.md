@@ -11,14 +11,22 @@
 ```sh
 # 啟動並執行完整應用
 docker-compose up
+
 # 在背景啟動並執行完整應用
 docker-compose up -d
+
+# 在背景啟動並執行指定服務
+docker-compose up -d slapd
+
 # 顯示記錄
 docker-compose logs
+
 # 持續顯示記錄
 docker-compose logs -f
+
 # 關閉應用
 docker-compose down
+
 # 顯示所有啟動中的容器
 docker ps
 ```
