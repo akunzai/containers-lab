@@ -57,7 +57,7 @@ mkcert -cert-file etc/nginx/cert.pem -key-file etc/nginx/cert.key dev.magento.te
 
 配置完成 SSL 憑證後，可修改 `etc/nginx/conf.d/default.conf` 以啟用 HTTPS 連線
 
-> 可參考[https://cipherli.st/](https://cipherli.st/)以強化 HTTPS 安全性
+> 可參考 [https://cipherli.st/](https://cipherli.st/) 以強化 HTTPS 安全性
 
 ```nginx
 server {
@@ -222,6 +222,6 @@ modman clone https://github.com/yireo/MageBridgeCore.git
 modman clone https://github.com/yireo/Yireo_CheckoutTester
 modman clone https://github.com/jacquesbh/jbh_cartmerge.git
 
-# 列出己安裝的 modman 模組
+# 列出已安裝的 modman 模組
 modman list
 ```

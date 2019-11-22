@@ -57,7 +57,7 @@ mkcert -cert-file etc/nginx/cert.pem -key-file etc/nginx/cert.key dev.joomla.tes
 
 配置完成 SSL 憑證後，可修改 `etc/nginx/conf.d/default.conf` 以啟用 HTTPS 連線
 
-> 可參考[https://cipherli.st/](https://cipherli.st/)以強化 HTTPS 安全性
+> 可參考 [https://cipherli.st/](https://cipherli.st/) 以強化 HTTPS 安全性
 
 ```nginx
 server {
