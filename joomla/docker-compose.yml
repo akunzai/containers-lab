@@ -21,7 +21,7 @@ services:
       - ./etc/mysql/conf.d:/etc/mysql/mariadb.conf.d:ro
       - ./etc/mysql/initdb.d:/docker-entrypoint-initdb.d
       - ./db:/var/lib/mysql
-  # # 如果要使用 adminer 管理介面的話
+  # 如果要使用 adminer 管理介面的話
   # adminer:
   #   image: adminer
   #   ports:
