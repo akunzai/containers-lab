@@ -115,7 +115,7 @@ gzip -dc magento.sql.gz | docker exec -i $(docker-compose ps -q db) mysql -u roo
 
 請調整 `docker-compose.yml` 啟用 `XDEBUG_CONFIG` 的環境變數以進行遠端偵錯
 
-可參考 [PHP Debug for VSCode](https://code.visualstudio.com/docs/languages/php#_debugging) 或 [PHPStorm](https://confluence.jetbrains.com/display/PhpStorm/Zero-configuration+Web+Application+Debugging+with+Xdebug+and+PhpStorm) 等 IDE 的配置說明
+可參考 [PHP Debug for VSCode](https://code.visualstudio.com/docs/languages/php#_debugging) 或 [PHPStorm](https://www.jetbrains.com/help/phpstorm/zero-configuration-debugging.html) 等 IDE 的配置說明
 
 > 需要在 HTTP 請求中加入 `XDEBUG_SESSION_START` URL 參數或 `XDEBUG_SESSION` Cookie 以啟用遠端偵錯
 > 建議可透過[瀏覽器外掛](https://chrome.google.com/webstore/detail/xdebug-helper/eadndfjplgieldjbigjakmdgkmoaaaoc)來切換
@@ -156,8 +156,6 @@ docker-compose run --rm cli n98-magerun install
 ```
 
 ## Magento 組態設定
-
-> 如果要連線本測試環境的 MariaDB 環境，請記得修改資料庫設定
 
 將 Magento 組態檔還原至 `web` 目錄下的 `app/etc/local.xml`
 
