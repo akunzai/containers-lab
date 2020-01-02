@@ -12,7 +12,7 @@ services:
       # 產生隨機的初始密碼,將顯示在標準輸出(GENERATED ROOT PASSWORD:...)
       - MYSQL_RANDOM_ROOT_PASSWORD=yes
     ports:
-     - '3306:3306'
+     - '127.0.0.1:3306:3306'
     # 當宿主是 Windows 作業系統時,需要以下配置以正確掛載 /var/lib/mysql
     # https://github.com/docker-library/mariadb/issues/38#issuecomment-385845282
     # command: mysqld --innodb-flush-method=littlesync --innodb-use-native-aio=OFF --log_bin=ON
@@ -24,6 +24,6 @@ services:
   # adminer:
   #   image: adminer
   #   ports:
-  #     - '8080:8080'
+  #     - '127.0.0.1:8080:8080'
   #   depends_on:
   #     - db
