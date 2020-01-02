@@ -1,4 +1,4 @@
-FROM php:7.2-cli
+FROM php:7.3-cli
 ENV LANG=C.UTF-8
 RUN set -ex; \
   # ensure www-data userhome & permissions
