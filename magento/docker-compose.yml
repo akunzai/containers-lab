@@ -5,8 +5,6 @@ services:
     image: mariadb
     restart: always
     environment:
-      # 設定空密碼 (不建議用於正式環境)
-      # - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       # 指定密碼
       # - MYSQL_ROOT_PASSWORD=secret
       # 產生隨機的初始密碼,將顯示在標準輸出(GENERATED ROOT PASSWORD:...)
