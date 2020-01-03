@@ -1,4 +1,4 @@
-FROM php:7.2-fpm
+FROM php:7.3-fpm
 ENV LANG=C.UTF-8
 RUN set -ex; \
   # ensure www-data userhome & permissions
@@ -7,11 +7,12 @@ RUN set -ex; \
   # persistent / runtime deps
   apt-get update; \
   apt-get install -y --no-install-recommends \
-    libfreetype6 libjpeg62-turbo libpng16-16 libicu63 libmcrypt4 libwebp6 libxml2 libxpm4 libxslt1.1; \
+    libfreetype6 libjpeg62-turbo libpng16-16 libicu63 libmcrypt4 libwebp6 libxml2 libxpm4 libxslt1.1 libzip4; \
   # dependencies required for building
   buildDeps="libfreetype6-dev libjpeg-dev libpng-dev \
     libmcrypt-dev libicu-dev \
-    libwebp-dev libxml2-dev libxpm-dev libxslt1-dev"; \
+    libwebp-dev libxml2-dev libxpm-dev libxslt1-dev \
+    libzip-dev zlib1g-dev"; \
   apt-get install -y --no-install-recommends $buildDeps; \
   # install PHP Extensions
   docker-php-ext-configure gd \
