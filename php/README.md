@@ -96,19 +96,20 @@ docker-compose exec db mysql_secure_installation
 - 可調整 `docker-compose.yml` 啟用 `adminer` 容器來管理資料庫
 - 可調整 `docker-compose.yml` 開放 `db` 容器的本機連接埠，利用本機工具來管理資料庫
 - 可利用 `db` 容器本身的工具來管理資料庫
+- 請自行替換下列指令中的 `$MYSQL_ROOT_PASSWORD` 為實際的密碼
 
 ```sh
 # 刪除暨有資料庫
-docker-compose exec db mysqladmin -u root drop test
+docker-compose exec db mysqladmin -u root -p drop test
 
 # 創建新的資料庫
-docker-compose exec db mysqladmin -u root create test
+docker-compose exec db mysqladmin -u root -p create test
 
 # 匯入本機的 SQL 備份檔至容器內的資料庫內
-cat test.sql | docker exec -i $(docker-compose ps -q db) mysql -u root test
+cat test.sql | docker exec -i $(docker-compose ps -q db) mysql -u root -p$MYSQL_ROOT_PASSWORD test
 
 # 匯入本機壓縮的 SQL 備份檔至容器內的資料庫內
-gzip -dc test.sql.gz | docker exec -i $(docker-compose ps -q db) mysql -u root test
+gzip -dc test.sql.gz | docker exec -i $(docker-compose ps -q db) mysql -u root -p$MYSQL_ROOT_PASSWORD test
 ```
 
 ## PHP XDebug 遠端偵錯
