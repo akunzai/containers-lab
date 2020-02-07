@@ -146,7 +146,7 @@ $ docker-compose run --rm cli bash
 
 ```sh
 # 直接至官網下載安裝檔後解壓縮
-tar xvjf ./magento-1.9.4.3-2019-10-08-05-27-59.tar.bz2
+tar xvjf ./magento-1.9.4.4-2020-01-28-04-53-07.tar.bz2
 [ -e "./web.orig" ] || mv ./web ./web.orig
 mv -f ./magento ./web
 # 可能需要重啟應用
@@ -219,9 +219,12 @@ modman clone --copy git@git.gss.com.tw:magento/AitCheckoutFields.git
 modman clone git@git.gss.com.tw:magento/magento-aitcheckoutfieldsApi2.git
 modman clone git@git.gss.com.tw:magento/aitcheckoutfields-customize.git
 modman clone git@git.gss.com.tw:magento/Spgateway_MPG_Magento.git
+modman clone git@git.gss.com.tw:magento/magento-videgree.git
+modman clone git@git.gss.com.tw:magento/BSS_MultiStoreViewPricing.git
+modman clone git@git.gss.com.tw:magento/torchbearer.git
 modman clone https://github.com/yireo/MageBridgeCore.git
-modman clone https://github.com/yireo/Yireo_CheckoutTester
 modman clone https://github.com/jacquesbh/jbh_cartmerge.git
+modman clone https://github.com/yireo/Yireo_CheckoutTester
 
 # 列出已安裝的 modman 模組
 modman list
