@@ -118,25 +118,27 @@ docker-compose exec db mysql_secure_installation
 
 ## 管理資料庫
 
-> 以下指令執行前請先啟動資料庫服務
-
 - 可調整 `docker-compose.yml` 啟用 `adminer` 容器來管理資料庫
 - 可調整 `docker-compose.yml` 開放 `db` 容器的本機連接埠，利用本機工具來管理資料庫
-- 可利用 `db` 容器本身的工具來管理資料庫
-- 請自行替換下列指令中的 `$MYSQL_ROOT_PASSWORD` 為實際的密碼
+
+以下示範使用 `db` 容器本身的工具來管理資料庫
+
+> 執行前請先啟動資料庫服務
+
+可以透過設定[認證資訊](https://dev.mysql.com/doc/refman/8.0/en/password-security-user.html)於 `etc/mysql/conf.d/my.cnf` 簡化認證流程
 
 ```sh
-# 刪除暨有資料庫
-docker-compose exec db mysqladmin -u root -p drop joomla
-
-# 創建新的資料庫
-docker-compose exec db mysqladmin -u root -p create joomla
+# 完整備份容器內的資料庫
+docker-compose exec db mysqldump --add-drop-database --insert-ignore --databases sample | gzip > backup.sql.gz
 
 # 匯入本機的 SQL 備份檔至容器內的資料庫內
-cat joomla.sql | docker exec -i $(docker-compose ps -q db) mysql -u root -p$MYSQL_ROOT_PASSWORD joomla
+cat backup.sql | docker exec -i $(docker-compose ps -q db) mysql
 
 # 匯入本機壓縮的 SQL 備份檔至容器內的資料庫內
-gzip -dc joomla.sql.gz | docker exec -i $(docker-compose ps -q db) mysql -u root -p$MYSQL_ROOT_PASSWORD joomla
+gzip -dc backup.sql.gz | docker exec -i $(docker-compose ps -q db) mysql
+
+# 進入容器的 bash shell
+docker-compose exec db bash
 ```
 
 ## PHP XDebug 遠端偵錯
