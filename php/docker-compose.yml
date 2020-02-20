@@ -1,31 +1,6 @@
 version: '3'
 
 services:
-  db:
-    image: mariadb
-    restart: always
-    environment:
-      # 指定密碼
-      # - MYSQL_ROOT_PASSWORD=secret
-      # 產生隨機的初始密碼,將顯示在標準輸出(GENERATED ROOT PASSWORD:...)
-      - MYSQL_RANDOM_ROOT_PASSWORD=yes
-    # 如果要開放透過本機連接埠存取容器內的資料庫的話
-    # ports:
-    #  - '127.0.0.1:3306:3306'
-    # 當宿主是 Windows 作業系統時,需要以下配置以正確掛載 /var/lib/mysql
-    # https://github.com/docker-library/mariadb/issues/38#issuecomment-385845282
-    # command: mysqld --innodb-flush-method=littlesync --innodb-use-native-aio=OFF --log_bin=ON
-    volumes:
-      - ./etc/mysql/conf.d:/etc/mysql/mariadb.conf.d:ro
-      - ./etc/mysql/initdb.d:/docker-entrypoint-initdb.d
-      - ./db:/var/lib/mysql
-  # 如果要使用 adminer 管理介面的話
-  # adminer:
-  #   image: adminer
-  #   ports:
-  #     - '127.0.0.1:8080:8080'
-  #   depends_on:
-  #     - db
   web:
     image: nginx
     restart: always
@@ -36,15 +11,17 @@ services:
       # - '127.0.0.1:443:443'
     volumes:
       - ./etc/nginx/conf.d:/etc/nginx/conf.d:ro
-      - ./web:/var/www/html
+      - ./home:/var/www/html
       # 如果要啟用 HTTPS 連線的話
       # - ./etc/nginx/cert.pem:/etc/nginx/cert.pem:ro
       # - ./etc/nginx/cert.key:/etc/nginx/cert.key:ro
     depends_on:
       - fpm
   fpm:
-    build: ./php/fpm
-    image: app:fpm
+    build: 
+      context: .
+      dockerfile: Dockerfile.fpm
+    image: php:fpm
     user: www-data
     restart: always
     # 如果要啟用 XDebug 遠端偵錯的話
@@ -52,22 +29,20 @@ services:
     #   # 如果不是偵錯本機容器時才需要修改
     #   - XDEBUG_CONFIG=remote_host=host.docker.internal
     volumes:
-      - ./web:/var/www/html
+      - ./home:/var/www/html
       - ./etc/php/php.ini:/usr/local/etc/php/php.ini:ro
       - ./etc/php/log.conf:/usr/local/etc/php-fpm.d/zz-log.conf:ro
-    depends_on:
-      - db
     # 如果要配置額外的主機名稱對應的話
     # extra_hosts:
     #   - "localhost:127.0.0.1"
   cli:
-    build: ./php/cli
-    image: app:cli
+    build: 
+      context: .
+      dockerfile: Dockerfile.cli
+    image: php:cli
     user: www-data
     working_dir: /var/www/html
     volumes:
-      - ./web:/var/www/html
+      - ./home:/var/www/html
       - ./etc/php/php.ini:/usr/local/etc/php/php.ini:ro
       - ./etc/php/log.conf:/usr/local/etc/php-fpm.d/zz-log.conf:ro
-    depends_on:
-      - db
