@@ -8,6 +8,8 @@
 
 > `docker-compose` 指令必須要在 `docker-compose.yml` 所在的目錄下執行
 
+可透過建立 `docker-compose.override.yml` 來擴展 `docker-compose.yml` 組態
+
 ```sh
 # 啟動並執行完整應用
 docker-compose up
@@ -33,8 +35,6 @@ docker ps
 啟動環境後預設會開始監聽本機的以下連線埠
 
 - 5000: HTTP/HTTPS
-
-> 請參考 `docker-compose.yml` 的內容做調整
 
 ## 建立本機開發用的 SSL 憑證
 
