@@ -27,7 +27,7 @@ services:
     # 如果要啟用 XDebug 遠端偵錯的話
     # environment:
     #   # 如果不是偵錯本機容器時才需要修改
-    #   - XDEBUG_CONFIG=remote_host=host.docker.internal
+    #   XDEBUG_CONFIG: 'remote_host=host.docker.internal'
     volumes:
       - ./home:/var/www/html
       - ./etc/php/php.ini:/usr/local/etc/php/php.ini:ro

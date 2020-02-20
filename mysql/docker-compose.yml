@@ -6,9 +6,9 @@ services:
     restart: always
     environment:
       # 指定密碼
-      # - MYSQL_ROOT_PASSWORD=secret
+      # MYSQL_ROOT_PASSWORD: 'secret'
       # 產生隨機的初始密碼,將顯示在標準輸出(GENERATED ROOT PASSWORD:...)
-      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+      MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
     ports:
      - '127.0.0.1:3306:3306'
     # 當宿主是 Windows 作業系統時,需要以下配置以正確掛載 /var/lib/mysql
