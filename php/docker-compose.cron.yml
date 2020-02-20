@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  cron:
+    build: 
+      context: .
+      dockerfile: Dockerfile.cli
+    image: php:cli
+    volumes:
+      - ./etc/crontab:/etc/crontab
+      - ./home:/var/www/html
+    command: cron -f
