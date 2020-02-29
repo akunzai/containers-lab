@@ -1,0 +1,5 @@
+version: '3'
+services:
+  php:
+    build: ./nginx-fpm
+    image: php:nginx-fpm

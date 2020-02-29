@@ -42,6 +42,9 @@ COMPOSE_FILE=docker-compose.yml:docker-compose.cron.yml docker-compose up -d
 
 # 如果需要在本機偵錯 PHP 應用程式的話
 COMPOSE_FILE=docker-compose.yml:docker-compose.xdebug.yml docker-compose up -d
+
+# 如果需要擴展以使用自訂的 PHP-FPM 執行環境的話
+COMPOSE_FILE=docker-compose.yml:docker-compose.fpm.yml docker-compose up -d
 ```
 
 ## 連線埠配置
