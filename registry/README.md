@@ -40,14 +40,14 @@ docker ps
 
 可透過 [mkcert](https://github.com/FiloSottile/mkcert) 建立本機開發用的 SSL 憑證
 
-以網域名稱 `dev.registry.test` 為例
+以網域名稱 `dev.example.test` 為例
 
 ```sh
 # 安裝本機開發用的憑證簽發證書
 mkcert -install
 
 # 產生 SSL 憑證
-mkcert -cert-file etc/certs/domain.crt -key-file etc/certs/domain.key dev.registry.test
+mkcert -cert-file etc/certs/domain.crt -key-file etc/certs/domain.key dev.example.test
 ```
 
 ## 啟用 HTTPS 連線
@@ -63,7 +63,7 @@ mkcert -cert-file etc/certs/domain.crt -key-file etc/certs/domain.key dev.regist
 docker run --rm --entrypoint htpasswd registry:2 -Bbn testuser testpassword > etc/auth/htpasswd
 
 # 登入自建的 Registry
-$ docker login dev.registry.test:5000
+$ docker login dev.example.test:5000
 Username: testuser
 Password:
 Login Succeeded
@@ -74,10 +74,10 @@ Login Succeeded
 ```sh
 # 上傳映像檔專案至自建的 Registry
 $ docker pull hello-world
-$ docker tag hello-world dev.registry.test:5000/hello-world
-$ docker push dev.registry.test:5000/hello-world
+$ docker tag hello-world dev.example.test:5000/hello-world
+$ docker push dev.example.test:5000/hello-world
 
 # 列出 Registry 上的所有映像檔專案
-$ curl -ku testuser:testpassword https://dev.registry.test:5000/v2/_catalog
+$ curl -ku testuser:testpassword https://dev.example.test:5000/v2/_catalog
 {"repositories":["hello-world"]}
 ```

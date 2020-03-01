@@ -7,8 +7,10 @@
 ## 運行開發環境
 
 > `docker-compose` 指令必須要在 `docker-compose.yml` 所在的目錄下執行
-
-可透過建立 `docker-compose.override.yml` 來擴展 `docker-compose.yml` 組態
+>
+> 可透過建立 `docker-compose.override.yml` 來擴展 `docker-compose.yml` 組態
+>
+> 還可以利用 [COMPOSE_FILE](https://docs.docker.com/compose/reference/envvars/#compose_file) 環境變數指定多個組態來擴展服務配置
 
 ```sh
 # 啟動並執行完整應用
@@ -16,9 +18,6 @@ docker-compose up
 
 # 在背景啟動並執行完整應用
 docker-compose up -d
-
-# 在背景啟動並執行指定服務
-docker-compose up -d db
 
 # 顯示記錄
 docker-compose logs
@@ -31,6 +30,9 @@ docker-compose down
 
 # 顯示所有啟動中的容器
 docker ps
+
+# 如果需要擴展以使用 MySQL 網頁管理介面的話
+COMPOSE_FILE=docker-compose.yml:docker-compose.adminer.yml docker-compose up -d
 ```
 
 ## 連線埠配置
@@ -51,17 +53,15 @@ docker ps
 
 ```sh
 # 直接重設 root 帳號密碼
-docker-compose exec db mysqladmin -u root password 'new-password'
+docker-compose exec mysql mysqladmin -u root password 'new-password'
 
 # 或是透過以下互動程序來設定所有安全性選項
-docker-compose exec db mysql_secure_installation
+docker-compose exec mysql mysql_secure_installation
 ```
 
 ## 管理資料庫
 
-- 可調整 `docker-compose.yml` 啟用 `adminer` 容器來管理資料庫
-
-以下示範使用 `db` 容器本身的工具來管理資料庫
+以下示範使用 `mysql` 容器本身的工具來管理資料庫
 
 > 執行前請先啟動資料庫服務
 
@@ -69,14 +69,14 @@ docker-compose exec db mysql_secure_installation
 
 ```sh
 # 完整備份容器內的資料庫
-docker-compose exec db mysqldump --add-drop-database --insert-ignore --databases sample | gzip > backup.sql.gz
+docker-compose exec mysql mysqldump --add-drop-database --insert-ignore --databases sample | gzip > backup.sql.gz
 
 # 匯入本機的 SQL 備份檔至容器內的資料庫內
-cat backup.sql | docker exec -i $(docker-compose ps -q db) mysql
+cat backup.sql | docker exec -i $(docker-compose ps -q mysql) mysql
 
 # 匯入本機壓縮的 SQL 備份檔至容器內的資料庫內
-gzip -dc backup.sql.gz | docker exec -i $(docker-compose ps -q db) mysql
+gzip -dc backup.sql.gz | docker exec -i $(docker-compose ps -q mysql) mysql
 
-# 進入容器的 bash shell
-docker-compose exec db bash
+# 進入容器的 Bash Shell
+docker-compose exec mysql bash
 ```

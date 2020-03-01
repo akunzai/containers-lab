@@ -1,48 +1,25 @@
 version: '3'
-
 services:
-  web:
-    image: nginx
+  php:
+    image: appsvc/php
     restart: always
-    # 如果開放本機連接埠發生衝突,請自行調整埠號
+    volumes:
+      - ./home:/home
+    # 如果要開放透過本機連接埠存取的話
+    # ports:
+      # - '127.0.0.1:80:80'
+    # 如果要自訂 PHP 組態設定的話
+    # environment:
+      # PHP_INI_SCAN_DIR: '/usr/local/etc/php/conf.d:/home/site/ini'
+    # 如果要配置額外的主機名稱對應的話
+    # extra_hosts:
+      # - "localhost:127.0.0.1"
+  haproxy:
+    image: haproxy:2.0
+    restart: always
+    volumes:
+      - ./etc/haproxy:/usr/local/etc/haproxy:ro
     ports:
       - '127.0.0.1:80:80'
       # 如果要啟用 HTTPS 連線的話
       # - '127.0.0.1:443:443'
-    volumes:
-      - ./etc/nginx/conf.d:/etc/nginx/conf.d:ro
-      - ./home:/var/www/html
-      # 如果要啟用 HTTPS 連線的話
-      # - ./etc/nginx/cert.pem:/etc/nginx/cert.pem:ro
-      # - ./etc/nginx/cert.key:/etc/nginx/cert.key:ro
-    depends_on:
-      - fpm
-  fpm:
-    build: 
-      context: .
-      dockerfile: Dockerfile.fpm
-    image: php:fpm
-    user: www-data
-    restart: always
-    # 如果要啟用 XDebug 遠端偵錯的話
-    # environment:
-    #   # 如果不是偵錯本機容器時才需要修改
-    #   XDEBUG_CONFIG: 'remote_host=host.docker.internal'
-    volumes:
-      - ./home:/var/www/html
-      - ./etc/php/php.ini:/usr/local/etc/php/php.ini:ro
-      - ./etc/php/log.conf:/usr/local/etc/php-fpm.d/zz-log.conf:ro
-    # 如果要配置額外的主機名稱對應的話
-    # extra_hosts:
-    #   - "localhost:127.0.0.1"
-  cli:
-    build: 
-      context: .
-      dockerfile: Dockerfile.cli
-    image: php:cli
-    user: www-data
-    working_dir: /var/www/html
-    volumes:
-      - ./home:/var/www/html
-      - ./etc/php/php.ini:/usr/local/etc/php/php.ini:ro
-      - ./etc/php/log.conf:/usr/local/etc/php-fpm.d/zz-log.conf:ro

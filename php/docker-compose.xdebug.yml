@@ -1,0 +1,6 @@
+version: '3'
+services:
+  php:
+    image: appsvc/php:latest-xdebug
+    environment:
+      XDEBUG_CONFIG: 'remote_enable=1 remote_host=host.docker.internal'
