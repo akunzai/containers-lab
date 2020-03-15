@@ -67,26 +67,25 @@ docker-compose kill -s HUP haproxy
 
 可透過 [mkcert](https://github.com/FiloSottile/mkcert) 建立本機開發用的 SSL 憑證
 
-以網域名稱 `dev.example.test` 為例
+以網域名稱 `*.example.test` 為例
 
 ```sh
 # 安裝本機開發用的憑證簽發證書
 mkcert -install
 
 # 產生 SSL 憑證
-mkcert -cert-file etc/haproxy/cert.pem -key-file key.pem dev.example.test
-cat key.pem >> etc/haproxy/cert.pem
-rm key.pem
+mkcert -cert-file etc/haproxy/cert.pem -key-file key.pem '*.example.test'
+cat key.pem >> etc/haproxy/cert.pem && rm key.pem
 ```
 
-如果啟用 HTTPS 後, 連線 PHP 應用程式出現重導迴圈的狀況
+如果啟用 HTTPS 後, 瀏覽器連線時出現重導迴圈的狀況
 可以試著在網站根目錄下的 [.htaccess](https://httpd.apache.org/docs/2.4/howto/htaccess.html)加入以下配置
 
-```apacheconf:.htaccess
+```apache:.htaccess
 SetEnvIf X-Forwarded-Proto https HTTPS=on
 ```
 
-## 利用 PHP 容器執行指令
+## 利用容器執行指令
 
 ```sh
 # 預設執行身份為 root
@@ -101,7 +100,9 @@ www-data
 $ docker-compose run --rm php bash
 ```
 
-## [自訂 PHP 組態設定](https://docs.microsoft.com/azure/app-service/containers/configure-language-php#customize-phpini-settings)
+## [自訂和調整](https://docs.microsoft.com/azure/app-service/containers/configure-language-php)
+
+### [自訂 PHP 組態設定](https://docs.microsoft.com/azure/app-service/containers/configure-language-php#customize-phpini-settings)
 
 請擴展 PHP 容器配置並啟用 `PHP_INI_SCAN_DIR` 環境變數配置
 
@@ -121,7 +122,7 @@ output_buffering=4096
 error_reporting=E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED
 ```
 
-## [啟用 PHP 擴充功能](https://docs.microsoft.com/azure/app-service/containers/configure-language-php#enable-php-extensions)
+### [啟用 PHP 擴充功能](https://docs.microsoft.com/azure/app-service/containers/configure-language-php#enable-php-extensions)
 
 必須先參考上面的說明啟用自訂 PHP 組態設定後才能啟用額外的 PHP 擴充功能
 
@@ -143,7 +144,7 @@ find /usr/local/lib/php/extensions -name redis.so -exec cp {} /home/site/lib/ \;
 echo "extension=/home/site/lib/redis.so" > /home/site/ini/redis.ini
 ```
 
-## 安裝工具程式
+### 安裝工具程式
 
 可將工具程式安裝在 `/home/site/wwwroot/` (永續儲存區), 避免額外客製容器映像檔的需要
 
@@ -157,13 +158,13 @@ curl -sS https://getcomposer.org/installer | php -- --install-dir=/home/site/www
 
 建議可以建立網站目錄下的 [.htaccess](https://httpd.apache.org/docs/2.4/howto/htaccess.html) 以限制透過網路存取工具程式
 
-```apacheconf:.htaccess
+```apache:.htaccess
 <FilesMatch "^composer$">
     Require all denied
 </FilesMatch>
 ```
 
-## 偵錯 PHP 應用程式
+## 偵錯應用程式
 
 如果需要在 Azure App Service 上偵錯, 請新增[應用系統設定](https://docs.microsoft.com/azure/app-service/configure-common#configure-app-settings) `PHP_ZENDEXTENSIONS` 加入 `xdebug` 設定值
 
