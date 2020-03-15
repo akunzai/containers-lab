@@ -1,29 +1,19 @@
 version: '3'
-
 services:
-  slapd:
+  openldap:
     # https://github.com/osixia/docker-openldap
     image: osixia/openldap
-    command: --loglevel warning
+    restart: always
     environment:
+      # https://www.openldap.org/doc/admin24/slapdconf2.html#olcLogLevel:%20%3Clevel%3E
+      # LDAP_LOG_LEVEL: 256
       # https://github.com/osixia/docker-openldap/blob/stable/image/environment/default.startup.yaml
-      LDAP_LOG_LEVEL: "256"
-      LDAP_ORGANISATION: "example"
-      LDAP_DOMAIN: "example.org"
-      LDAP_BASE_DN: ""
-      LDAP_ADMIN_PASSWORD: "admin"
-      LDAP_CONFIG_PASSWORD: "config"
-      LDAP_BACKEND: "mdb"
-      LDAP_TLS: "false"
+      LDAP_DOMAIN: example.org
+      LDAP_ADMIN_PASSWORD: admin
+      LDAP_CONFIG_PASSWORD: config
+      LDAP_TLS: 'false'
     volumes:
-      - ./data/ldap:/var/lib/ldap
-      - ./etc/ldap/slapd.d:/etc/ldap/slapd.d
+      - ./home/data/ldap:/var/lib/ldap
+      - ./home/ldap/conf:/etc/ldap/slapd.d
     ports:
-      - "127.0.0.1:389:389"
-  cli:
-    image: osixia/openldap
-    # https://github.com/osixia/docker-light-baseimage#run-command-line-options
-    entrypoint: /container/tool/run --loglevel warning --skip-env-files --skip-startup-files --skip-process-files --
-    volumes:
-      - ./data/ldap:/var/lib/ldap
-      - ./etc/ldap/slapd.d:/etc/ldap/slapd.d
+      - '127.0.0.1:389:389'
