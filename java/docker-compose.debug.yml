@@ -1,0 +1,9 @@
+version: '3'
+services:
+  java:
+    environment:
+      # https://www.baeldung.com/spring-debugging
+      DEBUG: 1
+      JAVA_OPTS: '-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000'
+    ports:
+      - '127.0.0.1:8000:8000'
