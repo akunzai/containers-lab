@@ -1,6 +1,7 @@
 version: '3'
 services:
   php:
-    image: appsvc/php:latest-xdebug
+    # https://hub.docker.com/r/appsvc/php/tags?page=1&name=xdebug
+    image: appsvc/php:7.3-apache-xdebug_20200101.1
     environment:
       XDEBUG_CONFIG: 'remote_enable=1 remote_host=host.docker.internal'
