@@ -212,7 +212,7 @@ rm -i *.jpa
 
 ### 初始化資料庫
 
-將資料庫匯出檔 `*.sql` 或 `*.sql.gz` 放在相對於目前專案的 `home/mysql.initdb.d` 目錄下即可
+將資料庫匯出檔 `*.sql` 或 `*.sql.gz` 放在相對於目前專案的 `home/mysql/initdb.d` 目錄下即可
 
 > 只有在初始化資料庫(第一次建立)時會自動匯入
 
@@ -235,7 +235,7 @@ docker-compose exec mysql mysql_secure_installation
 
 > 執行前請先啟動資料庫服務
 
-可以透過設定[認證資訊](https://dev.mysql.com/doc/refman/8.0/en/password-security-user.html)於 `home/mysql.conf.d/my.cnf` 簡化認證流程
+可以透過設定[認證資訊](https://dev.mysql.com/doc/refman/8.0/en/password-security-user.html)於 `home/mysql/conf.d/my.cnf` 簡化認證流程
 
 ```sh
 # 允許擴展服務配置
