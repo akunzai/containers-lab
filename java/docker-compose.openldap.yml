@@ -14,7 +14,7 @@ services:
       LDAP_TLS: 'false'
     volumes:
       - ./home/data/ldap:/var/lib/ldap
-      - ./home/slapd.d:/etc/ldap/slapd.d
+      - ./home/ldap/conf:/etc/ldap/slapd.d
     # 如果要開放透過本機連接埠存取的話
     #  ports:
     #    - '127.0.0.1:389:389'

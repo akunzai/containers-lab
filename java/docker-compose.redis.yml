@@ -6,7 +6,7 @@ services:
     volumes:
       - ./home/data/redis:/data
       # 如果需要自訂組態的話
-      # - ./home/redis.conf:/etc/redis/redis.conf:ro
+      # - ./home/redis/redis.conf:/etc/redis/redis.conf:ro
     # 如果要開放透過本機連接埠存取的話
     # ports:
       # - '127.0.0.1:6379:6379'
