@@ -178,15 +178,21 @@ curl -sS https://getcomposer.org/installer | php -- --install-dir=/home/site/www
 ### 透過指令
 
 ```sh
-# 備份網站的檔案
-tar zcvf backup.web.tgz /var/www/html
-# 備份網站的資料庫
+# 備份資料庫
 mysqldump --add-drop-database --insert-ignore --databases sample | gzip > backup.sql.gz
-
-# 還原網站的檔案
-tar zxvf backup.web.tgz
-# 還原網站的資料庫
+# 還原資料庫
 gzip -dc backup.sql.gz | mysql
+
+# 備份檔案 (假設當下目錄即為網站根目錄)
+tar -zcvf /tmp/backup.file.tgz --exclude='./node_modules/*' ./
+# 還原檔案
+tar -zxvf /tmp/backup.file.tgz
+
+# 或是利用 rsync 差異同步暨有網站檔案(以下為測試模式，實際執行請拿掉 --dry-run 選項)
+rsync --dry-run -vrlP --delete \
+    --exclude='/node_modules/' \
+    --exclude='/configuration.php' \
+    HOST:/var/www/html/ ./
 ```
 
 ### 透過 [Akeeba Backup](https://www.akeebabackup.com/)
