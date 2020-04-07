@@ -188,7 +188,7 @@ tar -zcvf /tmp/backup.file.tgz --exclude='./node_modules/*' ./
 # 還原檔案
 tar -zxvf /tmp/backup.file.tgz
 
-# 或是利用 rsync 差異同步暨有網站檔案(以下為測試模式，實際執行請拿掉 --dry-run 選項)
+# 或是利用 rsync 差異同步暨有網站檔案 (以下為測試模式，實際執行請拿掉 --dry-run 選項)
 rsync --dry-run -vrlP --delete \
     --exclude='/node_modules/' \
     --exclude='/configuration.php' \
@@ -203,9 +203,9 @@ rsync --dry-run -vrlP --delete \
 4. 選取要還原的備份檔並選以解壓縮檔模式為 `Directly` 後開始進行解壓縮
 5. 解壓縮完成後將開啟 [Kickstart 安裝頁面](http://127.0.0.1/installation/) 進行網站還原
 6. 還原資料庫 (建議保留表格名稱前綴，當使用本機的資料庫服務容器時，資料庫主機名稱請設定為 `mysql`)
-7. 網站還原完成後，回到 Kickstart 主頁面執行 Clean Up
+7. 網站還原完成後，回到 Kickstart 主頁面執行 `Clean Up`
 
-如果無法執行 Clean Up, 請手動清理
+如果無法執行 `Clean Up`, 請手動清理
 
 ```sh
 cd /home/site/wwwroot
