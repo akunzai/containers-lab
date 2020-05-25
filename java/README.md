@@ -122,7 +122,7 @@ $ docker-compose run --rm java bash
 如需設定 Java 執行階段選項, 可透過配置 `JAVA_OPTS` 環境變數達成，例如
 
 ```sh
-JAVA_OPTS=-Dfile.encoding=UTF-8
+JAVA_OPTS=-server -Xmx4g
 ```
 
 ### [JAR 應用程式部署](https://docs.microsoft.com/azure/app-service/containers/configure-language-java#configure-jar-applications)
