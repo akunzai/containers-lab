@@ -16,10 +16,11 @@ services:
     # extra_hosts:
       # - "localhost:127.0.0.1"
   haproxy:
+    # https://hub.docker.com/_/haproxy
     image: haproxy:2.0
     restart: always
     volumes:
-      - ./etc/haproxy:/usr/local/etc/haproxy:ro
+      - ./haproxy:/usr/local/etc/haproxy:ro
     ports:
       - '127.0.0.1:80:80'
       # 如果要啟用 HTTPS 連線的話

@@ -71,8 +71,8 @@ docker-compose kill -s HUP haproxy
 mkcert -install
 
 # 產生 SSL 憑證
-mkcert -cert-file etc/haproxy/cert.pem -key-file key.pem '*.example.test'
-cat key.pem >> etc/haproxy/cert.pem && rm key.pem
+mkcert -cert-file haproxy/cert.pem -key-file key.pem '*.example.test'
+cat key.pem >> haproxy/cert.pem && rm key.pem
 ```
 
 如果啟用 HTTPS 後, 如果應用程式無法正確判定 HTTPS 安全連線的話

@@ -13,7 +13,7 @@ services:
       LDAP_CONFIG_PASSWORD: config
       LDAP_TLS: 'false'
     volumes:
-      - ./home/data/ldap:/var/lib/ldap
-      - ./home/ldap/conf:/etc/ldap/slapd.d
+      - ./data:/var/lib/ldap
+      - ./conf:/etc/ldap/slapd.d
     ports:
       - '127.0.0.1:389:389'

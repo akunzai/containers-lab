@@ -1,17 +1,18 @@
 version: '3'
 services:
   mysql:
+    # https://hub.docker.com/_/mariadb
     image: mariadb
     restart: always
     environment:
       # 指定初始化資料庫建立的 root 密碼
       MYSQL_ROOT_PASSWORD: 'CHANGEME'
     volumes:
-      - ./home/data/mysql:/var/lib/mysql
+      - ./data:/var/lib/mysql
       # 如果需要自訂組態的話
-      # - ./home/mysql/conf.d:/etc/mysql/mariadb.conf.d:ro
+      # - ./conf:/etc/mysql/mariadb.conf.d:ro
       # 如果需要初始化資料庫的話
-      # - ./home/mysql/initdb.d:/docker-entrypoint-initdb.d
+      # - ./initdb:/docker-entrypoint-initdb.d
     ports:
      - '127.0.0.1:3306:3306'
     # 當宿主是 Windows 作業系統時,需要以下配置以正確掛載 /var/lib/mysql
