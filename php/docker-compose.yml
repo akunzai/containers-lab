@@ -2,7 +2,7 @@ version: '3'
 services:
   php:
     # https://hub.docker.com/r/appsvc/php
-    image: appsvc/php:7.3-apache_20200101.1
+    image: appsvc/php:7.3-apache_20200522.6
     restart: always
     volumes:
       - ./home:/home
