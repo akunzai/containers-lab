@@ -31,8 +31,11 @@ docker-compose down
 # 顯示所有啟動中的容器
 docker ps
 
-# 如果需要擴展以使用 MySQL 網頁管理介面的話
+# 如果需要使用 MySQL 網頁管理介面的話
 COMPOSE_FILE=docker-compose.yml:docker-compose.adminer.yml docker-compose up -d
+
+# 如果宿主作業系統是 Windows 的話
+COMPOSE_FILE=docker-compose.yml:docker-compose.windows.yml docker-compose up -d
 ```
 
 ## 連線埠配置
