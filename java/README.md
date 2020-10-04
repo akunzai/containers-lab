@@ -1,4 +1,4 @@
-# Java 開發環境 for Docker
+# [Java](https://github.com/microsoft/java) 開發環境 for Docker
 
 ## 環境需求
 
@@ -13,11 +13,14 @@
 > 還可以利用 [COMPOSE_FILE](https://docs.docker.com/compose/reference/envvars/#compose_file) 環境變數指定多個組態來擴展服務配置
 
 ```sh
-# 啟動並執行完整應用
+# 啟動並執行完整應用(若配置有異動會自動重建容器)
 docker-compose up
 
 # 在背景啟動並執行完整應用
 docker-compose up -d
+
+# 在背景啟動應用時指定服務的執行個數數量
+docker-compose up -d --scale java=2
 
 # 在背景啟動並執行指定服務
 docker-compose up -d java
@@ -34,14 +37,11 @@ docker-compose down
 # 顯示所有啟動中的容器
 docker ps
 
-# 如果需要擴展以啟用 OpenLDAP 服務的話
-COMPOSE_FILE=docker-compose.yml:docker-compose.openldap.yml docker-compose up -d
+# 如果需要使用最新版本的 Java 執行環境的話
+COMPOSE_FILE=docker-compose.yml:docker-compose.latest.yml docker-compose up -d
 
-# 如果需要擴展以啟用 Redis 服務的話
-COMPOSE_FILE=docker-compose.yml:docker-compose.redis.yml docker-compose up -d
-
-# 如果需要擴展以使用 Tomcat 執行環境的話
-COMPOSE_FILE=docker-compose.yml:docker-compose.tomcat.yml docker-compose up -d
+# 如果需要偵錯 Java 容器內的應用程式的話
+COMPOSE_FILE=docker-compose.yml:docker-compose.debug.yml docker-compose up -d
 ```
 
 ## 連線埠配置
@@ -49,18 +49,9 @@ COMPOSE_FILE=docker-compose.yml:docker-compose.tomcat.yml docker-compose up -d
 啟動環境後預設會開始監聽本機的以下連線埠
 
 - 80: HTTP
+- 8080: Traefik 負載平衡器管理後台
 
-## 自訂網站負載平衡設定
-
-請擴展 [HAProxy](https://www.haproxy.org/) 服務配置及調整 `etc/haproxy/haproxy.cfg`
-
-調整後可以透過以下指令在不中斷服務的情況下重新載入組態
-
-```sh
-docker-compose kill -s HUP haproxy
-```
-
-### 啟用 HTTPS 連線
+## 建立本機開發用的 SSL 憑證
 
 可透過 [mkcert](https://github.com/FiloSottile/mkcert) 建立本機開發用的 SSL 憑證
 
@@ -71,8 +62,24 @@ docker-compose kill -s HUP haproxy
 mkcert -install
 
 # 產生 SSL 憑證
-mkcert -cert-file haproxy/cert.pem -key-file key.pem '*.example.test'
-cat key.pem >> haproxy/cert.pem && rm key.pem
+mkdir -p traefik/conf/ssl
+mkcert -cert-file traefik/conf/ssl/cert.pem -key-file traefik/conf/ssl/key.pem '*.example.test'
+```
+
+### 啟用 HTTPS 連線
+
+配置完成 SSL 憑證後，可修改 `docker-compose.yml` 並加入 TLS 檔案配置以啟用 HTTPS 連線
+
+```sh
+mkdir -p traefik/conf/dynamic
+cat <<EOF > traefik/conf/dynamic/tls.yml
+tls:
+  stores:
+    default:
+      defaultCertificate:
+        certFile: /etc/traefik/ssl/cert.pem
+        keyFile: /etc/traefik/ssl/key.pem
+EOF
 ```
 
 如果啟用 HTTPS 後, 如果應用程式無法正確判定 HTTPS 安全連線的話
@@ -84,20 +91,6 @@ cat key.pem >> haproxy/cert.pem && rm key.pem
 server.use-forward-headers=true
 # since spring-boot 2.2
 server.forward-headers-strategy=NATIVE
-```
-
-或是自訂 Tomcat 伺服器配置加入 [RemoteIPValve](https://tomcat.apache.org/tomcat-8.5-doc/config/valve.html#Remote_IP_Valve)
-
-```diff
-<Server port="8005" shutdown="SHUTDOWN">
-  <Service name="Catalina">
-    <Engine name="Catalina" defaultHost="localhost">
-      <Host name="localhost" name="localhost" appBase="${site.home}/site/wwwroot/webapps" xmlBase="${site.home}/site/wwwroot/"
-            unpackWARs="false" autoDeploy="true" workDir="${site.tempdir}">
-+       <Valve className="org.apache.catalina.valves.RemoteIpValve" />
-    </Engine>
-  </Service>
-</Server>
 ```
 
 ## 利用容器執行指令
@@ -115,41 +108,30 @@ www-data
 $ docker-compose run --rm java bash
 ```
 
-## [自訂和調整](https://docs.microsoft.com/azure/app-service/containers/configure-language-java#customization-and-tuning)
-
-### [設定 Java 執行階段選項](https://docs.microsoft.com/azure/app-service/containers/configure-language-java#set-java-runtime-options)
-
-如需設定 Java 執行階段選項, 可透過配置 `JAVA_OPTS` 環境變數達成，例如
-
-```sh
-JAVA_OPTS=-server -Xmx4g
-```
-
-### [JAR 應用程式部署](https://docs.microsoft.com/azure/app-service/containers/configure-language-java#configure-jar-applications)
+## [應用程式部署](https://docs.microsoft.com/azure/app-service/configure-language-java#configure-jar-applications)
 
 > 如果不希望更名 JAR 應用程式，則需要自訂容器的啟動程序
 
 JAR 應用程式請打包或更名為 `app.jar` 並部署至容器內的 `/home/site/wwwroot/` 目錄下
 
-### [WAR 應用程式部署](https://docs.microsoft.com/zh-tw/azure/app-service/deploy-zip#deploy-war-file)
+## [自訂和調整](https://docs.microsoft.com/azure/app-service/configure-language-java#customization-and-tuning)
 
-如果希望將 WAR 應用程式透過 API 直接部署至 Azure App Service
+### [自訂啟動腳本](https://github.com/Azure-App-Service/java/blob/dev/shared/init_container.sh)
+
+在本機開發時可以透過 [command](https://docs.docker.com/compose/compose-file/#command) 屬性設定啟動命令
+
+而在 Azure App Service 則可以在組態頁面的一般設定中設定啟動命令
+
+> 如果存在 `/home/startup.sh` 腳本, 將會自動於容器啟動時執行
+>
+> 但若設定啟動命令或腳本則不會載入預設的 jar
+
+### [設定 Java 執行階段選項](https://docs.microsoft.com/azure/app-service/configure-language-java#set-java-runtime-options)
+
+如需設定 Java 執行階段選項, 可透過配置 `JAVA_OPTS` 環境變數達成，例如
 
 ```sh
-curl -X POST -u <username> --data-binary @"<war-file-path>" https://<app-name>.scm.azurewebsites.net/api/wardeploy
-```
-
-如果希望將 WAR 應用程式部署至本機開發環境，則請先擴展以使用 Tomcat 執行環境
-
-WAR 應用程式部署目錄為容器內的 `/home/site/wwwroot/webapps/`
-
-如需自訂 Tomcat 配置, 請複製必要的檔案至 `/home/tomcat` 目錄下,
-Tomcat 會將 [CATALINA_BASE](https://tomcat.apache.org/tomcat-8.5-doc/introduction.html#CATALINA_HOME_and_CATALINA_BASE) 重設為 `/home/tomcat`，並使用自訂的配置
-
-```sh
-mkdir -p /home/tomcat/bin /home/tomcat/temp
-cp /usr/local/tomcat/bin/setenv.sh /home/tomcat/bin/
-cp -r /usr/local/tomcat/conf /usr/local/tomcat/lib  /home/tomcat/
+JAVA_OPTS=-server -Xmx4g
 ```
 
 ### [Spring Boot 應用程式組態檔配置](https://docs.spring.io/spring-boot/docs/current/reference/html/howto.html#howto-change-the-location-of-external-properties)
@@ -171,11 +153,3 @@ SPRING_CONFIG_LOCATION=file:/home/config/
 | spring.config.location  | SPRING_CONFIG_LOCATION  | 逗號分隔的組態檔搜尋路徑(路徑必須以 `/` 結尾)              | `classpath:/,classpath:/config/,file:./,file:./config/` |
 | spring.profiles.active  | SPRING_PROFILES_ACTIVE  | 逗號分隔的啟用配置名稱                                     |                                                         |
 | spring.profiles.include | SPRING_PROFILES_INCLUDE | 逗號分隔的引用配置名稱                                     |                                                         |
-
-## 偵錯應用程式
-
-如需偵錯 Java 容器內的應用程式可以參考 `docker-compose.debug.yml` 的擴展
-
-```sh
-COMPOSE_FILE=docker-compose.yml:docker-compose.debug.yml docker-compose up
-```

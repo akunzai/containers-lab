@@ -1,5 +1,0 @@
-version: '3'
-services:
-  java:
-    # https://hub.docker.com/r/appsvc/tomcat
-    image: appsvc/tomcat:8.5-jre8_0000000000

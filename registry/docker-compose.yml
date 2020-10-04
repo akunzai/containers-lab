@@ -5,17 +5,39 @@ services:
     # https://hub.docker.com/_/registry
     image: registry:2
     restart: always
-    ports:
-     - '5000:5000'
-    # 如果要限制存取的話
-    # environment:
-      # REGISTRY_HTTP_TLS_CERTIFICATE: /certs/domain.crt
-      # REGISTRY_HTTP_TLS_KEY: /certs/domain.key
-      # REGISTRY_AUTH: htpasswd
-      # REGISTRY_AUTH_HTPASSWD_PATH: /auth/htpasswd
-      # REGISTRY_AUTH_HTPASSWD_REALM: Registry Realm
     volumes:
       - ./data:/var/lib/registry
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.registry.rule=Host(`registry.example.test`)"
+      # 如果要啟用 HTTPS 連線的話
+      # - "traefik.http.routers.registry.tls=true"
+      - "traefik.http.services.registry.loadBalancer.server.port=5000"
       # 如果要限制存取的話
-      # - ./certs:/certs
-      # - ./auth:/auth
+      # - "traefik.http.routers.registry.middlewares=auth-users"
+      # echo $(htpasswd -nb user password) | sed -e s/\\$/\\$\\$/g
+      # - "traefik.http.middlewares.auth-users.basicauth.users=test:$$apr1$$H6uskkkW$$IgXLP6ewTrSuBkTrqE8wj/"
+  traefik:
+    # https://hub.docker.com/_/traefik
+    image: traefik
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      # 如果要啟用 HTTPS 連線的話
+      # - ./traefik/conf:/etc/traefik:ro
+    command:
+      - --api.insecure=true
+      - --providers.docker=true
+      - --providers.docker.exposedByDefault=false
+      - --entrypoints.web.address=:80
+      # 如果要啟用 HTTPS 連線的話
+      # - --entrypoints.web.http.redirections.entryPoint.to=websecure
+      # - --entrypoints.web.http.redirections.entryPoint.scheme=https
+      # - --entrypoints.websecure.address=:443
+      # - --providers.file.directory=/etc/traefik/dynamic/
+      # - --providers.file.watch=true
+    ports:
+      - '127.0.0.1:80:80'
+      - '127.0.0.1:8080:8080'
+      # 如果要啟用 HTTPS 連線的話
+      # - '127.0.0.1:443:443'

@@ -13,11 +13,14 @@
 > 還可以利用 [COMPOSE_FILE](https://docs.docker.com/compose/reference/envvars/#compose_file) 環境變數指定多個組態來擴展服務配置
 
 ```sh
-# 啟動並執行完整應用
+# 啟動並執行完整應用(若配置有異動會自動重建容器)
 docker-compose up
 
 # 在背景啟動並執行完整應用
 docker-compose up -d
+
+# 在背景啟動應用時指定服務的執行個數數量
+docker-compose up -d --scale php=2
 
 # 在背景啟動並執行指定服務
 docker-compose up -d php
@@ -34,12 +37,6 @@ docker-compose down
 # 顯示所有啟動中的容器
 docker ps
 
-# 如果需要擴展以使用 MySQL 容器的話
-COMPOSE_FILE=docker-compose.yml:docker-compose.mysql.yml docker-compose up -d
-
-# 如果需要擴展以啟用 cron 排程服務的話
-COMPOSE_FILE=docker-compose.yml:docker-compose.cron.yml docker-compose up -d
-
 # 如果需要在本機偵錯 PHP 應用程式的話
 COMPOSE_FILE=docker-compose.yml:docker-compose.xdebug.yml docker-compose up -d
 
@@ -52,18 +49,9 @@ COMPOSE_FILE=docker-compose.yml:docker-compose.fpm.yml docker-compose up -d
 啟動環境後預設會開始監聽本機的以下連線埠
 
 - 80: HTTP
+- 8080: Traefik 負載平衡器管理後台
 
-## 自訂網站負載平衡設定
-
-請擴展 [HAProxy](https://www.haproxy.org/) 服務配置及調整 `etc/haproxy/haproxy.cfg`
-
-調整後可以透過以下指令在不中斷服務的情況下重新載入組態
-
-```sh
-docker-compose kill -s HUP haproxy
-```
-
-### 啟用 HTTPS 連線
+## 建立本機開發用的 SSL 憑證
 
 可透過 [mkcert](https://github.com/FiloSottile/mkcert) 建立本機開發用的 SSL 憑證
 
@@ -74,8 +62,24 @@ docker-compose kill -s HUP haproxy
 mkcert -install
 
 # 產生 SSL 憑證
-mkcert -cert-file haproxy/cert.pem -key-file key.pem '*.example.test'
-cat key.pem >> haproxy/cert.pem && rm key.pem
+mkdir -p traefik/conf/ssl
+mkcert -cert-file traefik/conf/ssl/cert.pem -key-file traefik/conf/ssl/key.pem '*.example.test'
+```
+
+### 啟用 HTTPS 連線
+
+配置完成 SSL 憑證後，可修改 `docker-compose.yml` 並加入 TLS 檔案配置以啟用 HTTPS 連線
+
+```sh
+mkdir -p traefik/conf/dynamic
+cat <<EOF > traefik/conf/dynamic/tls.yml
+tls:
+  stores:
+    default:
+      defaultCertificate:
+        certFile: /etc/traefik/ssl/cert.pem
+        keyFile: /etc/traefik/ssl/key.pem
+EOF
 ```
 
 如果啟用 HTTPS 後, 瀏覽器連線時出現重導迴圈的狀況
@@ -101,6 +105,12 @@ $ docker-compose run --rm php bash
 ```
 
 ## [自訂和調整](https://docs.microsoft.com/azure/app-service/containers/configure-language-php)
+
+### [自訂啟動腳本](https://github.com/Azure-App-Service/ImageBuilder/blob/master/GenerateDockerFiles/php/apache/init_container.sh)
+
+在本機開發時可以透過 [command](https://docs.docker.com/compose/compose-file/#command) 屬性設定啟動命令
+
+而在 Azure App Service 則可以在組態頁面的一般設定中設定啟動命令
 
 ### [自訂 PHP 組態設定](https://docs.microsoft.com/azure/app-service/containers/configure-language-php#customize-phpini-settings)
 
@@ -212,50 +222,4 @@ cd /home/site/wwwroot
 rm kicketstart.php en-GB.kickstart.ini
 rm -rf installation
 rm -i *.jpa
-```
-
-## 使用 MySQL 容器
-
-### 初始化資料庫
-
-將資料庫匯出檔 `*.sql` 或 `*.sql.gz` 放在相對於目前專案的 `home/mysql/initdb.d` 目錄下即可
-
-> 只有在初始化資料庫(第一次建立)時會自動匯入
-
-### 重設資料庫密碼
-
-> 以下指令執行前請先啟動資料庫服務
-
-```sh
-# 允許擴展服務配置
-export COMPOSE_FILE=docker-compose.yml:docker-compose.mysql.yml
-
-# 直接重設 root 帳號密碼
-docker-compose exec mysql mysqladmin -u root password 'new-password'
-
-# 或是透過以下互動程序來設定所有安全性選項
-docker-compose exec mysql mysql_secure_installation
-```
-
-### 管理資料庫
-
-> 執行前請先啟動資料庫服務
-
-可以透過設定[認證資訊](https://dev.mysql.com/doc/refman/8.0/en/password-security-user.html)於 `home/mysql/conf.d/my.cnf` 簡化認證流程
-
-```sh
-# 允許擴展服務配置
-export COMPOSE_FILE=docker-compose.yml:docker-compose.mysql.yml
-
-# 完整備份容器內的資料庫
-docker-compose exec mysql mysqldump --add-drop-database --insert-ignore --databases sample | gzip > backup.sql.gz
-
-# 匯入本機的 SQL 備份檔至容器內的資料庫內
-cat backup.sql | docker exec -i $(docker-compose ps -q mysql) mysql
-
-# 匯入本機壓縮的 SQL 備份檔至容器內的資料庫內
-gzip -dc backup.sql.gz | docker exec -i $(docker-compose ps -q mysql) mysql
-
-# 進入容器的 Bash Shell
-docker-compose exec mysql bash
 ```
