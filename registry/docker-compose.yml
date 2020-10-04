@@ -2,6 +2,7 @@ version: '3'
 
 services:
   registry:
+    # https://hub.docker.com/_/registry
     image: registry:2
     restart: always
     ports:
@@ -16,5 +17,5 @@ services:
     volumes:
       - ./data:/var/lib/registry
       # 如果要限制存取的話
-      # - ./etc/certs:/certs
-      # - ./etc/auth:/auth
+      # - ./certs:/certs
+      # - ./auth:/auth

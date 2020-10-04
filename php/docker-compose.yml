@@ -2,7 +2,7 @@ version: '3'
 services:
   php:
     # https://hub.docker.com/r/appsvc/php
-    image: appsvc/php:7.3-apache_20200101.1
+    image: appsvc/php:7.3-apache_20200522.6
     restart: always
     volumes:
       - ./home:/home
@@ -16,10 +16,11 @@ services:
     # extra_hosts:
       # - "localhost:127.0.0.1"
   haproxy:
+    # https://hub.docker.com/_/haproxy
     image: haproxy:2.0
     restart: always
     volumes:
-      - ./etc/haproxy:/usr/local/etc/haproxy:ro
+      - ./haproxy:/usr/local/etc/haproxy:ro
     ports:
       - '127.0.0.1:80:80'
       # 如果要啟用 HTTPS 連線的話
