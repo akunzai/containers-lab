@@ -113,7 +113,27 @@ www-data
 $ docker-compose run --rm tomcat bash
 ```
 
-## [自訂和調整](https://docs.microsoft.com/azure/app-service/configure-language-java#customization-and-tuning)
+## [應用程式部署](https://docs.microsoft.com/azure/app-service/deploy-zip#deploy-war-file)
+
+WAR 應用程式部署目錄為容器內的 `/home/site/wwwroot/webapps/`
+
+如果希望將 WAR 應用程式透過 API 直接部署至 Azure App Service
+
+```sh
+curl -X POST -u <username> --data-binary @"<war-file-path>" https://<app-name>.scm.azurewebsites.net/api/wardeploy
+```
+
+## 自訂和調整
+
+如需自訂 Tomcat 配置, 請複製必要的檔案至 `/home/tomcat` 目錄下,
+Tomcat 會將 [CATALINA_BASE](https://tomcat.apache.org/tomcat-8.5-doc/introduction.html#CATALINA_HOME_and_CATALINA_BASE) 重設為 `/home/tomcat`，並使用自訂的配置
+
+```sh
+mkdir -p /home/tomcat/bin /home/tomcat/conf/ home/tomcat/lib /home/tomcat/temp
+cp -v /usr/local/tomcat/bin/setenv.sh /usr/local/tomcat/bin/tomcat-juli.jar /home/tomcat/bin/
+cp -v /usr/local/tomcat/lib/azure.*.jar /home/tomcat/lib/
+cp -v /usr/local/tomcat/conf/* /home/tomcat/conf/
+```
 
 ### [自訂啟動腳本](https://github.com/Azure-App-Service/tomcat/blob/dev/shared/misc/init_container.sh)
 
@@ -122,8 +142,6 @@ $ docker-compose run --rm tomcat bash
 而在 Azure App Service 則可以在組態頁面的一般設定中設定啟動命令
 
 > 如果存在 `/home/startup.sh` 腳本, 將會自動於容器啟動時執行
->
-> 但若設定啟動命令或腳本則不會載入預設的 jar
 
 ### [設定 Java 執行階段選項](https://docs.microsoft.com/azure/app-service/configure-language-java#set-java-runtime-options)
 
@@ -131,25 +149,4 @@ $ docker-compose run --rm tomcat bash
 
 ```sh
 JAVA_OPTS=-server -Xmx4g
-```
-
-### [WAR 應用程式部署](https://docs.microsoft.com/azure/app-service/deploy-zip#deploy-war-file)
-
-如果希望將 WAR 應用程式透過 API 直接部署至 Azure App Service
-
-```sh
-curl -X POST -u <username> --data-binary @"<war-file-path>" https://<app-name>.scm.azurewebsites.net/api/wardeploy
-```
-
-如果希望將 WAR 應用程式部署至本機開發環境，則請先擴展以使用 Tomcat 執行環境
-
-WAR 應用程式部署目錄為容器內的 `/home/site/wwwroot/webapps/`
-
-如需自訂 Tomcat 配置, 請複製必要的檔案至 `/home/tomcat` 目錄下,
-Tomcat 會將 [CATALINA_BASE](https://tomcat.apache.org/tomcat-8.5-doc/introduction.html#CATALINA_HOME_and_CATALINA_BASE) 重設為 `/home/tomcat`，並使用自訂的配置
-
-```sh
-mkdir -p /home/tomcat/bin /home/tomcat/temp
-cp /usr/local/tomcat/bin/setenv.sh /home/tomcat/bin/
-cp -r /usr/local/tomcat/conf /usr/local/tomcat/lib  /home/tomcat/
 ```
