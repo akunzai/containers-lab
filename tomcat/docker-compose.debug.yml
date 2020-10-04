@@ -1,0 +1,11 @@
+version: '3'
+services:
+  tomcat:
+    # https://www.baeldung.com/spring-debugging
+    environment:
+      DEBUG: 1
+      JPDA_ADDRESS: 5005
+      JPDA_TRANSPORT: dt_socket
+    command: catalina.sh jpda run
+    ports:
+      - '127.0.0.1:5005:5005'
