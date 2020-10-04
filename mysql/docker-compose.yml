@@ -15,6 +15,3 @@ services:
       # - ./initdb:/docker-entrypoint-initdb.d
     ports:
      - '127.0.0.1:3306:3306'
-    # 當宿主是 Windows 作業系統時,需要以下配置以正確掛載 /var/lib/mysql
-    # https://github.com/docker-library/mariadb/issues/38#issuecomment-385845282
-    # command: mysqld --innodb-flush-method=littlesync --innodb-use-native-aio=OFF --log_bin=ON
