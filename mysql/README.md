@@ -44,9 +44,44 @@ COMPOSE_FILE=docker-compose.yml:docker-compose.windows.yml docker-compose up -d
 
 - 3306: MySQL
 
+## 建立本機開發用的 SSL 憑證
+
+可透過 [mkcert](https://github.com/FiloSottile/mkcert) 建立本機開發用的 SSL 憑證
+
+以網域名稱 `*.example.test` 為例
+
+```sh
+# 安裝本機開發用的憑證簽發證書
+mkcert -install
+
+# 產生 SSL 憑證
+mkdir -p ssl
+mkcert -cert-file ssl/cert.pem -key-file ssl/key.pem '*.example.test'
+```
+
+### [啟用 SSL 加密連線](https://mariadb.com/kb/en/securing-connections-for-client-and-server/)
+
+> 如果 mysql 伺服器支援加密連線的話，用戶端預設會嘗試使用
+
+```sh
+# 啟用 SSL 加密連線
+COMPOSE_FILE=docker-compose.yml:docker-compose.ssl.yml docker-compose up -d
+
+# 確認已正確啟用
+docker-compose exec mysql mysql -p -e 'show variables like "%ssl%";'
+
+# 如果要使用者必須使用加密連線登入的話
+docker-compose exec mysql mysql -p -e 'alter user "alice"@"%" require ssl;'
+# 也可以反過來取消加密連線的登入限制
+docker-compose exec mysql mysql -p -e 'alter user "alice"@"localhost" require none;'
+
+# 測試用戶端加密連線
+mysql -h db.example.test -u root -p -e 'show status like "ssl_version";'
+```
+
 ## 初始化資料庫
 
-將資料庫匯出檔 `*.sql` 或 `*.sql.gz` 放在相對於目前專案的 `home/mysql/initdb.d` 目錄下即可
+將資料庫匯出檔 `*.sql` 或 `*.sql.gz` 掛載於 `mysql` 容器的 `/docker-entrypoint-initdb.d` 目錄下即可
 
 > 只有在初始化資料庫(第一次建立)時會自動匯入
 
@@ -68,7 +103,7 @@ docker-compose exec mysql mysql_secure_installation
 
 > 執行前請先啟動資料庫服務
 
-可以透過設定[認證資訊](https://dev.mysql.com/doc/refman/8.0/en/password-security-user.html)於 `home/mysql//conf.d/my.cnf` 簡化認證流程
+可以透過設定[認證資訊](https://dev.mysql.com/doc/refman/8.0/en/password-security-user.html)於 `conf/my.cnf` 簡化認證流程
 
 ```sh
 # 完整備份容器內的資料庫
