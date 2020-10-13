@@ -3,6 +3,8 @@
 grep free.nchc.org.tw /etc/apt/sources.list >/dev/null || sed -i 's,^\deb http://deb.debian.org,deb https://free.nchc.org.tw,g' /etc/apt/sources.list
 # fix: Cannot load Zend OPcache - it was already loaded
 sed -i '/zend_extension=opcache/d' /usr/local/etc/php/conf.d/php.ini
+# fix: Cannot load Xdebug - it was already loaded
+[ -e /usr/local/etc/php/conf.d/xdebug.ini ] && sed -i '/zend_extension/d' /usr/local/etc/php/conf.d/xdebug.ini
 # fix: Permission denied error caused by empty `which php` in cron jobs
 [ -e /usr/bin/php ] || ln -s /usr/local/bin/php /usr/bin/php
 
