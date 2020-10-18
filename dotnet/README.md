@@ -60,7 +60,7 @@ mkdir -p traefik/conf/ssl
 mkcert -cert-file traefik/conf/ssl/cert.pem -key-file traefik/conf/ssl/key.pem '*.example.test'
 ```
 
-### 啟用 HTTPS 連線
+## 啟用 HTTPS 連線
 
 配置完成 SSL 憑證後，可修改 `docker-compose.yml` 並加入 TLS 檔案配置以啟用 HTTPS 連線
 
