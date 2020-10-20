@@ -7,7 +7,7 @@ services:
     volumes:
       - ./data:/data
       # 如果需要自訂組態的話
-      # - ./conf:/usr/local/etc/redis:ro
+      # - ./etc:/usr/local/etc/redis:ro
     # 如果需要自訂組態的話
     # command: /usr/local/etc/redis/redis.conf
     ports:

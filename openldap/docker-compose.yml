@@ -14,6 +14,6 @@ services:
       LDAP_TLS: 'false'
     volumes:
       - ./data:/var/lib/ldap
-      - ./conf:/etc/ldap/slapd.d
+      - ./etc:/etc/ldap/slapd.d
     ports:
       - '127.0.0.1:389:389'
