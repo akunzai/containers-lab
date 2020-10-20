@@ -40,11 +40,15 @@ docker ps
 - 80: HTTP
 - 8080: Traefik 負載平衡器管理後台
 
-## 建立本機開發用的 SSL 憑證
+## [啟用 HTTPS 連線](https://doc.traefik.io/traefik/https/tls/)
+
+### [使用 Let's Encrypt 自動產生憑證](https://doc.traefik.io/traefik/https/acme/)
+
+### 建立本機開發用的 SSL 憑證
 
 可透過 [mkcert](https://github.com/FiloSottile/mkcert) 建立本機開發用的 SSL 憑證
 
-以網域名稱 `registry.example.test` 為例
+以網域名稱 `*.example.test` 為例
 
 ```sh
 # 安裝本機開發用的憑證簽發證書
@@ -52,10 +56,8 @@ mkcert -install
 
 # 產生 SSL 憑證
 mkdir -p traefik/conf/ssl
-mkcert -cert-file traefik/conf/ssl/cert.pem -key-file traefik/conf/ssl/key.pem 'registry.example.test'
+mkcert -cert-file traefik/conf/ssl/cert.pem -key-file traefik/conf/ssl/key.pem '*.example.test'
 ```
-
-## 啟用 HTTPS 連線
 
 配置完成 SSL 憑證後，可修改 `docker-compose.yml` 並加入 TLS 檔案配置以啟用 HTTPS 連線
 

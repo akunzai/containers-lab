@@ -51,7 +51,11 @@ COMPOSE_FILE=docker-compose.yml:docker-compose.debug.yml docker-compose up -d
 - 80: HTTP
 - 8080: Traefik 負載平衡器管理後台
 
-## 建立本機開發用的 SSL 憑證
+## [啟用 HTTPS 連線](https://doc.traefik.io/traefik/https/tls/)
+
+### [使用 Let's Encrypt 自動產生憑證](https://doc.traefik.io/traefik/https/acme/)
+
+### 建立本機開發用的 SSL 憑證
 
 可透過 [mkcert](https://github.com/FiloSottile/mkcert) 建立本機開發用的 SSL 憑證
 
@@ -66,8 +70,6 @@ mkdir -p traefik/conf/ssl
 mkcert -cert-file traefik/conf/ssl/cert.pem -key-file traefik/conf/ssl/key.pem '*.example.test'
 ```
 
-## 啟用 HTTPS 連線
-
 配置完成 SSL 憑證後，可修改 `docker-compose.yml` 並加入 TLS 檔案配置以啟用 HTTPS 連線
 
 ```sh
@@ -80,22 +82,6 @@ tls:
         certFile: /etc/traefik/ssl/cert.pem
         keyFile: /etc/traefik/ssl/key.pem
 EOF
-```
-
-如果啟用 HTTPS 後, 如果應用程式無法正確判定 HTTPS 安全連線的話
-
-可以試著在 Tomcat 伺服器配置加入 [RemoteIPValve](https://tomcat.apache.org/tomcat-8.5-doc/config/valve.html#Remote_IP_Valve)
-
-```diff
-<Server port="8005" shutdown="SHUTDOWN">
-  <Service name="Catalina">
-    <Engine name="Catalina" defaultHost="localhost">
-      <Host name="localhost" name="localhost" appBase="${site.home}/site/wwwroot/webapps" xmlBase="${site.home}/site/wwwroot/"
-            unpackWARs="false" autoDeploy="true" workDir="${site.tempdir}">
-+       <Valve className="org.apache.catalina.valves.RemoteIpValve" />
-    </Engine>
-  </Service>
-</Server>
 ```
 
 ## 利用容器執行指令
@@ -149,4 +135,22 @@ cp -v /usr/local/tomcat/conf/* /home/tomcat/conf/
 
 ```sh
 JAVA_OPTS=-server -Xmx4g
+```
+
+## 疑難排解
+
+### 如果啟用 HTTPS 後, 應用程式無法正確判定 HTTPS 安全連線的話
+
+可以試著在 Tomcat 伺服器配置加入 [RemoteIPValve](https://tomcat.apache.org/tomcat-8.5-doc/config/valve.html#Remote_IP_Valve)
+
+```diff
+<Server port="8005" shutdown="SHUTDOWN">
+  <Service name="Catalina">
+    <Engine name="Catalina" defaultHost="localhost">
+      <Host name="localhost" name="localhost" appBase="${site.home}/site/wwwroot/webapps" xmlBase="${site.home}/site/wwwroot/"
+            unpackWARs="false" autoDeploy="true" workDir="${site.tempdir}">
++       <Valve className="org.apache.catalina.valves.RemoteIpValve" />
+    </Engine>
+  </Service>
+</Server>
 ```

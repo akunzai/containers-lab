@@ -51,7 +51,11 @@ COMPOSE_FILE=docker-compose.yml:docker-compose.fpm.yml docker-compose up -d
 - 80: HTTP
 - 8080: Traefik 負載平衡器管理後台
 
-## 建立本機開發用的 SSL 憑證
+## [啟用 HTTPS 連線](https://doc.traefik.io/traefik/https/tls/)
+
+### [使用 Let's Encrypt 自動產生憑證](https://doc.traefik.io/traefik/https/acme/)
+
+### 建立本機開發用的 SSL 憑證
 
 可透過 [mkcert](https://github.com/FiloSottile/mkcert) 建立本機開發用的 SSL 憑證
 
@@ -66,8 +70,6 @@ mkdir -p traefik/conf/ssl
 mkcert -cert-file traefik/conf/ssl/cert.pem -key-file traefik/conf/ssl/key.pem '*.example.test'
 ```
 
-## 啟用 HTTPS 連線
-
 配置完成 SSL 憑證後，可修改 `docker-compose.yml` 並加入 TLS 檔案配置以啟用 HTTPS 連線
 
 ```sh
@@ -80,13 +82,6 @@ tls:
         certFile: /etc/traefik/ssl/cert.pem
         keyFile: /etc/traefik/ssl/key.pem
 EOF
-```
-
-如果啟用 HTTPS 後, 瀏覽器連線時出現重導迴圈的狀況
-可以試著在網站根目錄下的 [.htaccess](https://httpd.apache.org/docs/2.4/howto/htaccess.html)加入以下配置
-
-```apache:.htaccess
-SetEnvIf X-Forwarded-Proto https HTTPS=on
 ```
 
 ## 利用容器執行指令
@@ -222,4 +217,14 @@ cd /home/site/wwwroot
 rm kicketstart.php en-GB.kickstart.ini
 rm -rf installation
 rm -i *.jpa
+```
+
+## 疑難排解
+
+### 啟用 HTTPS 後, 瀏覽器連線時出現重導迴圈的狀況
+
+可以試著在網站根目錄下的 [.htaccess](https://httpd.apache.org/docs/2.4/howto/htaccess.html)加入以下配置
+
+```apache:.htaccess
+SetEnvIf X-Forwarded-Proto https HTTPS=on
 ```

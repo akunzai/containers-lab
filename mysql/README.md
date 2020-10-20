@@ -44,22 +44,7 @@ COMPOSE_FILE=docker-compose.yml:docker-compose.windows.yml docker-compose up -d
 
 - 3306: MySQL
 
-## 建立本機開發用的 SSL 憑證
-
-可透過 [mkcert](https://github.com/FiloSottile/mkcert) 建立本機開發用的 SSL 憑證
-
-以網域名稱 `*.example.test` 為例
-
-```sh
-# 安裝本機開發用的憑證簽發證書
-mkcert -install
-
-# 產生 SSL 憑證
-mkdir -p ssl
-mkcert -cert-file ssl/cert.pem -key-file ssl/key.pem '*.example.test'
-```
-
-### [啟用 SSL 加密連線](https://mariadb.com/kb/en/securing-connections-for-client-and-server/)
+## [啟用 SSL 加密連線](https://mariadb.com/kb/en/securing-connections-for-client-and-server/)
 
 > 如果 mysql 伺服器支援加密連線的話，用戶端預設會嘗試使用
 
@@ -77,6 +62,21 @@ docker-compose exec mysql mysql -p -e 'alter user "alice"@"localhost" require no
 
 # 測試用戶端加密連線
 mysql -h db.example.test -u root -p -e 'show status like "ssl_version";'
+```
+
+### 建立本機開發用的 SSL 憑證
+
+可透過 [mkcert](https://github.com/FiloSottile/mkcert) 建立本機開發用的 SSL 憑證
+
+以網域名稱 `*.example.test` 為例
+
+```sh
+# 安裝本機開發用的憑證簽發證書
+mkcert -install
+
+# 產生 SSL 憑證
+mkdir -p ssl
+mkcert -cert-file ssl/cert.pem -key-file ssl/key.pem '*.example.test'
 ```
 
 ## 初始化資料庫
