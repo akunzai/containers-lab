@@ -66,15 +66,15 @@ COMPOSE_FILE=docker-compose.yml:docker-compose.debug.yml docker-compose up -d
 mkcert -install
 
 # 產生 SSL 憑證
-mkdir -p traefik/conf/ssl
-mkcert -cert-file traefik/conf/ssl/cert.pem -key-file traefik/conf/ssl/key.pem '*.example.test'
+mkdir -p traefik/etc/ssl
+mkcert -cert-file traefik/etc/ssl/cert.pem -key-file traefik/etc/ssl/key.pem '*.example.test'
 ```
 
 配置完成 SSL 憑證後，可修改 `docker-compose.yml` 並加入 TLS 檔案配置以啟用 HTTPS 連線
 
 ```sh
-mkdir -p traefik/conf/dynamic
-cat <<EOF > traefik/conf/dynamic/tls.yml
+mkdir -p traefik/etc/dynamic
+cat <<EOF > traefik/etc/dynamic/tls.yml
 tls:
   stores:
     default:

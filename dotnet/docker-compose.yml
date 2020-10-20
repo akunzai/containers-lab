@@ -25,17 +25,20 @@ services:
     image: traefik
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      # 如果要啟用 HTTPS 連線的話
-      # - ./traefik/conf:/etc/traefik:ro
+      # 如果有相關配置檔案的話
+      # - ./traefik/etc:/etc/traefik
     command:
+      # https://doc.traefik.io/traefik/operations/dashboard/#secure-mode
       - --api.insecure=true
       - --providers.docker=true
       - --providers.docker.exposedByDefault=false
       - --entrypoints.web.address=:80
       # 如果要啟用 HTTPS 連線的話
+      # - --entrypoints.websecure.address=:443
+      # 如果要自動重導為 HTTPS 的話
       # - --entrypoints.web.http.redirections.entryPoint.to=websecure
       # - --entrypoints.web.http.redirections.entryPoint.scheme=https
-      # - --entrypoints.websecure.address=:443
+      # 如果要使用 file provider 的話
       # - --providers.file.directory=/etc/traefik/dynamic/
       # - --providers.file.watch=true
     ports:

@@ -10,7 +10,7 @@ services:
     volumes:
       - ./data:/var/lib/mysql
       # 如果需要自訂組態的話
-      # - ./conf:/etc/mysql/mariadb.conf.d:ro
+      # - ./etc:/etc/mysql/mariadb.conf.d:ro
       # 如果需要初始化資料庫的話
       # - ./initdb:/docker-entrypoint-initdb.d
     ports:
