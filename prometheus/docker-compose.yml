@@ -1,0 +1,110 @@
+version: '3'
+
+volumes:
+    prometheus-storage: 
+    grafana-storage: 
+  
+services:
+  prometheus:
+    # https://github.com/prometheus/prometheus
+    image: prom/prometheus
+    container_name: prometheus
+    restart: unless-stopped
+    volumes:
+      - ./etc/prometheus:/etc/prometheus:ro
+      - prometheus-storage:/prometheus
+    command: 
+      # https://github.com/prometheus/prometheus/blob/master/Dockerfile
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      # https://prometheus.io/docs/prometheus/latest/storage/
+      - '--storage.tsdb.retention.time=15d'
+      # https://prometheus.io/docs/prometheus/latest/management_api/
+      - '--web.enable-lifecycle'
+    # 如果需要自訂主機名稱對應IP的話
+    # extra_hosts:
+    #   - "somehost:127.0.0.2"
+  alertmanager:
+    # https://github.com/prometheus/alertmanager
+    image: prom/alertmanager
+    container_name: alertmanager
+    restart: unless-stopped
+    volumes:
+      - ./etc/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+  grafana:
+    # https://github.com/grafana/grafana
+    image: grafana/grafana
+    container_name: grafana
+    restart: unless-stopped
+    volumes:
+      - grafana-storage:/var/lib/grafana
+      - ./etc/grafana/provisioning:/etc/grafana/provisioning
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.grafana.loadbalancer.server.port=3000"
+      - "traefik.http.routers.grafana.rule=Host(`dev.example.test`)"
+  cadvisor:
+    # https://github.com/google/cadvisor
+    image: gcr.io/cadvisor/cadvisor:v0.38.3
+    container_name: cadvisor
+    restart: unless-stopped
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker:/var/lib/docker:ro
+      # - /dev/disk:/dev/disk:ro # Linux only
+    # Linux only
+    # devices: 
+    #   - /dev/kmsg:/dev/kmsg
+    # privileged: true
+  node:
+    # https://github.com/prometheus/node_exporter
+    image: prom/node-exporter
+    restart: unless-stopped
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
+  blackbox:
+    # https://github.com/prometheus/blackbox_exporter
+    image: prom/blackbox-exporter
+    restart: unless-stopped
+    volumes:
+      - ./etc/blackbox.yml:/etc/blackbox_exporter/config.yml:ro
+  traefik:
+    image: traefik
+    container_name: traefik
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      # 如果有相關配置檔案的話
+      # - ./traefik/etc:/etc/traefik
+    command:
+      # https://doc.traefik.io/traefik/operations/dashboard/#secure-mode
+      - --api.insecure=true
+      - --providers.docker=true
+      - --providers.docker.exposedByDefault=false
+      - --entrypoints.web.address=:80
+      # 如果要啟用 HTTPS 連線的話
+      # - --entrypoints.websecure.address=:443
+      # 如果要自動重導為 HTTPS 的話
+      # - --entrypoints.web.http.redirections.entryPoint.to=websecure
+      # - --entrypoints.web.http.redirections.entryPoint.scheme=https
+      # 如果要使用 file provider 的話
+      # - --providers.file.directory=/etc/traefik/dynamic/
+      # - --providers.file.watch=true
+      # https://doc.traefik.io/traefik/observability/metrics/prometheus/
+      - --metrics.prometheus=true
+    ports:
+      - '127.0.0.1:80:80'
+      - '127.0.0.1:8080:8080'
+      # 如果要啟用 HTTPS 連線的話
+      # - '127.0.0.1:443:443'

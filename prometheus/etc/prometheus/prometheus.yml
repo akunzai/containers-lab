@@ -1,0 +1,66 @@
+# https://prometheus.io/docs/prometheus/latest/configuration/configuration/
+global:
+  # The labels to add to any time series or alerts when communicating with
+  # external systems (federation, remote storage, Alertmanager).
+  external_labels:
+    monitor: 'dev-monitor'
+
+# Rule files specifies a list of globs. Rules and alerts are read from
+# all matching files.
+rule_files:
+  # https://github.com/samber/awesome-prometheus-alerts
+  # - rules/prometheus.alert.yml
+  # - rules/container.alert.yml
+  # - rules/host.alert.yml
+  # - rules/blackbox.alert.yml
+  # - rules/windows.alert.yml
+
+# Alerting specifies settings related to the Alertmanager.
+alerting:
+  alertmanagers:
+  # https://prometheus.io/docs/prometheus/latest/configuration/configuration/#alertmanager_config
+  - static_configs:
+    - targets: 
+      - alertmanager:9093
+
+# A list of scrape configurations.
+scrape_configs:
+  - job_name: prometheus
+    scrape_interval: 10s
+    static_configs:
+      - targets: 
+        - localhost:9090
+  - job_name: cadvisor
+    static_configs:
+    - targets:
+      - cadvisor:8080
+  - job_name: node
+    # https://prometheus.io/docs/prometheus/latest/configuration/configuration/#static_config
+    static_configs:
+      - targets: 
+        - node:9100
+  - job_name: blackbox
+    # https://github.com/prometheus/blackbox_exporter/blob/master/CONFIGURATION.md
+    metrics_path: /probe
+    params:
+      module: [http_head]
+    static_configs:
+      - targets:
+        - http://www.example.com
+        - https://www.example.com
+    # https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox:9115
+  # - job_name: windows
+  #   static_configs:
+  #     - targets: 
+  #       - windows-server1:9182
+  # - job_name: traefik
+  #   static_configs:
+  #     - targets: 
+  #       - traefik:8080
