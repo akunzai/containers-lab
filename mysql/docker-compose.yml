@@ -1,4 +1,8 @@
 version: '3'
+
+volumes:
+    mysql-storage: 
+
 services:
   mysql:
     # https://hub.docker.com/_/mariadb
@@ -8,7 +12,7 @@ services:
       # 指定初始化資料庫建立的 root 密碼
       MYSQL_ROOT_PASSWORD: 'CHANGEME'
     volumes:
-      - ./data:/var/lib/mysql
+      - mysql-storage:/var/lib/mysql
       # 如果需要自訂組態的話
       # - ./etc:/etc/mysql/conf.d:ro
       # 如果需要初始化資料庫的話

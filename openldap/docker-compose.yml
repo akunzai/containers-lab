@@ -1,4 +1,8 @@
 version: '3'
+
+volumes:
+    openldap-storage: 
+
 services:
   openldap:
     # https://github.com/osixia/docker-openldap
@@ -13,7 +17,7 @@ services:
       LDAP_CONFIG_PASSWORD: config
       LDAP_TLS: 'false'
     volumes:
-      - ./data:/var/lib/ldap
+      - openldap-storage:/var/lib/ldap
       - ./etc:/etc/ldap/slapd.d
     ports:
       - '127.0.0.1:389:389'

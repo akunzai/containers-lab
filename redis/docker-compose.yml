@@ -1,11 +1,15 @@
 version: '3'
+
+volumes:
+    redis-storage: 
+
 services:
   redis:
     # https://hub.docker.com/_/redis
     image: redis
     restart: always
     volumes:
-      - ./data:/data
+      - redis-storage:/data
       # 如果需要自訂組態的話
       # - ./etc:/usr/local/etc/redis:ro
     # 如果需要自訂組態的話
