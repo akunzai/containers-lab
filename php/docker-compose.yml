@@ -3,7 +3,7 @@ services:
   php:
     # https://hub.docker.com/r/appsvc/php
     image: appsvc/php:7.3-apache_20200522.6
-    restart: always
+    restart: unless-stopped
     volumes:
       # 在 Azure App Service 運作時，僅有 '/home' 目錄可以跨容器存取並永續儲存
       - ./home:/home
@@ -23,7 +23,7 @@ services:
   traefik:
     # https://hub.docker.com/_/traefik
     image: traefik
-    restart: always
+    restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       # 如果有相關配置檔案的話

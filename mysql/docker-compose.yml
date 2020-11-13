@@ -7,7 +7,7 @@ services:
   mysql:
     # https://hub.docker.com/_/mariadb
     image: mariadb
-    restart: always
+    restart: unless-stopped
     environment:
       # 指定初始化資料庫建立的 root 密碼
       MYSQL_ROOT_PASSWORD: 'CHANGEME'

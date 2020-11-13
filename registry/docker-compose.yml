@@ -7,7 +7,7 @@ services:
   registry:
     # https://hub.docker.com/_/registry
     image: registry:2
-    restart: always
+    restart: unless-stopped
     volumes:
       - registry-storage:/var/lib/registry
     labels:
@@ -23,7 +23,7 @@ services:
   traefik:
     # https://hub.docker.com/_/traefik
     image: traefik
-    restart: always
+    restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       # 如果有相關配置檔案的話

@@ -3,7 +3,7 @@ services:
   dotnet:
     # https://hub.docker.com/r/appsvc/dotnetcore
     image: appsvc/dotnetcore:3.1_20200522.6
-    restart: always
+    restart: unless-stopped
     environment:
       # https://docs.microsoft.com/aspnet/core/fundamentals/configuration/#environment-variables
       # Bash 不支援 `:` 做為階層式索引鍵分隔符號, 必須改用 `__`

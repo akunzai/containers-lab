@@ -7,7 +7,7 @@ services:
   openldap:
     # https://github.com/osixia/docker-openldap
     image: osixia/openldap
-    restart: always
+    restart: unless-stopped
     environment:
       # https://www.openldap.org/doc/admin24/slapdconf2.html#olcLogLevel:%20%3Clevel%3E
       # LDAP_LOG_LEVEL: 256
