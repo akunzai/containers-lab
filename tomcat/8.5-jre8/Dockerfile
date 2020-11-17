@@ -2,7 +2,7 @@
 FROM mcr.microsoft.com/java/jre-headless:8-zulu-alpine-with-tools
 
 ENV AI_VERSION 2.6.2
-ENV TOMCAT_VERSION 8.5.58
+ENV TOMCAT_VERSION 8.5.59
 ENV TOMCAT_MAJOR 8
 ENV APPINSIGHTS_ENABLED 1
 
