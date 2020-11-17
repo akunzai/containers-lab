@@ -1,8 +1,8 @@
 version: '3'
 services:
   dotnet:
-    # https://hub.docker.com/r/appsvc/dotnetcore
-    image: appsvc/dotnetcore:3.1_20200522.6
+    # curl -L https://mcr.microsoft.com/v2/appsvc/dotnetcore/tags/list
+    image: mcr.microsoft.com/appsvc/dotnetcore:lts
     restart: unless-stopped
     environment:
       # https://docs.microsoft.com/aspnet/core/fundamentals/configuration/#environment-variables

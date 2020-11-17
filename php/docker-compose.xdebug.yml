@@ -1,7 +1,7 @@
 version: '3'
 services:
   php:
-    # https://hub.docker.com/r/appsvc/php/tags?page=1&name=xdebug
-    image: appsvc/php:7.3-apache-xdebug_20200522.6
+    # curl -L https://mcr.microsoft.com/v2/appsvc/php/tags/list | grep xdebug
+    image: mcr.microsoft.com/appsvc/php:7.4-apache-xdebug_20201113.1
     environment:
       XDEBUG_CONFIG: 'remote_host=host.docker.internal'

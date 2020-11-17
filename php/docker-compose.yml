@@ -1,8 +1,8 @@
 version: '3'
 services:
   php:
-    # https://hub.docker.com/r/appsvc/php
-    image: appsvc/php:7.3-apache_20200522.6
+    # curl -L https://mcr.microsoft.com/v2/appsvc/php/tags/list
+    image: mcr.microsoft.com/appsvc/php:7.4-apache_20201113.1
     restart: unless-stopped
     volumes:
       # 在 Azure App Service 運作時，僅有 '/home' 目錄可以跨容器存取並永續儲存
