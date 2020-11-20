@@ -18,7 +18,7 @@ docker-compose up
 docker-compose up -d
 
 # 在背景啟動並執行指定服務
-docker-compose up -d openldap
+docker-compose up -d ldap
 
 # 顯示記錄
 docker-compose logs
@@ -41,27 +41,24 @@ docker ps
 
 ## 管理資料庫
 
-以下示範使用 `openldap` 容器本身的工具來管理資料庫
+以下示範使用 `ldap-cli` 容器來管理資料庫
 
-> 還原資料庫前請記得暫時關閉啟動中的 `openldap` 容器以避免資料存取衝突
+> 還原資料庫前請記得暫時關閉啟動中的 `ldap` 容器以避免資料存取衝突
 
 ```sh
-# 擴展為命令列模式
-export COMPOSE_FILE=docker-compose.yml:docker-compose.cli.yml
-
 # 依據目錄後綴匯出為 LDIF (此例為 LDAP config files)
-docker-compose run --rm openldap slapcat -b cn=config > config.ldif
+docker-compose run --rm ldap-cli slapcat -b cn=config > config.ldif
 
 # 依據資料庫索引匯出為 LDIF (此例為 LDAP database files)
-docker-compose run --rm openldap slapcat -n 1 > data.ldif
+docker-compose run --rm ldap-cli slapcat -n 1 > data.ldif
 
 # 刪除 LDAP config files 以利還原
-docker-compose run --rm openldap sh -c 'rm -rf /etc/ldap/slapd.d/*'
+docker-compose run --rm ldap-cli sh -c 'rm -rf /etc/ldap/slapd.d/*'
 # 還原 LDAP config files
-cat config.ldif | docker-compose run --rm openldap slapadd -F /etc/ldap/slapd.d -n 0
+cat config.ldif | docker-compose run --rm ldap-cli slapadd -F /etc/ldap/slapd.d -n 0
 
 # 刪除 LDAP database files
-docker-compose run --rm openldap sh -c 'rm -rf /var/lib/ldap/*'
+docker-compose run --rm ldap-cli sh -c 'rm -rf /var/lib/ldap/*'
 # 還原 LDAP database files
-cat data.ldif | docker-compose run --rm openldap slapadd -F /etc/ldap/slapd.d -n 1
+cat data.ldif | docker-compose run --rm ldap-cli slapadd -F /etc/ldap/slapd.d -n 1
 ```

@@ -1,10 +1,10 @@
 version: '3'
 
 volumes:
-    openldap-storage: 
+  ldap-storage: 
 
 services:
-  openldap:
+  ldap:
     # https://github.com/osixia/docker-openldap
     image: osixia/openldap
     restart: unless-stopped
@@ -17,7 +17,15 @@ services:
       LDAP_CONFIG_PASSWORD: config
       LDAP_TLS: 'false'
     volumes:
-      - openldap-storage:/var/lib/ldap
-      - ./etc:/etc/ldap/slapd.d
+      - ldap-storage:/var/lib/ldap
+      - ./etc/ldap:/etc/ldap/slapd.d
     ports:
       - '127.0.0.1:389:389'
+  ldap-cli:
+    # https://github.com/osixia/docker-openldap
+    image: osixia/openldap
+    volumes:
+      - ldap-storage:/var/lib/ldap
+      - ./etc/ldap:/etc/ldap/slapd.d
+    # https://github.com/osixia/docker-light-baseimage#run-command-line-options
+    entrypoint: /container/tool/run --loglevel warning --skip-env-files --skip-startup-files --skip-process-files --
