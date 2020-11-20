@@ -1,4 +1,4 @@
-FROM php:7.3-fpm
+FROM php:7.4-fpm
 
 RUN set -eux; \
   # persistent / runtime deps
@@ -61,10 +61,11 @@ RUN set -eux; \
   savedAptMark="$(apt-mark showmanual)"; \
   apt-get update; \
   apt-get install -y --no-install-recommends \
-    libicu-dev libjpeg-dev libpng-dev libxslt1-dev libzip-dev \
+    libfreetype6-dev libicu-dev libjpeg62-turbo-dev libpng-dev libxslt1-dev libzip-dev libwebp-dev\
     ${PHP_EXTRA_BUILD_DEPS:-}; \
   rm -rf /var/lib/apt/lists/*; \
-  docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr; \
+  # https://www.php.net/manual/en/image.installation.php
+  docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp; \
   docker-php-ext-install -j$(nproc) \
     intl gd mysqli opcache pcntl pdo_mysql xmlrpc xsl zip; \
   # reset apt-mark's "manual" list so that "purge --auto-remove" will remove all build dependencies
