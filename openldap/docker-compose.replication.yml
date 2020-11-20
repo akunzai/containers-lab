@@ -1,0 +1,65 @@
+version: '3'
+
+volumes:
+  ldap-storage: 
+  ldap2-storage: 
+
+services:
+  ldap:
+    # https://github.com/osixia/docker-openldap
+    image: osixia/openldap
+    restart: unless-stopped
+    hostname: ldap
+    environment: 
+      # https://www.openldap.org/doc/admin24/slapdconf2.html#olcLogLevel:%20%3Clevel%3E
+      LDAP_LOG_LEVEL: 16640
+      # https://github.com/osixia/docker-openldap/blob/stable/image/environment/default.startup.yaml
+      LDAP_DOMAIN: example.org
+      LDAP_ADMIN_PASSWORD: admin
+      LDAP_CONFIG_PASSWORD: config
+      LDAP_REPLICATION: 'true'
+      LDAP_REPLICATION_CONFIG_SYNCPROV: binddn="cn=config" bindmethod=simple credentials="$$LDAP_CONFIG_PASSWORD" searchbase="cn=config" type=refreshAndPersist retry="60 +" timeout=1
+      LDAP_REPLICATION_DB_SYNCPROV: binddn="cn=admin,$$LDAP_BASE_DN" bindmethod=simple credentials="$$LDAP_ADMIN_PASSWORD" searchbase="$$LDAP_BASE_DN" type=refreshAndPersist interval=00:00:00:10 retry="60 +" timeout=1
+      LDAP_REPLICATION_HOSTS: "#PYTHON2BASH:['ldap://ldap','ldap://ldap2']"
+    volumes:
+      - ldap-storage:/var/lib/ldap
+      - ./etc/ldap:/etc/ldap/slapd.d
+    ports:
+      - '127.0.0.1:389:389'
+  ldap-cli:
+    # https://github.com/osixia/docker-openldap
+    image: osixia/openldap
+    volumes:
+      - ldap-storage:/var/lib/ldap
+      - ./etc/ldap:/etc/ldap/slapd.d
+    # https://github.com/osixia/docker-light-baseimage#run-command-line-options
+    entrypoint: /container/tool/run --loglevel warning --skip-env-files --skip-startup-files --skip-process-files --
+  ldap2:
+    # https://github.com/osixia/docker-openldap
+    image: osixia/openldap
+    restart: unless-stopped
+    hostname: ldap2
+    environment:
+      # https://www.openldap.org/doc/admin24/slapdconf2.html#olcLogLevel:%20%3Clevel%3E
+      LDAP_LOG_LEVEL: 16640
+      # https://github.com/osixia/docker-openldap/blob/stable/image/environment/default.startup.yaml
+      LDAP_DOMAIN: example.org
+      LDAP_ADMIN_PASSWORD: admin
+      LDAP_CONFIG_PASSWORD: config
+      LDAP_REPLICATION: 'true'
+      LDAP_REPLICATION_CONFIG_SYNCPROV: binddn="cn=config" bindmethod=simple credentials="$$LDAP_CONFIG_PASSWORD" searchbase="cn=config" type=refreshAndPersist retry="60 +" timeout=1
+      LDAP_REPLICATION_DB_SYNCPROV: binddn="cn=admin,$$LDAP_BASE_DN" bindmethod=simple credentials="$$LDAP_ADMIN_PASSWORD" searchbase="$$LDAP_BASE_DN" type=refreshAndPersist interval=00:00:00:10 retry="60 +" timeout=1
+      LDAP_REPLICATION_HOSTS: "#PYTHON2BASH:['ldap://ldap','ldap://ldap2']"
+    volumes:
+      - ldap2-storage:/var/lib/ldap
+      - ./etc/ldap2:/etc/ldap/slapd.d
+    ports:
+      - '127.0.0.1:10389:389'
+  ldap2-cli:
+    # https://github.com/osixia/docker-openldap
+    image: osixia/openldap
+    volumes:
+      - ldap2-storage:/var/lib/ldap
+      - ./etc/ldap2:/etc/ldap/slapd.d
+    # https://github.com/osixia/docker-light-baseimage#run-command-line-options
+    entrypoint: /container/tool/run --loglevel warning --skip-env-files --skip-startup-files --skip-process-files --
