@@ -18,8 +18,6 @@ services:
       LDAP_ADMIN_PASSWORD: admin
       LDAP_CONFIG_PASSWORD: config
       LDAP_REPLICATION: 'true'
-      LDAP_REPLICATION_CONFIG_SYNCPROV: binddn="cn=config" bindmethod=simple credentials="$$LDAP_CONFIG_PASSWORD" searchbase="cn=config" type=refreshAndPersist retry="60 +" timeout=1
-      LDAP_REPLICATION_DB_SYNCPROV: binddn="cn=admin,$$LDAP_BASE_DN" bindmethod=simple credentials="$$LDAP_ADMIN_PASSWORD" searchbase="$$LDAP_BASE_DN" type=refreshAndPersist interval=00:00:00:10 retry="60 +" timeout=1
       LDAP_REPLICATION_HOSTS: "#PYTHON2BASH:['ldap://ldap','ldap://ldap2']"
     volumes:
       - ldap-storage:/var/lib/ldap
@@ -47,8 +45,6 @@ services:
       LDAP_ADMIN_PASSWORD: admin
       LDAP_CONFIG_PASSWORD: config
       LDAP_REPLICATION: 'true'
-      LDAP_REPLICATION_CONFIG_SYNCPROV: binddn="cn=config" bindmethod=simple credentials="$$LDAP_CONFIG_PASSWORD" searchbase="cn=config" type=refreshAndPersist retry="60 +" timeout=1
-      LDAP_REPLICATION_DB_SYNCPROV: binddn="cn=admin,$$LDAP_BASE_DN" bindmethod=simple credentials="$$LDAP_ADMIN_PASSWORD" searchbase="$$LDAP_BASE_DN" type=refreshAndPersist interval=00:00:00:10 retry="60 +" timeout=1
       LDAP_REPLICATION_HOSTS: "#PYTHON2BASH:['ldap://ldap','ldap://ldap2']"
     volumes:
       - ldap2-storage:/var/lib/ldap
