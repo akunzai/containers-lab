@@ -103,8 +103,11 @@ docker-compose exec mysql mysql_secure_installation
 可以透過設定[認證資訊](https://dev.mysql.com/doc/refman/8.0/en/password-security-user.html)於 `conf/my.cnf` 簡化認證流程
 
 ```sh
-# 完整備份容器內的資料庫
+# 完整備份容器內的指定資料庫
 docker-compose exec mysql mysqldump --single-transaction --add-drop-database --insert-ignore --databases sample | gzip > backup.sql.gz
+
+# 完整備份容器內的所有資料庫
+docker-compose exec mysql mysqldump --single-transaction --add-drop-database --insert-ignore --all-databases | gzip > backup.sql.gz
 
 # 匯入本機的 SQL 備份檔至容器內的資料庫內
 cat backup.sql | docker exec -i $(docker-compose ps -q mysql) mysql
