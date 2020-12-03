@@ -2,7 +2,7 @@ version: '3'
 services:
   dotnet:
     # curl -L https://mcr.microsoft.com/v2/appsvc/dotnetcore/tags/list
-    image: mcr.microsoft.com/appsvc/dotnetcore:lts
+    image: mcr.microsoft.com/appsvc/dotnetcore
     restart: unless-stopped
     environment:
       # https://docs.microsoft.com/aspnet/core/fundamentals/configuration/#environment-variables
