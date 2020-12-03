@@ -92,6 +92,9 @@ docker-compose exec mysql mysqladmin -u root password 'new-password'
 
 # 或是透過以下互動程序來設定所有安全性選項
 docker-compose exec mysql mysql_secure_installation
+
+# 修改遠端登入的帳號密碼
+docker-compose exec mysql mysql -e "ALTER USER 'root'@'%' IDENTIFIED BY 'new-password';"
 ```
 
 ## 管理資料庫
