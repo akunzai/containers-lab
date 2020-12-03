@@ -38,6 +38,21 @@ docker ps
 
 - 6379: Redis
 
+## 複寫資料庫
+
+```sh
+# 啟動另一個配置好的 redis2 容器以複寫原有容器的資料庫
+docker-compose up -d redis2
+
+# 複寫 redis 容器的資料庫
+docker-compose exec redis2 redis-cli replicaof redis 6379
+
+# 等複寫完成後取消資料庫複寫
+docker-compose exec redis2 redis-cli replicaof no one
+
+# 最後再將 redis2 更名為 redis 即可
+```
+
 ## [啟用 TLS 加密連線](https://redis.io/topics/encryption)
 
 ```sh
