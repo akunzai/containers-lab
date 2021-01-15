@@ -1,0 +1,36 @@
+version: '3'
+
+volumes: 
+  mysql_storage:
+
+services:
+  mysql:
+    # https://hub.docker.com/_/mysql
+    image: mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-changeme}
+      MYSQL_USER: ${MYSQL_USER:-guacamole}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-changeme}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-guacamole}
+    volumes:
+      - mysql_storage:/var/lib/mysql
+  guacd:
+    # https://hub.docker.com/r/guacamole/guacd
+    image: guacamole/guacd
+    restart: unless-stopped
+  guacamole:
+    # https://hub.docker.com/r/guacamole/guacamole
+    image: guacamole/guacamole
+    restart: unless-stopped
+    depends_on:
+      - guacd
+      - mysql
+    environment:
+      GUACD_HOSTNAME: guacd
+      MYSQL_HOSTNAME: mysql
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-guacamole}
+      MYSQL_USER: ${MYSQL_USER:-guacamole}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-changeme}
+    ports:
+      - 127.0.0.1:8080:8080
