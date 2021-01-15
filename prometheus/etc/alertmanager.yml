@@ -14,9 +14,17 @@ route:
 
   # A default receiver
   receiver: email
+  routes:
+  # send alert to lint-notify with the env=production match
+  - receiver: 'line-notify'
+    match:
+      env: production
 
 receivers:
   - name: 'email'
     email_configs:
       - to: 'user@example.com'
       # - to: 'user2@example.com'
+  - name: 'line-notify'
+    webhook_configs:
+    - url: 'http://line-notify-gateway:8080/prometheus'

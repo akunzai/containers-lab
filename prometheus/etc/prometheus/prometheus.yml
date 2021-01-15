@@ -38,16 +38,12 @@ scrape_configs:
     # https://prometheus.io/docs/prometheus/latest/configuration/configuration/#static_config
     static_configs:
       - targets: 
-        - node:9100
-  - job_name: blackbox
+        - node-exporter:9100
+  - job_name: http_head
     # https://github.com/prometheus/blackbox_exporter/blob/master/CONFIGURATION.md
     metrics_path: /probe
     params:
       module: [http_head]
-    static_configs:
-      - targets:
-        - http://www.example.com
-        - https://www.example.com
     # https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
     relabel_configs:
       - source_labels: [__address__]
@@ -55,7 +51,27 @@ scrape_configs:
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: blackbox:9115
+        replacement: blackbox-exporter:9115
+    static_configs:
+      - targets:
+        - http://www.example.com
+  - job_name: http_get
+    # https://github.com/prometheus/blackbox_exporter/blob/master/CONFIGURATION.md
+    metrics_path: /probe
+    params:
+      module: [http_2xx]
+    # https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox-exporter:9115
+    static_configs:
+      - targets:
+        - https://www.example.com
+    
   # - job_name: windows
   #   static_configs:
   #     - targets: 

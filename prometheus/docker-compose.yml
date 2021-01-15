@@ -33,6 +33,13 @@ services:
     restart: unless-stopped
     volumes:
       - ./etc/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+  line-notify-gateway:
+    # https://github.com/blakey22/line-notify-gateway
+    image: blakey22/line-notify-gateway:v0.0.1
+    restart: unless-stopped
+    environment:
+      TOKEN: 'CHANGEME'
+      LOCALE: zh_TW
   grafana:
     # https://github.com/grafana/grafana
     image: grafana/grafana
@@ -47,7 +54,7 @@ services:
       - "traefik.http.routers.grafana.rule=Host(`dev.example.test`)"
   cadvisor:
     # https://github.com/google/cadvisor
-    image: gcr.io/cadvisor/cadvisor:v0.38.4
+    image: gcr.io/cadvisor/cadvisor:v0.38.7
     container_name: cadvisor
     restart: unless-stopped
     volumes:
@@ -60,7 +67,7 @@ services:
     # devices: 
     #   - /dev/kmsg:/dev/kmsg
     # privileged: true
-  node:
+  node-exporter:
     # https://github.com/prometheus/node_exporter
     image: prom/node-exporter
     restart: unless-stopped
@@ -73,7 +80,7 @@ services:
       - '--path.rootfs=/rootfs'
       - '--path.sysfs=/host/sys'
       - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
-  blackbox:
+  blackbox-exporter:
     # https://github.com/prometheus/blackbox_exporter
     image: prom/blackbox-exporter
     restart: unless-stopped
