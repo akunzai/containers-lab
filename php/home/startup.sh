@@ -3,10 +3,19 @@
 grep free.nchc.org.tw /etc/apt/sources.list >/dev/null || sed -i 's,^\deb http://deb.debian.org,deb https://free.nchc.org.tw,g' /etc/apt/sources.list
 # fix: Cannot load Zend OPcache - it was already loaded
 sed -i '/zend_extension=opcache/d' /usr/local/etc/php/conf.d/php.ini
-# fix: Cannot load Xdebug - it was already loaded
-[ -e /usr/local/etc/php/conf.d/xdebug.ini ] && sed -i '/zend_extension/d' /usr/local/etc/php/conf.d/xdebug.ini
 # fix: Permission denied error caused by empty `which php` in cron jobs
 [ -e /usr/bin/php ] || ln -s /usr/local/bin/php /usr/bin/php
+
+if [ -e /usr/local/etc/php/conf.d/xdebug.ini ]; then
+    # fix: Cannot load Xdebug - it was already loaded
+    if grep -q zend_extension "/usr/local/etc/php/conf.d/xdebug.ini"; then
+        sed -i '/zend_extension/d' /usr/local/etc/php/conf.d/xdebug.ini
+    fi
+    # fix: XDEBUG_MODE not working
+    if [ -n "$XDEBUG_MODE" ] && ! grep -q xdebug.mode "/usr/local/etc/php/conf.d/xdebug.ini"; then
+        echo "xdebug.mode=$XDEBUG_MODE" >> /usr/local/etc/php/conf.d/xdebug.ini
+    fi
+fi
 
 (hash cron && hash gosu ) >/dev/null 2>&1
 if [ "$?" -ne "0" ]; then
