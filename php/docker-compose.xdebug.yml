@@ -2,7 +2,7 @@ version: '3'
 services:
   php:
     # curl -L https://mcr.microsoft.com/v2/appsvc/php/tags/list | grep xdebug
-    image: mcr.microsoft.com/appsvc/php:7.4-apache-xdebug_20210106.1
+    image: mcr.microsoft.com/appsvc/php:7.4-apache-xdebug_20210308.1
     environment:
       XDEBUG_CONFIG: 'client_host=host.docker.internal'
       XDEBUG_MODE: debug
