@@ -1,5 +1,5 @@
 #!/bin/sh
-if [[ "$WEBSITE_INSTANCE_ID" == "localInstance" ]]; then
+if [ "$WEBSITE_INSTANCE_ID" = "localInstance" ]; then
     # preferred mirror site
     grep free.nchc.org.tw /etc/apt/sources.list >/dev/null || sed -i 's,^\deb http://deb.debian.org,deb http://free.nchc.org.tw,g' /etc/apt/sources.list
     # disable debian-security update
