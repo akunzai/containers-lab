@@ -1,6 +1,13 @@
 #!/bin/sh
-# preferred mirror site
-grep free.nchc.org.tw /etc/apt/sources.list >/dev/null || sed -i 's,^\deb http://deb.debian.org,deb https://free.nchc.org.tw,g' /etc/apt/sources.list
+if [[ "$WEBSITE_INSTANCE_ID" == "localInstance" ]]; then
+    # preferred mirror site
+    grep free.nchc.org.tw /etc/apt/sources.list >/dev/null || sed -i 's,^\deb http://deb.debian.org,deb http://free.nchc.org.tw,g' /etc/apt/sources.list
+    # disable debian-security update
+    grep "^deb http://security.debian.org/debian-security" /etc/apt/sources.list >/dev/null || sed -i -E 's/^(deb .*security.*)/#\1/g' /etc/apt/sources.list
+    # disable mssql update
+    [ -e /etc/apt/sources.list.d/mssql-release.list ] && rm /etc/apt/sources.list.d/mssql-release.list
+fi
+
 # fix: Cannot load Zend OPcache - it was already loaded
 sed -i '/zend_extension=opcache/d' /usr/local/etc/php/conf.d/php.ini
 # fix: Permission denied error caused by empty `which php` in cron jobs
