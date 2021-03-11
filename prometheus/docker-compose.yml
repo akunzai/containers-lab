@@ -54,7 +54,7 @@ services:
       - "traefik.http.routers.grafana.rule=Host(`dev.example.test`)"
   cadvisor:
     # https://github.com/google/cadvisor
-    image: gcr.io/cadvisor/cadvisor:v0.37.5
+    image: gcr.io/cadvisor/cadvisor
     container_name: cadvisor
     restart: unless-stopped
     volumes:
