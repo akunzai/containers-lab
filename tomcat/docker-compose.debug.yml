@@ -1,9 +1,0 @@
-version: '3'
-services:
-  tomcat:
-    # https://www.baeldung.com/spring-debugging
-    environment:
-      DEBUG: 1
-      CATALINA_OPTS: '-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005'
-    ports:
-      - '127.0.0.1:5005:5005'
