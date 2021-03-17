@@ -1,24 +1,24 @@
 version: '3'
 services:
   php:
-    # curl -L https://mcr.microsoft.com/v2/appsvc/php/tags/list
-    image: mcr.microsoft.com/appsvc/php:7.4-apache_20210308.1
+    build: .
+    image: php:7.4-apache-ext
     restart: unless-stopped
     volumes:
       # 在 Azure App Service 運作時，僅有 '/home' 目錄可以跨容器存取並永續儲存
       - ./home:/home
     environment:
       LANG: 'C.UTF-8'
+      APACHE_DOCUMENT_ROOT: /home/site/wwwroot
       # 如果要自訂 PHP 組態設定的話
       # PHP_INI_SCAN_DIR: '/usr/local/etc/php/conf.d:/home/site/ini'
-    # 如果需要自訂啟動腳本的話
-    # command: sh /home/startup.sh
+    command: bash /home/startup.sh
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.php.rule=Host(`dev.example.test`)"
       # 如果要啟用 HTTPS 連線的話
       # - "traefik.http.routers.php.tls=true"
-      - "traefik.http.services.php.loadBalancer.server.port=8080"
+      - "traefik.http.services.php.loadBalancer.server.port=80"
   # https://doc.traefik.io/traefik/
   traefik:
     # https://hub.docker.com/_/traefik
