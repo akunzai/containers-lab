@@ -36,12 +36,6 @@ docker-compose down
 
 # 顯示所有啟動中的容器
 docker ps
-
-# 如果需要使用最新版本的 Java 執行環境的話
-COMPOSE_FILE=docker-compose.yml:docker-compose.latest.yml docker-compose up -d
-
-# 如果需要偵錯 Java 容器內的應用程式的話
-COMPOSE_FILE=docker-compose.yml:docker-compose.debug.yml docker-compose up -d
 ```
 
 ## 連線埠配置
@@ -146,6 +140,12 @@ SPRING_CONFIG_LOCATION=file:/home/config/
 | spring.profiles.include | SPRING_PROFILES_INCLUDE | 逗號分隔的引用配置名稱                                     |                                                         |
 
 ## 疑難排解
+
+### [偵錯應用程式](https://www.baeldung.com/spring-debugging)
+
+請配置如下的 `JAVA_OPTS` 環境變數，並開放連接埠 5005 以利偵錯
+
+- JAVA_OPTS: `-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005`
 
 ### 如果啟用 HTTPS 後, 如果應用程式無法正確判定 HTTPS 安全連線的話
 
