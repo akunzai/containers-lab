@@ -1,5 +1,0 @@
-version: '3'
-services:
-  tomcat:
-    build: ./8.5-jre8
-    image: tomcat:8.5-jre8

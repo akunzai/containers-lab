@@ -36,12 +36,6 @@ docker-compose down
 
 # 顯示所有啟動中的容器
 docker ps
-
-# 如果需要在本機偵錯 PHP 應用程式的話
-COMPOSE_FILE=docker-compose.yml:docker-compose.xdebug.yml docker-compose up -d
-
-# 如果需要擴展以使用自訂的 PHP-FPM 執行環境的話
-COMPOSE_FILE=docker-compose.yml:docker-compose.fpm.yml docker-compose up -d
 ```
 
 ## 連線埠配置
@@ -101,6 +95,10 @@ $ docker-compose run --rm php bash
 
 ## [自訂和調整](https://docs.microsoft.com/azure/app-service/containers/configure-language-php)
 
+在 Azure App Service 運行時，網站根目錄位址為 /home/site/wwwroot
+
+在本機開發時，網站根目錄位址為 `/var/www/html`
+
 ### [自訂啟動腳本](https://github.com/Azure-App-Service/ImageBuilder/blob/master/GenerateDockerFiles/php/apache/init_container.sh)
 
 在本機開發時可以透過 [command](https://docs.docker.com/compose/compose-file/#command) 屬性設定啟動命令
@@ -109,9 +107,11 @@ $ docker-compose run --rm php bash
 
 ### [自訂 PHP 組態設定](https://docs.microsoft.com/azure/app-service/containers/configure-language-php#customize-phpini-settings)
 
-請擴展 PHP 容器配置並啟用 `PHP_INI_SCAN_DIR` 環境變數配置
+請擴展 PHP 容器配置並啟用 [PHP_INI_SCAN_DIR](https://www.php.net/manual/en/configuration.file.php#configuration.file.scan) 環境變數配置
 
-之後便可以在 `home/site/ini` 目錄下加入自訂的 `.ini` 檔案以自訂 [php.ini](https://www.php.net/manual/ini.list.php) 組態
+例如: `PHP_INI_SCAN_DIR=/usr/local/etc/php/conf.d:/home/site/ini`
+
+之後便可以在 `/home/site/ini` 目錄下加入自訂的 `.ini` 檔案以自訂 [php.ini](https://www.php.net/manual/ini.list.php) 組態
 
 > 也可在網站目錄下的 [.htaccess](https://httpd.apache.org/docs/2.4/howto/htaccess.html) 使用 `php_value` 語法自訂組態設定, 但僅限非 `PHP_INI_SYSTEM` 類型的設定
 
@@ -134,19 +134,23 @@ error_reporting=E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED
 > 以下指令請在 PHP 容器內執行
 
 ```sh
-[[ -e /home/site/lib ]] || mkdir /home/site/lib
-[[ -e /home/site/ini ]] || mkdir /home/site/ini
+[ -e /home/site/lib ] || mkdir -p /home/site/lib
+[ -e /home/site/ini ] || mkdir -p /home/site/ini
 
 # 透過 docker-php-ext-install 安裝擴充功能
 apt-get update && apt-get install -y libxml2-dev
 docker-php-ext-install soap
 find /usr/local/lib/php/extensions -name soap.so -exec cp {} /home/site/lib/ \;
-echo "extension=/home/site/lib/soap.so" > /home/site/ini/soap.ini
+tee -a /home/site/ini/php.ini << EOF
+extension=/home/site/lib/soap.so
+EOF
 
 # 透過 pecl 安裝擴充功能
-pecl install redis
-find /usr/local/lib/php/extensions -name redis.so -exec cp {} /home/site/lib/ \;
-echo "extension=/home/site/lib/redis.so" > /home/site/ini/redis.ini
+pecl install xdebug
+find /usr/local/lib/php/extensions -name xdebug.so -exec cp {} /home/site/lib/ \;
+tee -a /home/site/ini/php.ini << EOF
+zend_extension=/home/site/lib/xdebug.so
+EOF
 ```
 
 ### 安裝工具程式
@@ -169,15 +173,6 @@ curl -sS https://getcomposer.org/installer | php -- --install-dir=/home/site/www
 </FilesMatch>
 ```
 
-## 偵錯應用程式
-
-如果需要在 Azure App Service 上偵錯, 請新增[應用系統設定](https://docs.microsoft.com/azure/app-service/configure-common#configure-app-settings) `PHP_ZENDEXTENSIONS` 加入 `xdebug` 設定值
-
-可參考 [PHP Debug for VSCode](https://code.visualstudio.com/docs/languages/php#_debugging) 或 [PHPStorm](https://www.jetbrains.com/help/phpstorm/zero-configuration-debugging.html) 等 IDE 的配置說明
-
-> 需要在 HTTP 請求中加入 `XDEBUG_SESSION_START` URL 參數或 `XDEBUG_SESSION` Cookie 以啟用遠端偵錯
-> 建議可透過[瀏覽器外掛](https://chrome.google.com/webstore/detail/xdebug-helper/eadndfjplgieldjbigjakmdgkmoaaaoc)來切換
-
 ## 備份或還原網站
 
 ### 透過指令
@@ -197,7 +192,7 @@ tar -zxvf /tmp/backup.file.tgz
 rsync --dry-run -vrlP --delete \
     --exclude='/node_modules/' \
     --exclude='/configuration.php' \
-    HOST:/var/www/html/ ./
+    $REMOTE_HOST:/var/www/html/ ./
 ```
 
 ### 透過 [Akeeba Backup](https://www.akeebabackup.com/)
@@ -220,6 +215,20 @@ rm -i *.jpa
 ```
 
 ## 疑難排解
+
+### [偵錯應用程式](https://xdebug.org/docs/step_debug)
+
+如果需要在 Azure App Service 上偵錯, 請新增[應用系統設定](https://docs.microsoft.com/azure/app-service/configure-common#configure-app-settings) `PHP_ZENDEXTENSIONS` 加入 `xdebug` 設定值
+
+安裝 XDebug 擴充功能後，請加入以下的環境變數以利啟用偵錯
+
+- XDEBUG_CONFIG: client_host=host.docker.internal
+- XDEBUG_MODE: debug
+
+可參考 [PHP Debug for VSCode](https://code.visualstudio.com/docs/languages/php#_debugging) 或 [PHPStorm](https://www.jetbrains.com/help/phpstorm/zero-configuration-debugging.html) 等 IDE 的配置說明
+
+> 需要在 HTTP 請求中加入 `XDEBUG_SESSION_START` URL 參數或 `XDEBUG_SESSION` Cookie 以啟用遠端偵錯
+> 建議可透過[瀏覽器外掛](https://xdebug.org/docs/step_debug#browser-extensions)來切換
 
 ### 啟用 HTTPS 後, 瀏覽器連線時出現重導迴圈的狀況
 

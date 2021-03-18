@@ -1,24 +1,26 @@
 version: '3'
 services:
   dotnet:
-    # curl -L https://mcr.microsoft.com/v2/appsvc/dotnetcore/tags/list
-    image: mcr.microsoft.com/appsvc/dotnetcore
+    # https://hub.docker.com/_/microsoft-dotnet-aspnet/
+    image: mcr.microsoft.com/dotnet/aspnet:3.1
     restart: unless-stopped
+    volumes:
+      # 在 Azure App Service 運作時，僅有 '/home' 目錄可以跨容器存取並永續儲存
+      - ./home:/home
     environment:
       # https://docs.microsoft.com/aspnet/core/fundamentals/configuration/#environment-variables
       # Bash 不支援 `:` 做為階層式索引鍵分隔符號, 必須改用 `__`
       ASPNETCORE_ENVIRONMENT: Development
-    volumes:
-      # 在 Azure App Service 運作時，僅有 '/home' 目錄可以跨容器存取並永續儲存
-      - ./home:/home
+      ASPNETCORE_FORWARDEDHEADERS_ENABLED: 'true'
+      ASPNETCORE_URLS: http://*:80
     # 如果需要自訂啟動腳本的話
-    # command: dotnet /home/site/wwwroot/webApp.dll
+    # command: sh -c "cd /home/site/wwwroot && dotnet WebApp.dll"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.dotnet.rule=Host(`dev.example.test`)"
       # 如果要啟用 HTTPS 連線的話
       # - "traefik.http.routers.dotnet.tls=true"
-      - "traefik.http.services.dotnet.loadbalancer.server.port=8080"
+      - "traefik.http.services.dotnet.loadbalancer.server.port=80"
   # https://docs.traefik.io/
   traefik:
     # https://hub.docker.com/_/traefik

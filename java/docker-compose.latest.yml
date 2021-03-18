@@ -1,5 +1,0 @@
-version: '3'
-services:
-  java:
-    build: ./jre8-alpine
-    image: java:jre8-alpine
