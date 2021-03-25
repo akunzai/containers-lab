@@ -1,5 +1,16 @@
 #!/bin/bash
 
+# setup host alias
+hash host >/dev/null 2>&1
+if [ "$?" -ne "0" ]; then
+    apt-get update -qq >/dev/null 2>&1
+    apt-get install --no-install-recommends -yqq dnsutils iproute2
+fi
+host host.docker.internal >/dev/null 2>&1
+if [ "$?" -ne "0" ]; then
+    ip route show | awk '/default/ {print $3,"host.docker.internal"}' >> /etc/hosts
+fi
+
 if [ -d "$APACHE_DOCUMENT_ROOT" -a "$APACHE_DOCUMENT_ROOT" != "/var/www/html" ]; then
     # link /var/www/html to APACHE_DOCUMENT_ROOT
     rm -rf /var/www/html;
@@ -16,10 +27,10 @@ if [ -e /usr/local/etc/php/conf.d/xdebug.ini ]; then
     if grep -q zend_extension "/usr/local/etc/php/conf.d/xdebug.ini"; then
         sed -i '/zend_extension/d' /usr/local/etc/php/conf.d/xdebug.ini
     fi
-    # fix: XDEBUG_MODE not working
-    if [ -n "$XDEBUG_MODE" ] && ! grep -q xdebug.mode "/usr/local/etc/php/conf.d/xdebug.ini"; then
-        echo "xdebug.mode=$XDEBUG_MODE" >> /usr/local/etc/php/conf.d/xdebug.ini
-    fi
+fi
+# fix: XDEBUG_MODE not working
+if [ -n "$XDEBUG_MODE" ] && ! php -i | grep -q "xdebug.mode => $XDEBUG_MODE"; then
+    echo "xdebug.mode=$XDEBUG_MODE" >> /usr/local/etc/php/conf.d/xdebug.ini
 fi
 
 if [ -e "$APACHE_DOCUMENT_ROOT/cron.sh" ]; then
