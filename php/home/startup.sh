@@ -28,9 +28,15 @@ if [ -e /usr/local/etc/php/conf.d/xdebug.ini ]; then
         sed -i '/zend_extension/d' /usr/local/etc/php/conf.d/xdebug.ini
     fi
 fi
+
 # fix: XDEBUG_MODE not working
 if [ -n "$XDEBUG_MODE" ] && ! php -i | grep -q "xdebug.mode => $XDEBUG_MODE"; then
     echo "xdebug.mode=$XDEBUG_MODE" >> /usr/local/etc/php/conf.d/xdebug.ini
+fi
+
+# fix: Require ip not working
+if ! grep -q RemoteIPHeader /etc/apache2/apache2.conf; then
+    echo -e "RemoteIPHeader X-Forwarded-For\nRemoteIPInternalProxy 172.16.0.0/12" >> /etc/apache2/apache2.conf
 fi
 
 if [ -e "$APACHE_DOCUMENT_ROOT/cron.sh" ]; then
@@ -49,7 +55,7 @@ if [ -e "$APACHE_DOCUMENT_ROOT/cron.sh" ]; then
     # /proc/1/fd/1: STDOUT for Docker
     # /proc/1/fd/2: STDERR for Docker
     (
-    echo "* * * * * (/usr/sbin/gosu www-data /bin/bash $APACHE_DOCUMENT_ROOT/cron.sh)>/proc/1/fd/1 2>/proc/1/fd/2"
+    echo "*/5 * * * * (/usr/sbin/gosu www-data /bin/bash $APACHE_DOCUMENT_ROOT/cron.sh)>/proc/1/fd/1 2>/proc/1/fd/2"
     ) | crontab
 fi
 
