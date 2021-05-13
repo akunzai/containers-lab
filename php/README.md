@@ -189,7 +189,7 @@ tar -zcvf /tmp/backup.file.tgz --exclude='./node_modules/*' ./
 tar -zxvf /tmp/backup.file.tgz
 
 # 或是利用 rsync 差異同步暨有網站檔案 (以下為測試模式，實際執行請拿掉 --dry-run 選項)
-rsync --dry-run -vrlP --delete \
+rsync --dry-run -lcrvhP --delete \
     --exclude='/node_modules/' \
     --exclude='/configuration.php' \
     $REMOTE_HOST:/var/www/html/ ./
