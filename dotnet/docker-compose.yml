@@ -8,6 +8,7 @@ services:
       # 在 Azure App Service 運作時，僅有 '/home' 目錄可以跨容器存取並永續儲存
       - ./home:/home
     environment:
+      LANG: 'C.UTF-8'
       # https://docs.microsoft.com/aspnet/core/fundamentals/configuration/#environment-variables
       # Bash 不支援 `:` 做為階層式索引鍵分隔符號, 必須改用 `__`
       ASPNETCORE_ENVIRONMENT: Development

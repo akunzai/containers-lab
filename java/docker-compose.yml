@@ -8,6 +8,7 @@ services:
       # 在 Azure App Service 運作時，僅有 '/home' 目錄可以跨容器存取並永續儲存
       - ./home:/home
     environment:
+      LANG: 'C.UTF-8'
       JAVA_OPTS: '-server -XX:+UseParallelGC -XX:+TieredCompilation -XX:TieredStopAtLevel=1  -XX:+UseStringDeduplication'
       JAVA_TOOL_OPTIONS: '-Djava.net.preferIPv4Stack=true'
     command: sh -c 'java -noverify -Djava.security.egd=file:/dev/./urandom $$JAVA_OPTS -jar /home/site/wwwroot/app.jar'
