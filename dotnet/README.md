@@ -107,3 +107,12 @@ dotnet publish -c Release -o ./home/site/wwwroot/
 在本機開發時可以透過 [command](https://docs.docker.com/compose/compose-file/#command) 屬性設定啟動命令
 
 而在 Azure App Service 則可以在組態頁面的一般設定中設定啟動命令
+
+## 以非 root 身份執行應用程式
+
+可利用自訂啟動腳本，在容器內透過 [gosu](https://github.com/tianon/gosu) 工具以非 root 身份執行應用程式
+
+```sh
+apt-get update -qq && apt-get install --no-install-recommends -yqq gosu
+gosu www-data dotnet /home/site/wwwroot/myapp.dll
+```

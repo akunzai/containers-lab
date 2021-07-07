@@ -157,3 +157,17 @@ server.use-forward-headers=true
 # since spring-boot 2.2
 server.forward-headers-strategy=NATIVE
 ```
+
+### 以非 root 身份執行應用程式
+
+可利用先前提到的自訂啟動腳本，在容器內透過 [gosu](https://github.com/tianon/gosu) 或 [su-exec](https://github.com/ncopa/su-exec) 等工具以非 root 身份執行應用程式
+
+```sh
+# for Debian/Ubuntu
+apt-get update -qq && apt-get install --no-install-recommends -yqq gosu
+gosu www-data java -noverify -Djava.security.egd=file:/dev/./urandom $JAVA_OPTS -jar $JAR_FILE
+
+# for Alpine
+apk update && apk add su-exec
+su-exec nobody java -noverify -Djava.security.egd=file:/dev/./urandom $JAVA_OPTS -jar $JAR_FILE
+```
