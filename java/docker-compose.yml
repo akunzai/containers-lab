@@ -2,7 +2,7 @@ version: '3'
 services:
   java:
     # https://hub.docker.com/_/microsoft-java-jre-headless
-    image: mcr.microsoft.com/java/jre-headless:8-zulu-alpine
+    image: mcr.microsoft.com/java/jre-headless:8-zulu-debian10
     restart: unless-stopped
     volumes:
       # 在 Azure App Service 運作時，僅有 '/home' 目錄可以跨容器存取並永續儲存
