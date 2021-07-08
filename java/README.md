@@ -171,3 +171,11 @@ gosu www-data java -noverify -Djava.security.egd=file:/dev/./urandom $JAVA_OPTS 
 apk update && apk add su-exec
 su-exec nobody java -noverify -Djava.security.egd=file:/dev/./urandom $JAVA_OPTS -jar $JAR_FILE
 ```
+
+執行內嵌 Tomcat 應用程式時, 預設會在根目錄自動建立 `/build/tomcat` 目錄
+當由 root 身分轉換至非 root 身分時，需一併自動建立這些目錄及設定好權限，否則可能會造成應用程式啟動失敗 (Unable to create the directory [/build/tomcat] to use as the base directory)
+
+```sh
+# ensure embedded tomcat working directory exists and fixes permission
+mkdir -p /build/tomcat && chown -R www-data:www-data /build/tomcat
+```
