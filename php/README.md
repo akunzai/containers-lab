@@ -81,11 +81,11 @@ EOF
 ## 利用容器執行指令
 
 ```sh
-# 預設執行身份為 root
+# 預設執行身分為 root
 $ docker-compose run --rm php whoami
 root
 
-# 指定執行身份為 www-data
+# 指定執行身分為 www-data
 $ docker-compose run --rm --user www-data php whoami
 www-data
 

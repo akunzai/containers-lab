@@ -81,11 +81,11 @@ EOF
 ## 利用容器執行指令
 
 ```sh
-# 預設執行身份為 root
+# 預設執行身分為 root
 $ docker-compose run --rm dotnet whoami
 root
 
-# 指定執行身份為 www-data
+# 指定執行身分為 www-data
 $ docker-compose run --rm --user www-data dotnet whoami
 www-data
 
@@ -108,9 +108,9 @@ dotnet publish -c Release -o ./home/site/wwwroot/
 
 而在 Azure App Service 則可以在組態頁面的一般設定中設定啟動命令
 
-## 以非 root 身份執行應用程式
+## 以非 root 身分執行應用程式
 
-可利用自訂啟動腳本，在容器內透過 [gosu](https://github.com/tianon/gosu) 工具以非 root 身份執行應用程式
+可利用自訂啟動腳本，在容器內透過 [gosu](https://github.com/tianon/gosu) 工具以非 root 身分執行應用程式
 
 ```sh
 apt-get update -qq && apt-get install --no-install-recommends -yqq gosu

@@ -81,11 +81,11 @@ EOF
 ## 利用容器執行指令
 
 ```sh
-# 預設執行身份為 root
+# 預設執行身分為 root
 $ docker-compose run --rm java whoami
 root
 
-# 指定執行身份為 www-data
+# 指定執行身分為 www-data
 $ docker-compose run --rm --user www-data java whoami
 www-data
 
@@ -158,9 +158,9 @@ server.use-forward-headers=true
 server.forward-headers-strategy=NATIVE
 ```
 
-### 以非 root 身份執行應用程式
+### 以非 root 身分執行應用程式
 
-可利用先前提到的自訂啟動腳本，在容器內透過 [gosu](https://github.com/tianon/gosu) 或 [su-exec](https://github.com/ncopa/su-exec) 等工具以非 root 身份執行應用程式
+可利用先前提到的自訂啟動腳本，在容器內透過 [gosu](https://github.com/tianon/gosu) 或 [su-exec](https://github.com/ncopa/su-exec) 等工具以非 root 身分執行應用程式
 
 ```sh
 # for Debian/Ubuntu
