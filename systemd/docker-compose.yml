@@ -3,19 +3,19 @@ services:
   # https://github.com/j8r/dockerfiles/issues/10
   centos:
     build: ./centos
-    image: centos/systemd:7
+    image: centos/systemd:8
     tmpfs:
       - /tmp
       - /run
       - /run/lock
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
-  centos8:
+  centos7:
     build: 
       context: ./centos
       args:
-        VERSION: 8
-    image: centos/systemd:8
+        VERSION: 7
+    image: centos/systemd:7
     tmpfs:
       - /tmp
       - /run

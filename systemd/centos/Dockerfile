@@ -1,5 +1,5 @@
 # https://github.com/docker-library/docs/tree/master/centos#systemd-integration
-ARG VERSION=7
+ARG VERSION=8
 FROM centos:$VERSION
 
 ENV container docker
