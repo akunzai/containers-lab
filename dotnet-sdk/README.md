@@ -24,28 +24,28 @@ docker build -t dotnet:sdk-msbuild .
 # 執行 dotnet CLI
 $ docker run -it --rm dotnet:sdk-msbuild dotnet --info
 .NET SDK (reflecting any global.json):
- Version:   5.0.301
- Commit:    ef17233f86
+ Version:   5.0.302
+ Commit:    c005824e35
 
 Runtime Environment:
  OS Name:     debian
  OS Version:  10
  OS Platform: Linux
  RID:         debian.10-x64
- Base Path:   /usr/share/dotnet/sdk/5.0.301/
+ Base Path:   /usr/share/dotnet/sdk/5.0.302/
 
 Host (useful for support):
-  Version: 5.0.7
-  Commit:  556582d964
+  Version: 5.0.8
+  Commit:  35964c9215
 
 .NET SDKs installed:
-  5.0.301 [/usr/share/dotnet/sdk]
+  5.0.302 [/usr/share/dotnet/sdk]
 
 .NET runtimes installed:
-  Microsoft.AspNetCore.App 3.1.16 [/usr/share/dotnet/shared/Microsoft.AspNetCore.App]
-  Microsoft.AspNetCore.App 5.0.7 [/usr/share/dotnet/shared/Microsoft.AspNetCore.App]
-  Microsoft.NETCore.App 3.1.16 [/usr/share/dotnet/shared/Microsoft.NETCore.App]
-  Microsoft.NETCore.App 5.0.7 [/usr/share/dotnet/shared/Microsoft.NETCore.App]
+  Microsoft.AspNetCore.App 3.1.17 [/usr/share/dotnet/shared/Microsoft.AspNetCore.App]
+  Microsoft.AspNetCore.App 5.0.8 [/usr/share/dotnet/shared/Microsoft.AspNetCore.App]
+  Microsoft.NETCore.App 3.1.17 [/usr/share/dotnet/shared/Microsoft.NETCore.App]
+  Microsoft.NETCore.App 5.0.8 [/usr/share/dotnet/shared/Microsoft.NETCore.App]
 
 To install additional .NET runtimes or SDKs:
   https://aka.ms/dotnet-download
@@ -65,7 +65,7 @@ $ docker run -it --rm dotnet:sdk-msbuild bash
 
 ### 如何跨平台建置目標為 .NET Framework  的傳統 .NET 應用程式
 
-可透過 msbuild for [Mono](ttps://www.mono-project.com/) 來達成
+可透過 msbuild for [Mono](https://www.mono-project.com/) 來達成
 
 ### 如何跨平台建置目標為 .NET Framework  的 [.NET SDK 應用程式](https://docs.microsoft.com/dotnet/core/project-sdk/overview)
 
@@ -77,7 +77,7 @@ $ docker run -it --rm dotnet:sdk-msbuild bash
 
 ### [如何跨平台測試目標為 .NET Framework 的 .NET SDK 應用程式](https://cake-contrib.github.io/Cake.Recipe/docs/known-issues/running-xunit-tests-on-net-framework)
 
-> 執行環境需要安裝 [Mono](ttps://www.mono-project.com/)
+> 執行環境需要安裝 [Mono](https://www.mono-project.com/)
 
 可透過安裝 [Microsoft.TestPlatform.ObjectModel](https://www.nuget.org/packages/Microsoft.TestPlatform.ObjectModel/) 套件來達成
 
