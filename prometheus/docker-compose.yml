@@ -11,7 +11,7 @@ services:
     container_name: prometheus
     restart: unless-stopped
     volumes:
-      - ./etc/prometheus:/etc/prometheus:ro
+      - ./prometheus/etc:/etc/prometheus:ro
       - prometheus-storage:/prometheus
     command: 
       # https://github.com/prometheus/prometheus/blob/master/Dockerfile
@@ -32,7 +32,7 @@ services:
     container_name: alertmanager
     restart: unless-stopped
     volumes:
-      - ./etc/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+      - ./prometheus/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
   line-notify-gateway:
     # https://github.com/blakey22/line-notify-gateway
     image: blakey22/line-notify-gateway:v0.0.1
@@ -50,7 +50,7 @@ services:
       GF_SERVER_ROOT_URL: 'http://dev.example.test'
     volumes:
       - grafana-storage:/var/lib/grafana
-      - ./etc/grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/provisioning:/etc/grafana/provisioning
     labels:
       - "traefik.enable=true"
       - "traefik.http.services.grafana.loadbalancer.server.port=3000"
@@ -88,7 +88,7 @@ services:
     image: prom/blackbox-exporter
     restart: unless-stopped
     volumes:
-      - ./etc/blackbox.yml:/etc/blackbox_exporter/config.yml:ro
+      - ./prometheus/blackbox.yml:/etc/blackbox_exporter/config.yml:ro
   traefik:
     image: traefik
     container_name: traefik
