@@ -1,0 +1,8 @@
+# IDE - VSCode
+.vscode/*
+!.vscode/extensions.json
+.history/*
+
+# System Files
+.DS_Store
+Thumbs.db
