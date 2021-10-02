@@ -1,6 +1,7 @@
 version: '3'
 
 volumes:
+    alertmanager-storage:
     prometheus-storage: 
     grafana-storage: 
   
@@ -11,8 +12,8 @@ services:
     container_name: prometheus
     restart: unless-stopped
     volumes:
-      - ./prometheus/etc:/etc/prometheus:ro
       - prometheus-storage:/prometheus
+      - ./prometheus/etc:/etc/prometheus:ro
     command: 
       # https://github.com/prometheus/prometheus/blob/master/Dockerfile
       - '--config.file=/etc/prometheus/prometheus.yml'
@@ -32,6 +33,7 @@ services:
     container_name: alertmanager
     restart: unless-stopped
     volumes:
+      - alertmanager-storage:/alertmanager
       - ./prometheus/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
   line-notify-gateway:
     # https://github.com/blakey22/line-notify-gateway
