@@ -8,9 +8,13 @@ global:
 
 # The root route on which each incoming alert enters.
 route:
+  # How long to wait before sending a notification about new alerts that
+  # are added to a group of alerts for which an initial notification has
+  # already been sent. (Usually ~5m or more.)
+  group_interval: 1h
   # How long to wait before sending a notification again if it has already
   # been sent successfully for an alert. (Usually ~3h or more).
-  repeat_interval: 3h
+  repeat_interval: 4h
 
   # A default receiver
   receiver: email
