@@ -1,5 +1,6 @@
 # https://hub.docker.com/_/php
-FROM php:7.4-apache
+ARG VERSION=8.0
+FROM php:$VERSION-apache
 ENV LANG=C.UTF-8
 RUN set -eux; \
   # enable Apache2 modules
