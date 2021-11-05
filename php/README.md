@@ -145,6 +145,14 @@ tee -a /home/site/ini/php.ini << EOF
 extension=/home/site/lib/soap.so
 EOF
 
+# 透過 pickle 安裝擴充功能 (PHP 7.3 以上版本建議使用)
+curl -fSL -O https://github.com/FriendsOfPHP/pickle/releases/latest/download/pickle.phar
+php ./pickle.phar install redis
+find /usr/local/lib/php/extensions -name redis.so -exec cp {} /home/site/lib/ \;
+tee -a /home/site/ini/php.ini << EOF
+extension=/home/site/lib/redis.so
+EOF
+
 # 透過 pecl 安裝擴充功能
 pecl install xdebug
 find /usr/local/lib/php/extensions -name xdebug.so -exec cp {} /home/site/lib/ \;
