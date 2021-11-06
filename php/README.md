@@ -138,7 +138,8 @@ error_reporting=E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED
 [ -e /home/site/lib ] || mkdir -p /home/site/lib
 [ -e /home/site/ini ] || mkdir -p /home/site/ini
 
-# 透過 docker-php-ext-install 安裝擴充功能
+# 透過 docker-php-ext-install 安裝 PHP 內建的擴充功能
+# https://www.php.net/manual/en/extensions.alphabetical.php
 apt-get update && apt-get install -y libxml2-dev
 docker-php-ext-install soap
 find /usr/local/lib/php/extensions -name soap.so -exec cp {} /home/site/lib/ \;
@@ -146,7 +147,7 @@ tee -a /home/site/ini/php.ini << EOF
 extension=/home/site/lib/soap.so
 EOF
 
-# 透過 pickle 安裝擴充功能 (PHP 7.3 以上版本建議使用)
+# 透過 pickle 安裝第三方的擴充功能 (PHP 7.3 以上版本建議使用)
 curl -fSL -O https://github.com/FriendsOfPHP/pickle/releases/latest/download/pickle.phar
 php ./pickle.phar install redis
 find /usr/local/lib/php/extensions -name redis.so -exec cp {} /home/site/lib/ \;
@@ -154,7 +155,7 @@ tee -a /home/site/ini/php.ini << EOF
 extension=/home/site/lib/redis.so
 EOF
 
-# 透過 pecl 安裝擴充功能
+# 透過 pecl 安裝第三方的擴充功能
 pecl install xdebug
 find /usr/local/lib/php/extensions -name xdebug.so -exec cp {} /home/site/lib/ \;
 tee -a /home/site/ini/php.ini << EOF
