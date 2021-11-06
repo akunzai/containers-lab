@@ -3,6 +3,7 @@
 ## 環境需求
 
 - [Docker Engine](https://docs.docker.com/install/)
+- [Docker Compose V2](https://docs.docker.com/compose/cli-command/)
 
 ## 運行開發環境
 
@@ -12,22 +13,22 @@
 
 ```sh
 # 啟動並執行完整應用(若配置有異動會自動重建容器)
-docker-compose up
+docker compose up
 
 # 在背景啟動並執行完整應用
-docker-compose up -d
+docker compose up -d
 
 # 在背景啟動應用時指定服務的執行個數數量
-docker-compose up -d --scale registry=2
+docker compose up -d --scale registry=2
 
 # 顯示記錄
-docker-compose logs
+docker compose logs
 
 # 持續顯示記錄
-docker-compose logs -f
+docker compose logs -f
 
 # 關閉應用
-docker-compose down
+docker compose down
 
 # 顯示所有啟動中的容器
 docker ps

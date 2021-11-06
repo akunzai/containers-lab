@@ -3,6 +3,7 @@
 ## 環境需求
 
 - [Docker Engine](https://docs.docker.com/install/)
+- [Docker Compose V2](https://docs.docker.com/compose/cli-command/)
 
 ## 運行開發環境
 
@@ -12,22 +13,22 @@
 
 ```sh
 # 啟動並執行完整應用
-docker-compose up
+docker compose up
 
 # 在背景啟動並執行完整應用
-docker-compose up -d
+docker compose up -d
 
 # 在背景啟動並執行指定服務
-docker-compose up -d ldap
+docker compose up -d ldap
 
 # 顯示記錄
-docker-compose logs
+docker compose logs
 
 # 持續顯示記錄
-docker-compose logs -f
+docker compose logs -f
 
 # 關閉應用
-docker-compose down
+docker compose down
 
 # 顯示所有啟動中的容器
 docker ps
@@ -47,18 +48,18 @@ docker ps
 
 ```sh
 # 依據目錄後綴匯出為 LDIF (此例為 LDAP config files)
-docker-compose run --rm ldap-cli slapcat -b cn=config > config.ldif
+docker compose run --rm ldap-cli slapcat -b cn=config > config.ldif
 
 # 依據資料庫索引匯出為 LDIF (此例為 LDAP database files)
-docker-compose run --rm ldap-cli slapcat -n 1 > data.ldif
+docker compose run --rm ldap-cli slapcat -n 1 > data.ldif
 
 # 刪除 LDAP config files 以利還原
-docker-compose run --rm ldap-cli sh -c 'rm -rf /etc/ldap/slapd.d/*'
+docker compose run --rm ldap-cli sh -c 'rm -rf /etc/ldap/slapd.d/*'
 # 還原 LDAP config files
-cat config.ldif | docker-compose run --rm ldap-cli slapadd -F /etc/ldap/slapd.d -n 0
+cat config.ldif | docker compose run --rm ldap-cli slapadd -F /etc/ldap/slapd.d -n 0
 
 # 刪除 LDAP database files
-docker-compose run --rm ldap-cli sh -c 'rm -rf /var/lib/ldap/*'
+docker compose run --rm ldap-cli sh -c 'rm -rf /var/lib/ldap/*'
 # 還原 LDAP database files
-cat data.ldif | docker-compose run --rm ldap-cli slapadd -F /etc/ldap/slapd.d -n 1
+cat data.ldif | docker compose run --rm ldap-cli slapadd -F /etc/ldap/slapd.d -n 1
 ```

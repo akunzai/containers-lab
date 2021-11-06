@@ -3,6 +3,7 @@
 ## 環境需求
 
 - [Docker Engine](https://docs.docker.com/install/)
+- [Docker Compose V2](https://docs.docker.com/compose/cli-command/)
 
 ## 運行開發環境
 
@@ -14,19 +15,19 @@
 
 ```sh
 # 啟動並執行完整應用
-docker-compose up
+docker compose up
 
 # 在背景啟動並執行完整應用
-docker-compose up -d
+docker compose up -d
 
 # 顯示記錄
-docker-compose logs
+docker compose logs
 
 # 持續顯示記錄
-docker-compose logs -f
+docker compose logs -f
 
 # 關閉應用
-docker-compose down
+docker compose down
 
 # 顯示所有啟動中的容器
 docker ps
@@ -44,10 +45,10 @@ docker ps
 
 ```sh
 # 產生 MySQL 初始化腳本
-docker-compose run --rm guacamole /opt/guacamole/bin/initdb.sh --mysql > initdb.sql
+docker compose run --rm guacamole /opt/guacamole/bin/initdb.sh --mysql > initdb.sql
 
 # 在 MySQL 容器執行初始化腳本
-cat initdb.sql | docker exec -i $(docker-compose ps -q mysql) mysql -uguacamole -pchangeme guacamole
+cat initdb.sql | docker exec -i $(docker compose ps -q mysql) mysql -uguacamole -pchangeme guacamole
 ```
 
 ## 開始使用
