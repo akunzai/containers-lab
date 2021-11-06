@@ -94,13 +94,13 @@ www-data
 $ docker compose run --rm java bash
 ```
 
-## [應用程式部署](https://docs.microsoft.com/azure/app-service/configure-language-java#configure-jar-applications)
+## [應用程式部署](https://docs.microsoft.com/azure/app-service/configure-language-java?pivots=platform-linux#configure-jar-applications)
 
 > 如果不希望更名 JAR 應用程式，則需要自訂容器的啟動程序
 
 JAR 應用程式請打包或更名為 `app.jar` 並部署至容器內的 `/home/site/wwwroot/` 目錄下
 
-## [自訂和調整](https://docs.microsoft.com/azure/app-service/configure-language-java#customization-and-tuning)
+## [自訂和調整](https://docs.microsoft.com/azure/app-service/configure-language-java?pivots=platform-linux#customization-and-tuning)
 
 ### [自訂啟動腳本](https://github.com/Azure-App-Service/java/blob/dev/shared/init_container.sh)
 
@@ -112,7 +112,7 @@ JAR 應用程式請打包或更名為 `app.jar` 並部署至容器內的 `/home/
 >
 > 但若設定啟動命令或腳本則不會載入預設的 jar
 
-### [設定 Java 執行階段選項](https://docs.microsoft.com/azure/app-service/configure-language-java#set-java-runtime-options)
+### [設定 Java 執行階段選項](https://docs.microsoft.com/azure/app-service/configure-language-java?pivots=platform-linux#set-java-runtime-options)
 
 如需設定 Java 執行階段選項, 可透過配置 `JAVA_OPTS` 環境變數達成，例如
 
