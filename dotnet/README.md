@@ -3,10 +3,11 @@
 ## 環境需求
 
 - [Docker Engine](https://docs.docker.com/install/)
+- [Docker Compose V2](https://docs.docker.com/compose/cli-command/)
 
 ## 運行開發環境
 
-> `docker-compose` 指令必須要在 `docker-compose.yml` 所在的目錄下執行
+> `docker compose` 指令必須要在 `docker-compose.yml` 所在的目錄下執行
 >
 > 可透過建立 `docker-compose.override.yml` 來擴展 `docker-compose.yml` 組態
 >
@@ -14,25 +15,25 @@
 
 ```sh
 # 啟動並執行完整應用(若配置有異動會自動重建容器)
-docker-compose up
+docker compose up
 
 # 在背景啟動並執行完整應用
-docker-compose up -d
+docker compose up -d
 
 # 在背景啟動應用時指定服務的執行個數數量
-docker-compose up -d --scale dotnet=2
+docker compose up -d --scale dotnet=2
 
 # 在背景啟動並執行指定服務
-docker-compose up -d dotnet
+docker compose up -d dotnet
 
 # 顯示記錄
-docker-compose logs
+docker compose logs
 
 # 持續顯示記錄
-docker-compose logs -f
+docker compose logs -f
 
 # 關閉應用
-docker-compose down
+docker compose down
 
 # 顯示所有啟動中的容器
 docker ps
@@ -82,15 +83,15 @@ EOF
 
 ```sh
 # 預設執行身分為 root
-$ docker-compose run --rm dotnet whoami
+$ docker compose run --rm dotnet whoami
 root
 
 # 指定執行身分為 www-data
-$ docker-compose run --rm --user www-data dotnet whoami
+$ docker compose run --rm --user www-data dotnet whoami
 www-data
 
 # 執行 Bash Shell
-$ docker-compose run --rm dotnet bash
+$ docker compose run --rm dotnet bash
 ```
 
 ## 應用程式部署

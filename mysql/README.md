@@ -3,6 +3,7 @@
 ## 環境需求
 
 - [Docker Engine](https://docs.docker.com/install/)
+- [Docker Compose V2](https://docs.docker.com/compose/cli-command/)
 
 ## 運行開發環境
 
@@ -14,25 +15,25 @@
 
 ```sh
 # 啟動並執行完整應用
-docker-compose up
+docker compose up
 
 # 在背景啟動並執行完整應用
-docker-compose up -d
+docker compose up -d
 
 # 顯示記錄
-docker-compose logs
+docker compose logs
 
 # 持續顯示記錄
-docker-compose logs -f
+docker compose logs -f
 
 # 關閉應用
-docker-compose down
+docker compose down
 
 # 顯示所有啟動中的容器
 docker ps
 
 # 如果需要使用 MySQL 網頁管理介面的話
-COMPOSE_FILE=docker-compose.yml:docker-compose.adminer.yml docker-compose up -d
+COMPOSE_FILE=docker-compose.yml:docker-compose.adminer.yml docker compose up -d
 ```
 
 ## 連線埠配置
@@ -47,15 +48,15 @@ COMPOSE_FILE=docker-compose.yml:docker-compose.adminer.yml docker-compose up -d
 
 ```sh
 # 啟用 SSL 加密連線
-COMPOSE_FILE=docker-compose.yml:docker-compose.ssl.yml docker-compose up -d
+COMPOSE_FILE=docker-compose.yml:docker-compose.ssl.yml docker compose up -d
 
 # 確認已正確啟用
-docker-compose exec mysql mysql -p -e 'show variables like "%ssl%";'
+docker compose exec mysql mysql -p -e 'show variables like "%ssl%";'
 
 # 如果要使用者必須使用加密連線登入的話
-docker-compose exec mysql mysql -p -e 'alter user "alice"@"%" require ssl;'
+docker compose exec mysql mysql -p -e 'alter user "alice"@"%" require ssl;'
 # 也可以反過來取消加密連線的登入限制
-docker-compose exec mysql mysql -p -e 'alter user "alice"@"localhost" require none;'
+docker compose exec mysql mysql -p -e 'alter user "alice"@"localhost" require none;'
 
 # 測試用戶端加密連線
 mysql -h db.example.test -u root -p -e 'show status like "ssl_version";'
@@ -88,13 +89,13 @@ mkcert -cert-file ssl/cert.pem -key-file ssl/key.pem '*.example.test'
 
 ```sh
 # 直接重設 root 帳號密碼
-docker-compose exec mysql mysqladmin -u root password 'new-password'
+docker compose exec mysql mysqladmin -u root password 'new-password'
 
 # 或是透過以下互動程序來設定所有安全性選項
-docker-compose exec mysql mysql_secure_installation
+docker compose exec mysql mysql_secure_installation
 
 # 修改遠端登入的帳號密碼
-docker-compose exec mysql mysql -e "ALTER USER 'root'@'%' IDENTIFIED BY 'new-password';FLUSH PRIVILEGES;"
+docker compose exec mysql mysql -e "ALTER USER 'root'@'%' IDENTIFIED BY 'new-password';FLUSH PRIVILEGES;"
 ```
 
 ## 管理資料庫
@@ -107,17 +108,17 @@ docker-compose exec mysql mysql -e "ALTER USER 'root'@'%' IDENTIFIED BY 'new-pas
 
 ```sh
 # 完整備份容器內的指定資料庫
-docker-compose exec mysql mysqldump --single-transaction --add-drop-database --insert-ignore --databases sample | gzip > backup.sql.gz
+docker compose exec mysql mysqldump --single-transaction --add-drop-database --insert-ignore --databases sample | gzip > backup.sql.gz
 
 # 完整備份容器內的所有資料庫
-docker-compose exec mysql mysqldump --single-transaction --add-drop-database --insert-ignore --all-databases | gzip > backup.sql.gz
+docker compose exec mysql mysqldump --single-transaction --add-drop-database --insert-ignore --all-databases | gzip > backup.sql.gz
 
 # 匯入本機的 SQL 備份檔至容器內的資料庫內
-cat backup.sql | docker exec -i $(docker-compose ps -q mysql) mysql
+cat backup.sql | docker exec -i $(docker compose ps -q mysql) mysql
 
 # 匯入本機壓縮的 SQL 備份檔至容器內的資料庫內
-gzip -dc backup.sql.gz | docker exec -i $(docker-compose ps -q mysql) mysql
+gzip -dc backup.sql.gz | docker exec -i $(docker compose ps -q mysql) mysql
 
 # 進入容器的 Bash Shell
-docker-compose exec mysql bash
+docker compose exec mysql bash
 ```

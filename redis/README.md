@@ -3,6 +3,7 @@
 ## 環境需求
 
 - [Docker Engine](https://docs.docker.com/install/)
+- [Docker Compose V2](https://docs.docker.com/compose/cli-command/)
 
 ## 運行開發環境
 
@@ -14,19 +15,19 @@
 
 ```sh
 # 啟動並執行完整應用
-docker-compose up
+docker compose up
 
 # 在背景啟動並執行完整應用
-docker-compose up -d
+docker compose up -d
 
 # 顯示記錄
-docker-compose logs
+docker compose logs
 
 # 持續顯示記錄
-docker-compose logs -f
+docker compose logs -f
 
 # 關閉應用
-docker-compose down
+docker compose down
 
 # 顯示所有啟動中的容器
 docker ps
@@ -42,13 +43,13 @@ docker ps
 
 ```sh
 # 啟動另一個配置好的 redis2 容器以複寫原有容器的資料庫
-docker-compose up -d redis2
+docker compose up -d redis2
 
 # 複寫 redis 容器的資料庫
-docker-compose exec redis2 redis-cli replicaof redis 6379
+docker compose exec redis2 redis-cli replicaof redis 6379
 
 # 等複寫完成後取消資料庫複寫
-docker-compose exec redis2 redis-cli replicaof no one
+docker compose exec redis2 redis-cli replicaof no one
 
 # 最後再將 redis2 更名為 redis 即可
 ```
@@ -57,10 +58,10 @@ docker-compose exec redis2 redis-cli replicaof no one
 
 ```sh
 # 啟用 TLS 加密連線
-COMPOSE_FILE=docker-compose.yml:docker-compose.tls.yml docker-compose up -d
+COMPOSE_FILE=docker-compose.yml:docker-compose.tls.yml docker compose up -d
 
 # 確認已正確啟用
-COMPOSE_FILE=docker-compose.yml:docker-compose.tls.yml docker-compose exec redis redis-cli -p 6380 --tls \
+COMPOSE_FILE=docker-compose.yml:docker-compose.tls.yml docker compose exec redis redis-cli -p 6380 --tls \
     --cert /etc/tls/cert.pem \
     --key /etc/tls/key.pem \
     --cacert /etc/tls/ca.pem info

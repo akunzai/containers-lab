@@ -11,6 +11,7 @@
 ## 環境需求
 
 - [Docker Engine](https://docs.docker.com/install/)
+- [Docker Compose V2](https://docs.docker.com/compose/cli-command/)
 
 ## 建置容器映像
 
