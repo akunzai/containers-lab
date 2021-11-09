@@ -1,5 +1,7 @@
 # https://hub.docker.com/_/microsoft-dotnet-sdk/
-FROM mcr.microsoft.com/dotnet/sdk:5.0
+FROM mcr.microsoft.com/dotnet/sdk:6.0
+# install ASP.NET Core 5.0 Runtime
+COPY --from=mcr.microsoft.com/dotnet/aspnet:5.0 /usr/share/dotnet /usr/share/dotnet
 # install ASP.NET Core 3.1 Runtime
 COPY --from=mcr.microsoft.com/dotnet/aspnet:3.1 /usr/share/dotnet /usr/share/dotnet
 # install msbuild for Mono

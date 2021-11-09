@@ -5,8 +5,9 @@
 ## 支援的建置目標
 
 - .NET Framework
-- .NET Core 3.1
+- .NET Core 3.1 (LTS)
 - .NET 5.0
+- .NET 6.0 (LTS)
 
 ## 環境需求
 
@@ -25,28 +26,30 @@ docker build -t dotnet:sdk-msbuild .
 # 執行 dotnet CLI
 $ docker run -it --rm dotnet:sdk-msbuild dotnet --info
 .NET SDK (reflecting any global.json):
- Version:   5.0.302
- Commit:    c005824e35
+ Version:   6.0.100
+ Commit:    9e8b04bbff
 
 Runtime Environment:
  OS Name:     debian
- OS Version:  10
+ OS Version:  11
  OS Platform: Linux
- RID:         debian.10-x64
- Base Path:   /usr/share/dotnet/sdk/5.0.302/
+ RID:         debian.11-x64
+ Base Path:   /usr/share/dotnet/sdk/6.0.100/
 
 Host (useful for support):
-  Version: 5.0.8
-  Commit:  35964c9215
+  Version: 6.0.0
+  Commit:  4822e3c3aa
 
 .NET SDKs installed:
-  5.0.302 [/usr/share/dotnet/sdk]
+  6.0.100 [/usr/share/dotnet/sdk]
 
 .NET runtimes installed:
-  Microsoft.AspNetCore.App 3.1.17 [/usr/share/dotnet/shared/Microsoft.AspNetCore.App]
-  Microsoft.AspNetCore.App 5.0.8 [/usr/share/dotnet/shared/Microsoft.AspNetCore.App]
-  Microsoft.NETCore.App 3.1.17 [/usr/share/dotnet/shared/Microsoft.NETCore.App]
-  Microsoft.NETCore.App 5.0.8 [/usr/share/dotnet/shared/Microsoft.NETCore.App]
+  Microsoft.AspNetCore.App 3.1.21 [/usr/share/dotnet/shared/Microsoft.AspNetCore.App]
+  Microsoft.AspNetCore.App 5.0.12 [/usr/share/dotnet/shared/Microsoft.AspNetCore.App]
+  Microsoft.AspNetCore.App 6.0.0 [/usr/share/dotnet/shared/Microsoft.AspNetCore.App]
+  Microsoft.NETCore.App 3.1.21 [/usr/share/dotnet/shared/Microsoft.NETCore.App]
+  Microsoft.NETCore.App 5.0.12 [/usr/share/dotnet/shared/Microsoft.NETCore.App]
+  Microsoft.NETCore.App 6.0.0 [/usr/share/dotnet/shared/Microsoft.NETCore.App]
 
 To install additional .NET runtimes or SDKs:
   https://aka.ms/dotnet-download
