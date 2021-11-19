@@ -1,12 +1,12 @@
 # https://github.com/docker-library/docs/tree/master/centos#systemd-integration
-ARG VERSION=8
-FROM centos:$VERSION
+ARG CENTOS_VERSION=8
+FROM centos:$CENTOS_VERSION
 
 ENV container docker
 
 RUN cd /lib/systemd/system/sysinit.target.wants/; \
-  for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done; \
-  rm -f /lib/systemd/system/multi-user.target.wants/* \
+    for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done; \
+    rm -f /lib/systemd/system/multi-user.target.wants/* \
     /etc/systemd/system/*.wants/* \
     /lib/systemd/system/local-fs.target.wants/* \
     /lib/systemd/system/sockets.target.wants/*udev* \

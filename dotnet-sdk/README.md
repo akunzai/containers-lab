@@ -17,7 +17,11 @@
 ## 建置容器映像
 
 ```sh
-docker build -t dotnet:sdk-msbuild .
+# 建置預設容器映像
+docker build . -t dotnet:sdk-msbuild
+
+# 建置預設容器映像, 使用指定的 APT 套件伺服器
+docker build . -t dotnet:sdk-msbuild --build-arg APT_URL=http://free.nchc.org.tw
 ```
 
 ## 利用容器執行指令
