@@ -7,7 +7,7 @@
 
 ## 運行開發環境
 
-> `docker-compose` 指令必須要在 `docker-compose.yml` 所在的目錄下執行
+> `docker compose` 指令必須要在 `docker-compose.yml` 所在的目錄下執行
 >
 > 可透過建立 `docker-compose.override.yml` 來擴展 `docker-compose.yml` 組態
 >
@@ -104,7 +104,7 @@ docker compose exec grafana grafana-cli plugins install grafana-piechart-panel
 ### [重新載入 Prometheus 配置](https://prometheus.io/docs/prometheus/latest/management_api/)
 
 ```sh
-# 透過 docker-compose
+# 透過 docker compose
 docker compose kill -s SIGHUP prometheus
 
 # 透過 CURL
