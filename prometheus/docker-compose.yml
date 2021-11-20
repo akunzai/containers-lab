@@ -1,21 +1,20 @@
 version: '3'
 
 volumes:
-    alertmanager-storage:
-    prometheus-storage: 
-    grafana-storage: 
-  
+  alertmanager-storage: null
+  prometheus-storage: null
+  grafana-storage: null
+
 services:
   prometheus:
     # https://github.com/prometheus/prometheus
     image: prom/prometheus
-    container_name: prometheus
     restart: unless-stopped
     volumes:
       - prometheus-storage:/prometheus
       - ./prometheus/etc:/etc/prometheus:ro
-    command: 
-      # https://github.com/prometheus/prometheus/blob/master/Dockerfile
+    command:
+      # https://github.com/prometheus/prometheus/blob/main/Dockerfile
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
       - '--web.console.libraries=/etc/prometheus/console_libraries'
@@ -30,7 +29,6 @@ services:
   alertmanager:
     # https://github.com/prometheus/alertmanager
     image: prom/alertmanager
-    container_name: alertmanager
     restart: unless-stopped
     volumes:
       - alertmanager-storage:/alertmanager
@@ -45,7 +43,6 @@ services:
   grafana:
     # https://github.com/grafana/grafana
     image: grafana/grafana
-    container_name: grafana
     restart: unless-stopped
     environment:
       # https://grafana.com/docs/grafana/latest/administration/configuration/
@@ -60,7 +57,6 @@ services:
   cadvisor:
     # https://github.com/google/cadvisor
     image: gcr.io/cadvisor/cadvisor
-    container_name: cadvisor
     restart: unless-stopped
     volumes:
       - /:/rootfs:ro
@@ -68,10 +64,10 @@ services:
       - /sys:/sys:ro
       - /var/lib/docker:/var/lib/docker:ro
       # - /dev/disk:/dev/disk:ro # Linux only
-    # Linux only
-    # devices: 
-    #   - /dev/kmsg:/dev/kmsg
-    # privileged: true
+      # Linux only
+      # devices: 
+      #   - /dev/kmsg:/dev/kmsg
+      # privileged: true
   node-exporter:
     # https://github.com/prometheus/node_exporter
     image: prom/node-exporter
@@ -93,7 +89,6 @@ services:
       - ./prometheus/blackbox.yml:/etc/blackbox_exporter/config.yml:ro
   traefik:
     image: traefik
-    container_name: traefik
     restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
