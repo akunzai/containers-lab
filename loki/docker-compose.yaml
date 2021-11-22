@@ -1,0 +1,77 @@
+version: '3'
+
+volumes:
+  loki-storage: null
+  grafana-storage: null
+
+services:
+  loki:
+    # https://github.com/grafana/loki
+    image: grafana/loki
+    restart: unless-stopped
+    volumes:
+      - loki-storage:/loki
+      - ./loki:/etc/loki:ro
+    command:
+      - '-config.file=/etc/loki/config.yaml'
+    ports:
+      - '3100:3100'
+    labels:
+      - 'traefik.enable=true'
+
+  promtail:
+    # https://grafana.com/docs/loki/latest/clients/promtail/installation/
+    image: grafana/promtail
+    restart: unless-stopped
+    volumes:
+      - /var/log:/var/log:ro
+      - ./promtail:/etc/promtail:ro
+    command:
+      - '-config.file=/etc/promtail/config.yml'
+
+  grafana:
+    # https://github.com/grafana/grafana
+    image: grafana/grafana
+    restart: unless-stopped
+    environment:
+      # https://grafana.com/docs/grafana/latest/administration/configuration/
+      GF_SERVER_ROOT_URL: 'http://dev.example.test'
+      # 管理者帳號密碼, 應避免在正式環境中使用預設值
+      # GF_SECURITY_ADMIN_USER: 'admin'
+      # GF_SECURITY_ADMIN_PASSWORD: 'admin'
+    volumes:
+      - grafana-storage:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.services.grafana.loadbalancer.server.port=3000'
+      - 'traefik.http.routers.grafana.rule=Host(`dev.example.test`)'
+
+  traefik:
+    image: traefik
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      # 如果有相關配置檔案的話
+      # - ./traefik/etc:/etc/traefik
+    command:
+      # https://doc.traefik.io/traefik/operations/dashboard/#secure-mode
+      - --api.insecure=true
+      - --providers.docker=true
+      - --providers.docker.exposedByDefault=false
+      - --entrypoints.web.address=:80
+      # 如果要啟用 HTTPS 連線的話
+      # - --entrypoints.websecure.address=:443
+      # 如果要自動重導為 HTTPS 的話
+      # - --entrypoints.web.http.redirections.entryPoint.to=websecure
+      # - --entrypoints.web.http.redirections.entryPoint.scheme=https
+      # 如果要使用 file provider 的話
+      # - --providers.file.directory=/etc/traefik/dynamic/
+      # - --providers.file.watch=true
+      # https://doc.traefik.io/traefik/observability/metrics/prometheus/
+      - --metrics.prometheus=true
+    ports:
+      - '127.0.0.1:80:80'
+      - '127.0.0.1:8080:8080'
+      # 如果要啟用 HTTPS 連線的話
+      # - '127.0.0.1:443:443'
