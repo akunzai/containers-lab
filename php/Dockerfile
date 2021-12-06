@@ -2,7 +2,7 @@ ARG PHP_VERSION=8.0
 # https://hub.docker.com/_/php
 FROM php:$PHP_VERSION-apache
 
-ARG APT_URL
+ARG APT_URL=""
 ENV LANG=C.UTF-8
 
 RUN set -eux; \

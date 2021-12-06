@@ -2,7 +2,7 @@
 ARG DEBIAN_VERSION=10
 FROM debian:$DEBIAN_VERSION
 
-ARG APT_URL
+ARG APT_URL=""
 ENV container docker
 ENV DEBIAN_FRONTEND noninteractive
 

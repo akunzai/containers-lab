@@ -1,7 +1,7 @@
 # https://hub.docker.com/_/microsoft-dotnet-sdk/
 FROM mcr.microsoft.com/dotnet/sdk:6.0
 
-ARG APT_URL
+ARG APT_URL=""
 
 # install ASP.NET Core 5.0 Runtime
 COPY --from=mcr.microsoft.com/dotnet/aspnet:5.0 /usr/share/dotnet /usr/share/dotnet
