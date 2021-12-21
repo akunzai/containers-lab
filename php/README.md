@@ -123,7 +123,7 @@ expose_php=Off
 memory_limit=512M
 upload_max_filesize=256M
 post_max_size=256M
-max_execution_time=600
+max_execution_time=300
 output_buffering=4096
 error_reporting=E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED
 ```
