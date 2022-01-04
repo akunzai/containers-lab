@@ -22,18 +22,6 @@ if [ -e /usr/local/etc/php/conf.d/php.ini ]; then
     sed -i '/zend_extension=opcache/d' /usr/local/etc/php/conf.d/php.ini
 fi
 
-if [ -e /usr/local/etc/php/conf.d/xdebug.ini ]; then
-    # fix: Cannot load Xdebug - it was already loaded
-    if grep -q zend_extension "/usr/local/etc/php/conf.d/xdebug.ini"; then
-        sed -i '/zend_extension/d' /usr/local/etc/php/conf.d/xdebug.ini
-    fi
-fi
-
-# fix: XDEBUG_MODE not working
-if [ -n "$XDEBUG_MODE" ] && ! php -i | grep -q "xdebug.mode => $XDEBUG_MODE"; then
-    echo "xdebug.mode=$XDEBUG_MODE" >> /usr/local/etc/php/conf.d/xdebug.ini
-fi
-
 # fix: Require ip not working
 if ! grep -q RemoteIPHeader /etc/apache2/apache2.conf; then
     echo -e "RemoteIPHeader X-Forwarded-For\nRemoteIPInternalProxy 172.16.0.0/12" >> /etc/apache2/apache2.conf
