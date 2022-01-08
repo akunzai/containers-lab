@@ -1,4 +1,4 @@
-version: '3'
+version: '2'
 services:
   dotnet:
     # https://hub.docker.com/_/microsoft-dotnet-aspnet/
