@@ -120,25 +120,26 @@ JAR 應用程式請打包或更名為 `app.jar` 並部署至容器內的 `/home/
 JAVA_OPTS=-server -Xmx4g
 ```
 
-### [Spring Boot 應用程式組態檔配置](https://docs.spring.io/spring-boot/docs/current/reference/html/howto.html#howto-change-the-location-of-external-properties)
+### [Spring Boot 應用程式組態檔配置](https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.external-config)
 
 如需自訂 Spring Boot 應用程式組態檔位置
 
 ```sh
-# 透過 Java 屬性自訂組態檔搜尋路徑
-JAVA_OPTS=-Dspring.config.location=file:/home/config/
-# 透過環境變數自訂組態檔搜尋路徑
-SPRING_CONFIG_LOCATION=file:/home/config/
+# 透過 Java 屬性自訂組態檔搜尋路徑 (多個路徑以逗號分隔, 後者會優先於前者)
+JAVA_OPTS=-Dspring.config.location=classpath:/,file:/home/config/
+
+# 透過環境變數自訂組態檔搜尋路徑 (多個路徑以逗號分隔, 後者會優先於前者)
+SPRING_CONFIG_LOCATION=classpath:/,file:/home/config/
 ```
 
 常用的 Spring Boot 應用程式組態檔配置如下表所示
 
-| Java 屬性               | 環境變數                | 說明                                                       | 預設值                                                  |
-| ----------------------- | ----------------------- | ---------------------------------------------------------- | ------------------------------------------------------- |
-| spring.config.name      | SPRING_CONFIG_NAME      | 組態檔主檔名(會嘗試 `.properties` 及 `.(yml|yaml)` 副檔案) | `application`                                           |
-| spring.config.location  | SPRING_CONFIG_LOCATION  | 逗號分隔的組態檔搜尋路徑(路徑必須以 `/` 結尾)              | `classpath:/,classpath:/config/,file:./,file:./config/` |
-| spring.profiles.active  | SPRING_PROFILES_ACTIVE  | 逗號分隔的啟用配置名稱                                     |                                                         |
-| spring.profiles.include | SPRING_PROFILES_INCLUDE | 逗號分隔的引用配置名稱                                     |                                                         |
+| 名稱                              | 說明                                                                                                                                |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| spring.config.name                | 組態檔主檔名(用於切換組態, 會嘗試 `.properties` 及 `.yml`,`.yaml` 等副檔案, 預設值: `application`)                                  |
+| spring.config.location            | 組態檔搜尋路徑(用於切換組態, 路徑必須以 `/` 結尾, 預設值: `classpath:/,classpath:/config/,file:./,file:./config/*/,file:./config/`) |
+| spring.config.additional-location | 額外組態檔的搜尋路徑(用於覆寫組態, 自 2.0 開始支援)                                                                                 |
+| spring.config.import              | 額外組態檔的匯入位址(用於覆寫組態, 自 2.4 開始支援)                                                                                 |
 
 ## 疑難排解
 
