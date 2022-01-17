@@ -108,10 +108,10 @@ docker compose exec mysql mysql -e "ALTER USER 'root'@'%' IDENTIFIED BY 'new-pas
 
 ```sh
 # 完整備份容器內的指定資料庫
-docker compose exec mysql mysqldump --single-transaction --add-drop-database --insert-ignore --databases sample | gzip > backup.sql.gz
+docker compose exec -T mysql mysqldump --single-transaction --add-drop-database --insert-ignore --databases sample | gzip > backup.sql.gz
 
 # 完整備份容器內的所有資料庫
-docker compose exec mysql mysqldump --single-transaction --add-drop-database --insert-ignore --all-databases | gzip > backup.sql.gz
+docker compose exec -T mysql mysqldump --single-transaction --add-drop-database --insert-ignore --all-databases | gzip > backup.sql.gz
 
 # 匯入本機的 SQL 備份檔至容器內的資料庫內
 cat backup.sql | docker exec -i $(docker compose ps -q mysql) mysql

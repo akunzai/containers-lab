@@ -56,10 +56,10 @@ docker compose run --rm ldap-cli slapcat -n 1 > data.ldif
 # 刪除 LDAP config files 以利還原
 docker compose run --rm ldap-cli sh -c 'rm -rf /etc/ldap/slapd.d/*'
 # 還原 LDAP config files
-cat config.ldif | docker compose run --rm ldap-cli slapadd -F /etc/ldap/slapd.d -n 0
+cat config.ldif | docker compose -T run --rm ldap-cli slapadd -F /etc/ldap/slapd.d -n 0
 
 # 刪除 LDAP database files
 docker compose run --rm ldap-cli sh -c 'rm -rf /var/lib/ldap/*'
 # 還原 LDAP database files
-cat data.ldif | docker compose run --rm ldap-cli slapadd -F /etc/ldap/slapd.d -n 1
+cat data.ldif | docker compose run -T --rm ldap-cli slapadd -F /etc/ldap/slapd.d -n 1
 ```
