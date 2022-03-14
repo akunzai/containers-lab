@@ -89,13 +89,16 @@ mkcert -cert-file ssl/cert.pem -key-file ssl/key.pem '*.example.test'
 
 ```sh
 # 直接重設 root 帳號密碼
-docker compose exec mysql mysqladmin -u root password 'new-password'
+docker compose exec mysql mysqladmin -u root password 'secret'
 
 # 或是透過以下互動程序來設定所有安全性選項
 docker compose exec mysql mysql_secure_installation
 
-# 修改遠端登入的帳號密碼
-docker compose exec mysql mysql -e "ALTER USER 'root'@'%' IDENTIFIED BY 'new-password';FLUSH PRIVILEGES;"
+# 建立遠端登入的帳號密碼
+docker compose exec mysql mysql -e "CREATE USER root@'%' IDENTIFIED BY 'secret';FLUSH PRIVILEGES;"
+
+# 更變遠端登入的帳號密碼
+docker compose exec mysql mysql -e "ALTER USER root@'%' IDENTIFIED BY 'secret';FLUSH PRIVILEGES;"
 ```
 
 ## 管理資料庫
