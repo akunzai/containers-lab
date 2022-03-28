@@ -63,3 +63,39 @@ docker compose run --rm ldap-cli sh -c 'rm -rf /var/lib/ldap/*'
 # 還原 LDAP database files
 cat data.ldif | docker compose run -T --rm ldap-cli slapadd -F /etc/ldap/slapd.d -n 1
 ```
+
+## 疑難排解
+
+### [支援 ARGON2 密碼演算法](https://github.com/openldap/openldap/tree/master/servers/slapd/pwmods)
+
+```sh
+# 啟用 pw-argon2 模組
+ldapadd -Y EXTERNAL -H ldapi:/// <<'EOF'
+dn: cn=module{0},cn=config
+changetype: modify
+add: olcModuleLoad
+olcModuleLoad: pw-argon2
+EOF
+
+# 變更預設的密碼雜湊演算法
+ldapadd -Y EXTERNAL -H ldapi:/// <<'EOF'
+dn: olcDatabase={-1}frontend,cn=config
+changetype: modify
+add: olcPasswordHash
+olcPasswordHash: {ARGON2}
+EOF
+
+# 測試產生 ARGON2 雜湊密碼
+slappasswd -o module-load=pw-argon2.la -h {ARGON2} -s secret
+
+# 測試新增 ARGON2 雜湊密碼給指定使用者
+ldapadd -Y EXTERNAL -H ldapi:/// <<'EOF'
+dn: uid=78783f05-ff4d-4334-91f2-079807fe3491,ou=users,dc=example,dc=org
+changetype: modify
+add: userPassword
+userPassword: {ARGON2}$argon2i$v=19$m=4096,t=3,p=1$bf/rsEZQSwMbBxf9UrjObg$vYKrAJrwozyjwXM3sMuzUMf8Mmz0CwhS6utvyaj4JC8
+EOF
+
+# 測試使用 ARGON2 雜湊密碼認證指定使用者
+ldapsearch -x -D 'uid=78783f05-ff4d-4334-91f2-079807fe3491,ou=users,dc=example,dc=org' -W
+```
