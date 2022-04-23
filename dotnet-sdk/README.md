@@ -6,7 +6,6 @@
 
 - .NET Framework
 - .NET Core 3.1 (LTS)
-- .NET 5.0
 - .NET 6.0 (LTS)
 
 ## 環境需求
@@ -18,55 +17,53 @@
 
 ```sh
 # 建置預設容器映像
-docker build . -t dotnet:sdk-msbuild
+docker build . -t dotnet-sdk:mono
 
 # 建置預設容器映像, 使用指定的 APT 套件伺服器
-docker build . -t dotnet:sdk-msbuild --build-arg APT_URL=http://free.nchc.org.tw
+docker build . -t dotnet-sdk:mono --build-arg APT_URL=http://free.nchc.org.tw
 ```
 
 ## 利用容器執行指令
 
 ```sh
 # 執行 dotnet CLI
-$ docker run -it --rm dotnet:sdk-msbuild dotnet --info
+$ docker run -it --rm dotnet-sdk:mono dotnet --info
 .NET SDK (reflecting any global.json):
- Version:   6.0.100
- Commit:    9e8b04bbff
+ Version:   6.0.202
+ Commit:    f8a55617d2
 
 Runtime Environment:
  OS Name:     debian
  OS Version:  11
  OS Platform: Linux
  RID:         debian.11-x64
- Base Path:   /usr/share/dotnet/sdk/6.0.100/
+ Base Path:   /usr/share/dotnet/sdk/6.0.202/
 
 Host (useful for support):
-  Version: 6.0.0
-  Commit:  4822e3c3aa
+  Version: 6.0.4
+  Commit:  be98e88c76
 
 .NET SDKs installed:
-  6.0.100 [/usr/share/dotnet/sdk]
+  6.0.202 [/usr/share/dotnet/sdk]
 
 .NET runtimes installed:
-  Microsoft.AspNetCore.App 3.1.21 [/usr/share/dotnet/shared/Microsoft.AspNetCore.App]
-  Microsoft.AspNetCore.App 5.0.12 [/usr/share/dotnet/shared/Microsoft.AspNetCore.App]
-  Microsoft.AspNetCore.App 6.0.0 [/usr/share/dotnet/shared/Microsoft.AspNetCore.App]
-  Microsoft.NETCore.App 3.1.21 [/usr/share/dotnet/shared/Microsoft.NETCore.App]
-  Microsoft.NETCore.App 5.0.12 [/usr/share/dotnet/shared/Microsoft.NETCore.App]
-  Microsoft.NETCore.App 6.0.0 [/usr/share/dotnet/shared/Microsoft.NETCore.App]
+  Microsoft.AspNetCore.App 3.1.24 [/usr/share/dotnet/shared/Microsoft.AspNetCore.App]
+  Microsoft.AspNetCore.App 6.0.4 [/usr/share/dotnet/shared/Microsoft.AspNetCore.App]
+  Microsoft.NETCore.App 3.1.24 [/usr/share/dotnet/shared/Microsoft.NETCore.App]
+  Microsoft.NETCore.App 6.0.4 [/usr/share/dotnet/shared/Microsoft.NETCore.App]
 
 To install additional .NET runtimes or SDKs:
   https://aka.ms/dotnet-download
 
 # 執行 msbuild
-$ docker run --rm dotnet:sdk-msbuild msbuild -version
+$ docker run --rm dotnet-sdk:mono msbuild -version
 Microsoft (R) Build Engine version 16.6.0 for Mono
 Copyright (C) Microsoft Corporation. All rights reserved.
 
 16.6.0.15201
 
 # 執行 Bash Shell
-$ docker run -it --rm dotnet:sdk-msbuild bash
+$ docker run -it --rm dotnet-sdk:mono bash
 ```
 
 ## 疑難排解
