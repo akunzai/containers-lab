@@ -18,17 +18,17 @@
 
 ```sh
 # 建置預設容器映像
-docker build . -t dotnet:sdk-msbuild
+docker build . -t dotnet-sdk:mono
 
 # 建置預設容器映像, 使用指定的 APT 套件伺服器
-docker build . -t dotnet:sdk-msbuild --build-arg APT_URL=http://free.nchc.org.tw
+docker build . -t dotnet-sdk:mono --build-arg APT_URL=http://free.nchc.org.tw
 ```
 
 ## 利用容器執行指令
 
 ```sh
 # 執行 dotnet CLI
-$ docker run -it --rm dotnet:sdk-msbuild dotnet --info
+$ docker run -it --rm dotnet-sdk:mono dotnet --info
 .NET SDK (reflecting any global.json):
  Version:   6.0.100
  Commit:    9e8b04bbff
@@ -59,14 +59,14 @@ To install additional .NET runtimes or SDKs:
   https://aka.ms/dotnet-download
 
 # 執行 msbuild
-$ docker run --rm dotnet:sdk-msbuild msbuild -version
+$ docker run --rm dotnet-sdk:mono msbuild -version
 Microsoft (R) Build Engine version 16.6.0 for Mono
 Copyright (C) Microsoft Corporation. All rights reserved.
 
 16.6.0.15201
 
 # 執行 Bash Shell
-$ docker run -it --rm dotnet:sdk-msbuild bash
+$ docker run -it --rm dotnet-sdk:mono bash
 ```
 
 ## 疑難排解
