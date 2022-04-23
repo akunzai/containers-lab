@@ -87,7 +87,7 @@ $ docker run -it --rm dotnet-sdk:mono bash
 可透過安裝 [Microsoft.TestPlatform.ObjectModel](https://www.nuget.org/packages/Microsoft.TestPlatform.ObjectModel/) 套件來達成
 
 ```xml
-<PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="16.10.0" Condition="'$(OS)' != 'Windows_NT'" />
+<PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="17.1.0" Condition="'$(OS)' != 'Windows_NT'" />
 ```
 
 ## 參考資料
