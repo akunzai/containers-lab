@@ -1,0 +1,23 @@
+version: '2'
+
+volumes:
+  squid-cache:
+
+services:
+  squid:
+    build: .
+    image: squid:debian
+    restart: unless-stopped
+    volumes:
+      - squid-cache:/var/spool/squid
+      - ./etc/squid.conf:/etc/squid/conf.d/docker.conf:ro
+      # 如果要保留存取記錄的話
+      # - ./log:/var/log/squid
+  curl:
+    image: curlimages/curl
+    environment:
+      http_proxy: http://squid:3128
+      https_proxy: http://squid:3128
+      NO_PROXY: localhost,127.0.0.1,.example.test
+    depends_on:
+      - squid
