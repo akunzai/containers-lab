@@ -1,0 +1,14 @@
+version: '2'
+
+services:
+  nrpe:
+    build: .
+    image: nrpe:debian
+    restart: unless-stopped
+    volumes: 
+      - ./etc/nrpe.cfg:/etc/nagios/nrpe_local.cfg:ro
+      - /:/rootfs:ro
+    environment:
+      ALLOWED_HOSTS: 127.0.0.1,60.250.147.33
+    ports:
+      - 5666:5666
