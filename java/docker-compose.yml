@@ -1,5 +1,9 @@
 version: '2'
 
+volumes:
+  app-home:
+
+
 services:
   java:
     # https://hub.docker.com/_/microsoft-java-jre-headless
@@ -7,7 +11,9 @@ services:
     restart: unless-stopped
     volumes:
       # 在 Azure App Service 運作時，僅有 '/home' 目錄可以跨容器存取並永續儲存
-      - ./home:/home
+      # https://docs.microsoft.com/azure/app-service/configure-custom-container#use-persistent-shared-storage
+      - app-home:/home
+      - ./app.jar:/home/site/wwwroot/app.jar:ro
     environment:
       LANG: 'C.UTF-8'
       JAVA_OPTS: '-server -XX:+UseParallelGC -XX:+TieredCompilation -XX:TieredStopAtLevel=1  -XX:+UseStringDeduplication'

@@ -1,4 +1,7 @@
 version: '2'
+volumes:
+  app-home:
+
 services:
   php:
     build: 
@@ -9,7 +12,10 @@ services:
     restart: unless-stopped
     volumes:
       # 在 Azure App Service 運作時，僅有 '/home' 目錄可以跨容器存取並永續儲存
-      - ./home:/home
+      # https://docs.microsoft.com/azure/app-service/configure-custom-container#use-persistent-shared-storage
+      - app-home:/home
+      - ./index.php:/var/www/html/index.php:ro
+      - ./startup.sh:/home/startup.sh:ro
     environment:
       LANG: 'C.UTF-8'
       APACHE_DOCUMENT_ROOT: /home/site/wwwroot
