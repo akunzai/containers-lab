@@ -1,4 +1,5 @@
 version: '2'
+
 services:
   java:
     # https://hub.docker.com/_/microsoft-java-jre-headless

@@ -1,7 +1,7 @@
 version: '2'
 
 volumes: 
-  mysql_storage:
+  mysql-data:
 
 services:
   mysql:
@@ -14,7 +14,7 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD:-changeme}
       MYSQL_DATABASE: ${MYSQL_DATABASE:-guacamole}
     volumes:
-      - mysql_storage:/var/lib/mysql
+      - mysql-data:/var/lib/mysql
   guacd:
     # https://hub.docker.com/r/guacamole/guacd
     image: guacamole/guacd

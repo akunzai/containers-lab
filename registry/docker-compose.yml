@@ -1,7 +1,7 @@
 version: '2'
 
 volumes:
-    registry-storage: 
+    registry-data: 
 
 services:
   registry:
@@ -9,7 +9,7 @@ services:
     image: registry:2
     restart: unless-stopped
     volumes:
-      - registry-storage:/var/lib/registry
+      - registry-data:/var/lib/registry
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.registry.rule=Host(`registry.example.test`)"

@@ -1,7 +1,7 @@
 version: '2'
 
 volumes:
-    mysql-storage: 
+    mysql-data: 
 
 services:
   mysql:
@@ -12,9 +12,9 @@ services:
       # 指定初始化資料庫建立的 root 密碼
       MYSQL_ROOT_PASSWORD: 'CHANGEME'
     volumes:
-      - mysql-storage:/var/lib/mysql
+      - mysql-data:/var/lib/mysql
       # 如果需要自訂組態的話
-      # - ./etc:/etc/mysql/conf.d:ro
+      # - mysql-conf:/etc/mysql/conf.d:ro
       # 如果需要初始化資料庫的話
       # - ./initdb:/docker-entrypoint-initdb.d
     ports:

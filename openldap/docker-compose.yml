@@ -1,7 +1,8 @@
 version: '2'
 
 volumes:
-  ldap-storage: 
+  ldap-conf:
+  ldap-data: 
 
 services:
   ldap:
@@ -18,15 +19,15 @@ services:
       LDAP_ADMIN_PASSWORD: admin
       LDAP_CONFIG_PASSWORD: config
     volumes:
-      - ldap-storage:/var/lib/ldap
-      - ./etc/ldap:/etc/ldap/slapd.d
+      - ldap-conf:/etc/ldap/slapd.d
+      - ldap-data:/var/lib/ldap
     ports:
       - '127.0.0.1:389:389'
   ldap-cli:
     # https://github.com/osixia/docker-openldap
     image: osixia/openldap
     volumes:
-      - ldap-storage:/var/lib/ldap
-      - ./etc/ldap:/etc/ldap/slapd.d
+      - ldap-config:/etc/ldap/slapd.d
+      - ldap-data:/var/lib/ldap
     # https://github.com/osixia/docker-light-baseimage#run-command-line-options
     entrypoint: /container/tool/run --loglevel warning --skip-env-files --skip-startup-files --skip-process-files --

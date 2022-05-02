@@ -1,8 +1,8 @@
 version: '2'
 
 volumes:
-  loki-storage: null
-  grafana-storage: null
+  loki-data: null
+  grafana-data: null
 
 services:
   loki:
@@ -10,7 +10,7 @@ services:
     image: grafana/loki
     restart: unless-stopped
     volumes:
-      - loki-storage:/loki
+      - loki-data:/loki
       - ./loki:/etc/loki:ro
     command:
       - '-config.file=/etc/loki/config.yaml'
@@ -40,7 +40,7 @@ services:
       # GF_SECURITY_ADMIN_USER: 'admin'
       # GF_SECURITY_ADMIN_PASSWORD: 'admin'
     volumes:
-      - grafana-storage:/var/lib/grafana
+      - grafana-data:/var/lib/grafana
       - ./grafana/provisioning:/etc/grafana/provisioning
     labels:
       - 'traefik.enable=true'
