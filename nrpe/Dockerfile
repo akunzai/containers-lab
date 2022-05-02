@@ -12,7 +12,7 @@ RUN set -eux; \
 COPY check_mem.sh /usr/lib/nagios/plugins/
 COPY startup.sh /
 
-RUN chmod 755 /startup.sh
+RUN chmod 755 /startup.sh /usr/lib/nagios/plugins/check_mem.sh
 
 EXPOSE 5666
 
