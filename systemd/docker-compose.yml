@@ -2,7 +2,9 @@ version: '2'
 services:
   # https://github.com/j8r/dockerfiles/issues/10
   centos:
-    build: ./centos
+    build:
+      context: .
+      dockerfile: Dockerfile.centos
     image: centos/systemd:8
     tmpfs:
       - /tmp
@@ -12,7 +14,8 @@ services:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
   centos7:
     build: 
-      context: ./centos
+      context: .
+      dockerfile: Dockerfile.centos
       args:
         CENTOS_VERSION: 7
     image: centos/systemd:7
@@ -24,7 +27,7 @@ services:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
   debian:
     build: 
-      context: ./debian
+      context: .
       args:
         APT_URL: http://free.nchc.org.tw
     image: debian/systemd:10
@@ -36,7 +39,7 @@ services:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
   debian9:
     build: 
-      context: ./debian
+      context: .
       args:
         APT_URL: http://free.nchc.org.tw
         DEBIAN_VERSION: 9
