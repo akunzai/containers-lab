@@ -88,17 +88,20 @@ mkcert -cert-file ssl/cert.pem -key-file ssl/key.pem '*.example.test'
 > 以下指令執行前請先啟動資料庫服務
 
 ```sh
+# 進入容器的 Bash Shell
+docker compose exec mysql bash
+
 # 直接重設 root 帳號密碼
-docker compose exec mysql mysqladmin -u root password 'secret'
+mysqladmin -u root password 'secret'
 
 # 或是透過以下互動程序來設定所有安全性選項
-docker compose exec mysql mysql_secure_installation
+mysql_secure_installation
 
 # 建立遠端登入的帳號密碼
-docker compose exec mysql mysql -e "CREATE USER root@'%' IDENTIFIED BY 'secret';FLUSH PRIVILEGES;"
+mysql -e "CREATE USER root@'%' IDENTIFIED BY 'secret';FLUSH PRIVILEGES;"
 
 # 更變遠端登入的帳號密碼
-docker compose exec mysql mysql -e "ALTER USER root@'%' IDENTIFIED BY 'secret';FLUSH PRIVILEGES;"
+mysql -e "ALTER USER root@'%' IDENTIFIED BY 'secret';FLUSH PRIVILEGES;"
 ```
 
 ## 管理資料庫
@@ -107,21 +110,21 @@ docker compose exec mysql mysql -e "ALTER USER root@'%' IDENTIFIED BY 'secret';F
 
 > 執行前請先啟動資料庫服務
 
-可以透過設定[認證資訊](https://dev.mysql.com/doc/refman/8.0/en/password-security-user.html)於 `conf/my.cnf` 簡化認證流程
+可以透過設定[認證資訊](https://dev.mysql.com/doc/refman/8.0/en/password-security-user.html)於 `my.cnf` 以簡化認證流程
 
 ```sh
-# 完整備份容器內的指定資料庫
-docker compose exec -T mysql mysqldump --single-transaction --add-drop-database --insert-ignore --databases sample | gzip > backup.sql.gz
-
-# 完整備份容器內的所有資料庫
-docker compose exec -T mysql mysqldump --single-transaction --add-drop-database --insert-ignore --all-databases | gzip > backup.sql.gz
-
-# 匯入本機的 SQL 備份檔至容器內的資料庫內
-cat backup.sql | docker exec -i $(docker compose ps -q mysql) mysql
-
-# 匯入本機壓縮的 SQL 備份檔至容器內的資料庫內
-gzip -dc backup.sql.gz | docker exec -i $(docker compose ps -q mysql) mysql
-
 # 進入容器的 Bash Shell
 docker compose exec mysql bash
+
+# 完整備份指定資料庫
+mysqldump --single-transaction --add-drop-database --insert-ignore --databases sample | gzip > backup.sql.gz
+
+# 完整備份所有資料庫
+mysqldump --single-transaction --add-drop-database --insert-ignore --all-databases | gzip > backup.sql.gz
+
+# 匯入 SQL 備份檔至資料庫
+cat backup.sql | mysql
+
+# 匯入壓縮的 SQL 備份檔至資料庫
+gzip -dc backup.sql.gz | mysql
 ```

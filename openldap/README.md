@@ -1,4 +1,4 @@
-# OpenLDAP 開發環境 for Docker
+# OpenLDAP 目錄伺服器 for Docker
 
 ## 環境需求
 
@@ -47,21 +47,26 @@ docker ps
 > 還原資料庫前請記得暫時關閉啟動中的 `ldap` 容器以避免資料存取衝突
 
 ```sh
+# 進入容器的 Bash Shell
+docker compose run --rm ldap-cli bash
+
 # 依據目錄後綴匯出為 LDIF (此例為 LDAP config files)
-docker compose run --rm ldap-cli slapcat -b cn=config > config.ldif
+slapcat -b cn=config > config.ldif
 
 # 依據資料庫索引匯出為 LDIF (此例為 LDAP database files)
-docker compose run --rm ldap-cli slapcat -n 1 > data.ldif
+slapcat -n 1 > data.ldif
 
 # 刪除 LDAP config files 以利還原
-docker compose run --rm ldap-cli sh -c 'rm -rf /etc/ldap/slapd.d/*'
+rm -rf /etc/ldap/slapd.d/*
+
 # 還原 LDAP config files
-cat config.ldif | docker compose -T run --rm ldap-cli slapadd -F /etc/ldap/slapd.d -n 0
+cat config.ldif | slapadd -F /etc/ldap/slapd.d -n 0
 
 # 刪除 LDAP database files
-docker compose run --rm ldap-cli sh -c 'rm -rf /var/lib/ldap/*'
+rm -rf /var/lib/ldap/*
+
 # 還原 LDAP database files
-cat data.ldif | docker compose run -T --rm ldap-cli slapadd -F /etc/ldap/slapd.d -n 1
+cat data.ldif | slapadd -F /etc/ldap/slapd.d -n 1
 ```
 
 ## 疑難排解
