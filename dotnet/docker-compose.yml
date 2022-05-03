@@ -1,19 +1,23 @@
 version: '2'
+volumes:
+  app-home:
+
+
 services:
   dotnet:
     # https://hub.docker.com/_/microsoft-dotnet-aspnet/
-    image: mcr.microsoft.com/dotnet/aspnet:3.1
+    image: mcr.microsoft.com/dotnet/aspnet:6.0
     restart: unless-stopped
     volumes:
       # 在 Azure App Service 運作時，僅有 '/home' 目錄可以跨容器存取並永續儲存
-      - ./home:/home
+      - app-home:/home
     environment:
       LANG: 'C.UTF-8'
       # https://docs.microsoft.com/aspnet/core/fundamentals/configuration/#environment-variables
       # Bash 不支援 `:` 做為階層式索引鍵分隔符號, 必須改用 `__`
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_FORWARDEDHEADERS_ENABLED: 'true'
-      ASPNETCORE_URLS: http://*:80
+      ASPNETCORE_URLS: http://+:80
     # 如果需要自訂啟動腳本的話
     # command: sh -c "cd /home/site/wwwroot && dotnet WebApp.dll"
     labels:
