@@ -39,3 +39,6 @@ RUN set -eux; \
     # https://github.com/FriendsOfPHP/pickle
     curl -Lo /usr/local/bin/pickle https://github.com/FriendsOfPHP/pickle/releases/latest/download/pickle.phar && \
     chmod +x /usr/local/bin/pickle;
+
+# https://hub.docker.com/_/composer
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
