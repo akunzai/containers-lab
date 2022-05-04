@@ -60,13 +60,13 @@ slapcat -n 1 > data.ldif
 rm -rf /etc/ldap/slapd.d/*
 
 # 還原 LDAP config files
-cat config.ldif | slapadd -F /etc/ldap/slapd.d -n 0
+cat config.ldif | slapadd -vF /etc/ldap/slapd.d -n 0
 
 # 刪除 LDAP database files
 rm -rf /var/lib/ldap/*
 
 # 還原 LDAP database files
-cat data.ldif | slapadd -F /etc/ldap/slapd.d -n 1
+cat data.ldif | slapadd -vF /etc/ldap/slapd.d -n 1
 ```
 
 ## 疑難排解
