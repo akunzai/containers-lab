@@ -2,7 +2,7 @@
 
 # fix: Require ip not working
 if ! grep -q RemoteIPHeader /etc/apache2/apache2.conf; then
-    echo -e "RemoteIPHeader X-Forwarded-For\nRemoteIPInternalProxy 172.16.0.0/12" >> /etc/apache2/apache2.conf
+    echo -e "RemoteIPHeader X-Forwarded-For\nRemoteIPInternalProxy 172.16.0.0/12" >>/etc/apache2/apache2.conf
 fi
 
 # install tools
@@ -15,7 +15,7 @@ fi
 # set up the host alias
 host host.docker.internal >/dev/null 2>&1
 if [ "$?" -ne "0" ]; then
-    ip route show | awk '/default/ {print $3,"host.docker.internal"}' >> /etc/hosts
+    ip route show | awk '/default/ {print $3,"host.docker.internal"}' >>/etc/hosts
 fi
 
 if [ -d "$APACHE_DOCUMENT_ROOT" -a "$APACHE_DOCUMENT_ROOT" != "/var/www/html" ]; then
@@ -26,7 +26,7 @@ if [ -d "$APACHE_DOCUMENT_ROOT" -a "$APACHE_DOCUMENT_ROOT" != "/var/www/html" ];
     chown -R www-data:www-data $APACHE_DOCUMENT_ROOT &
 fi
 
-if [ -e "$APACHE_DOCUMENT_ROOT/cron.sh" ]; then
+if [ -n "$CRON" ] && [ "$CRON" -eq "1" ]; then
     # fix: Permission denied error caused by empty `which php` in cron jobs
     [ -e /usr/bin/php ] || ln -s /usr/local/bin/php /usr/bin/php
     service cron stauts >/dev/null 2>&1
@@ -37,7 +37,7 @@ if [ -e "$APACHE_DOCUMENT_ROOT/cron.sh" ]; then
     # /proc/1/fd/1: STDOUT for Docker
     # /proc/1/fd/2: STDERR for Docker
     (
-    echo "*/5 * * * * (/usr/sbin/gosu www-data /bin/bash $APACHE_DOCUMENT_ROOT/cron.sh)>/proc/1/fd/1 2>/proc/1/fd/2"
+        [ -e "$APACHE_DOCUMENT_ROOT/cron.sh" ] && echo "*/5 * * * * (/usr/sbin/gosu www-data /bin/bash $APACHE_DOCUMENT_ROOT/cron.sh)>/proc/1/fd/1 2>/proc/1/fd/2"
     ) | crontab
 fi
 
