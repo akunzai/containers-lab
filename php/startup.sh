@@ -8,11 +8,11 @@ fi
 # install tools
 hash gosu >/dev/null 2>&1
 if [ "$?" -ne "0" ]; then
-    apt-get update -qq >/dev/null 2>&1
-    apt-get install --no-install-recommends -yqq cron gosu dnsutils iproute2
+    apt-get update -qq >/dev/null
+    apt-get install --no-install-recommends -yqq cron gosu dnsutils iproute2 >/dev/null
 fi
 
-# setup host alias
+# set up the host alias
 host host.docker.internal >/dev/null 2>&1
 if [ "$?" -ne "0" ]; then
     ip route show | awk '/default/ {print $3,"host.docker.internal"}' >> /etc/hosts
