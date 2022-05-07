@@ -157,23 +157,21 @@ EOF
 
 ### 安裝工具程式
 
-可將工具程式安裝在 `/home/site/wwwroot/` (永續儲存區), 避免額外客製容器映像檔的需要
+可將工具程式安裝在 `/home/site/bin/` 目錄下
 
 > 以下指令請在 PHP 容器內執行
 
-以安裝 [Composer](https://getcomposer.org/) 工具為例
+以安裝 [modman](https://github.com/colinmollenhour/modman) 工具為例
 
 ```sh
-curl -sS https://getcomposer.org/installer | php -- --install-dir=/home/site/wwwroot/ --filename=composer
+[ -e /home/site/bin ] || mkdir -p /home/site/bin
+curl -fSL -o /home/site/bin/modman https://raw.githubusercontent.com/colinmollenhour/modman/master/modman
+chmod +x home/site/bin/modman
 ```
 
-建議可以建立網站目錄下的 [.htaccess](https://httpd.apache.org/docs/2.4/howto/htaccess.html) 以限制透過網路存取工具程式
+記得要將 `/home/site/bin/` 加入至 `PATH` 環境變數
 
-```apache:.htaccess
-<FilesMatch "^composer$">
-    Require all denied
-</FilesMatch>
-```
+- PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/site/bin
 
 ## 備份或還原網站
 
