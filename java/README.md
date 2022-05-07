@@ -174,7 +174,7 @@ apk update && apk add su-exec
 su-exec nobody java -noverify -Djava.security.egd=file:/dev/./urandom $JAVA_OPTS -jar $JAR_FILE
 ```
 
-執行內嵌 Tomcat 應用程式時, 預設會在根目錄自動建立 `/build/tomcat` 目錄
+某些內嵌 Tomcat 應用程式可能會[指定不同的工作目錄](https://github.com/apereo/cas/blob/6.4.x/webapp/cas-server-webapp-resources/src/main/resources/application.properties#L24)
 當由 root 身分轉換至非 root 身分時，需一併自動建立這些目錄及設定好權限，否則可能會造成應用程式啟動失敗 (Unable to create the directory [/build/tomcat] to use as the base directory)
 
 ```sh
