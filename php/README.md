@@ -96,7 +96,7 @@ $ docker compose run --rm php bash
 
 ## [自訂和調整](https://docs.microsoft.com/azure/app-service/configure-language-php?pivots=platform-linux)
 
-在 Azure App Service 運行時，網站根目錄位址為 /home/site/wwwroot
+在 Azure App Service 運行時，網站根目錄位址為 `/home/site/wwwroot`
 
 在本機開發時，網站根目錄位址為 `/var/www/html`
 
@@ -179,20 +179,20 @@ chmod +x home/site/bin/modman
 
 ```sh
 # 備份資料庫
-mysqldump --add-drop-database --insert-ignore --databases sample | gzip > backup.sql.gz
+mysqldump --single-transaction --add-drop-database --insert-ignore --databases sample | gzip > /var/backups/site.sql.gz
 # 還原資料庫
-gzip -dc backup.sql.gz | mysql
+gzip -dc /var/backups/site.sql.gz | mysql
 
 # 備份檔案 (假設當下目錄即為網站根目錄)
-tar -zcvf /tmp/backup.file.tgz --exclude='./node_modules/*' ./
+tar -zcvf /var/backups/site.file.tgz --exclude='./node_modules/' .
 # 還原檔案
-tar -zxvf /tmp/backup.file.tgz
+tar -zxvf /var/backups/site.file.tgz
 
 # 或是利用 rsync 差異同步暨有網站檔案 (以下為測試模式，實際執行請拿掉 --dry-run 選項)
 rsync --dry-run -lcrvhP --delete \
-    --exclude='/node_modules/' \
-    --exclude='/configuration.php' \
-    $REMOTE_HOST:/var/www/html/ ./
+    --exclude='./node_modules/' \
+    --exclude='./configuration.php' \
+    $REMOTE_HOST:/var/www/html/ .
 ```
 
 ### 透過 [Akeeba Backup](https://www.akeebabackup.com/)

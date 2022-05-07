@@ -44,14 +44,14 @@ docker ps
 
 以下示範使用 `ldap-cli` 容器來管理資料庫
 
-> 還原資料庫前請記得暫時關閉啟動中的 `ldap` 容器以避免資料存取衝突
+> 還原資料庫前請記得暫時關閉啟動中的 `ldap` 容器或掛載不同的檔案系統以避免資料存取衝突
 
 ```sh
 # 進入容器的 Bash Shell
 docker compose run --rm ldap-cli bash
 
 # 依據目錄後綴匯出為 LDIF (此例為 LDAP config files)
-slapcat -b cn=config > config.ldif
+slapcat -b cn=config > conf.ldif
 
 # 依據資料庫索引匯出為 LDIF (此例為 LDAP database files)
 slapcat -n 1 > data.ldif
@@ -60,7 +60,7 @@ slapcat -n 1 > data.ldif
 rm -rf /etc/ldap/slapd.d/*
 
 # 還原 LDAP config files
-cat config.ldif | slapadd -vF /etc/ldap/slapd.d -n 0
+cat conf.ldif | slapadd -vF /etc/ldap/slapd.d -n 0
 
 # 刪除 LDAP database files
 rm -rf /var/lib/ldap/*
