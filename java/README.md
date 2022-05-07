@@ -147,7 +147,9 @@ SPRING_CONFIG_LOCATION=classpath:/,file:/home/config/
 
 請配置如下的 `JAVA_OPTS` 環境變數，並開放連接埠 5005 以利偵錯
 
-- JAVA_OPTS: `-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005`
+> 如果 JVM 版本小於 9, address 參數請改為 5005
+
+- JAVA_OPTS: `-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005`
 
 ### 如果啟用 HTTPS 後, 如果應用程式無法正確判定 HTTPS 安全連線的話
 
