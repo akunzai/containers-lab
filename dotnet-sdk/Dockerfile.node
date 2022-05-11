@@ -1,0 +1,19 @@
+# https://hub.docker.com/_/microsoft-dotnet-sdk/
+FROM mcr.microsoft.com/dotnet/sdk:6.0
+
+ARG APT_URL=""
+
+RUN set -eux; \
+    # preferred mirror site
+    [ -n "${APT_URL}" ] && sed -i "s,^\deb http://deb.debian.org,deb ${APT_URL},g" /etc/apt/sources.list; \
+    # install Node.js v16.x
+    # https://github.com/nodesource/distributions/blob/master/README.md#debinstall
+    curl -fsSL https://deb.nodesource.com/setup_16.x | bash -; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends nodejs; \
+    # https://classic.yarnpkg.com/en/docs/install
+    npm install --global yarn; \
+    # clean up
+    rm -rf /var/lib/apt/lists/* /tmp/*; \
+    # smoke test
+    dotnet --info && node --version && npm --version && yarn --version;

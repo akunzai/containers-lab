@@ -1,0 +1,16 @@
+version: '2'
+
+services:
+  mono:
+    build:
+      context: .
+      args:
+        APT_URL: http://free.nchc.org.tw
+    image: dotnet-sdk:mono
+  node:
+    build: 
+      context: .
+      dockerfile: Dockerfile.node
+      args:
+        APT_URL: http://free.nchc.org.tw
+    image: dotnet-sdk:node
