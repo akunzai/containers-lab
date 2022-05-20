@@ -6,13 +6,13 @@ volumes:
 
 services:
   java:
-    # https://hub.docker.com/_/microsoft-java-jre-headless
-    image: mcr.microsoft.com/java/jre-headless:11-zulu-debian10
+    # https://hub.docker.com/_/eclipse-temurin
+    image:  eclipse-temurin:11
     restart: unless-stopped
     volumes:
       # 在 Azure App Service 運作時，僅有 '/home' 目錄可以跨容器存取並永續儲存
       # https://docs.microsoft.com/azure/app-service/configure-custom-container#use-persistent-shared-storage
-      - app-home:/home
+      # - app-home:/home
       - ./app.jar:/home/site/wwwroot/app.jar:ro
     environment:
       LANG: 'C.UTF-8'

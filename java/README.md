@@ -1,4 +1,4 @@
-# [Java](https://github.com/microsoft/java) 開發環境 for Docker
+# Java 開發環境 for Docker
 
 ## 環境需求
 
@@ -94,23 +94,13 @@ www-data
 $ docker compose run --rm java bash
 ```
 
-## [應用程式部署](https://docs.microsoft.com/azure/app-service/configure-language-java?pivots=platform-linux#configure-jar-applications)
-
-> 如果不希望更名 JAR 應用程式，則需要自訂容器的啟動程序
-
-JAR 應用程式請打包或更名為 `app.jar` 並部署至容器內的 `/home/site/wwwroot/` 目錄下
-
 ## [自訂和調整](https://docs.microsoft.com/azure/app-service/configure-language-java?pivots=platform-linux#customization-and-tuning)
 
-### [自訂啟動腳本](https://github.com/Azure-App-Service/java/blob/dev/shared/init_container.sh)
+### 啟動腳本
 
 在本機開發時可以透過 [command](https://docs.docker.com/compose/compose-file/#command) 屬性設定啟動命令
 
 而在 Azure App Service 則可以在組態頁面的一般設定中設定啟動命令
-
-> 如果存在 `/home/startup.sh` 腳本, 將會自動於容器啟動時執行
->
-> 但若設定啟動命令或腳本則不會載入預設的 jar
 
 ### [設定 Java 執行階段選項](https://docs.microsoft.com/azure/app-service/configure-language-java?pivots=platform-linux#set-java-runtime-options)
 
