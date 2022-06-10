@@ -1,5 +1,5 @@
 # https://github.com/j8r/dockerfiles/tree/master/systemd/debian
-ARG DEBIAN_VERSION=10
+ARG DEBIAN_VERSION=11
 FROM debian:$DEBIAN_VERSION
 
 ARG APT_URL=""

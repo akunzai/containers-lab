@@ -12,38 +12,24 @@ services:
       - /run/lock
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
-  centos7:
-    build: 
-      context: .
-      dockerfile: Dockerfile.centos
-      args:
-        CENTOS_VERSION: 7
-    image: centos/systemd:7
-    tmpfs:
-      - /tmp
-      - /run
-      - /run/lock
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
   debian:
     build: 
       context: .
       args:
         APT_URL: http://free.nchc.org.tw
-    image: debian/systemd:10
+    image: debian/systemd:11
     tmpfs:
       - /tmp
       - /run
       - /run/lock
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
-  debian9:
-    build: 
+  rocky:
+    build:
       context: .
-      args:
-        APT_URL: http://free.nchc.org.tw
-        DEBIAN_VERSION: 9
-    image: debian/systemd:9
+      dockerfile: Dockerfile.rocky
+    image: rockylinux/systemd:8
+    privileged: true
     tmpfs:
       - /tmp
       - /run
