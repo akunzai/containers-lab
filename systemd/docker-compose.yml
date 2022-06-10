@@ -50,3 +50,15 @@ services:
       - /run/lock
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  rocky:
+    build:
+      context: .
+      dockerfile: Dockerfile.rocky
+    image: rockylinux/systemd:8
+    privileged: true
+    tmpfs:
+      - /tmp
+      - /run
+      - /run/lock
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
