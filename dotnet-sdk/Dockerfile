@@ -8,7 +8,8 @@ COPY --from=mcr.microsoft.com/dotnet/aspnet:3.1 /usr/share/dotnet /usr/share/dot
 
 RUN set -eux; \
     # preferred mirror site
-    [ -n "${APT_URL}" ] && sed -i "s,^\deb http://deb.debian.org,deb ${APT_URL},g" /etc/apt/sources.list; \
+    [ -n "$APT_URL" ] && [ "$APT_URL" = 'http://free.nchc.org.tw' ] && [ $(uname -m) = 'x86_64' ] && sed -i -r "/-security/! s,^deb http?://[^/]+/(.*),deb $APT_URL/\1,g" /etc/apt/sources.list; \
+    [ -n "$APT_URL" ] && [ "$APT_URL" = 'http://free.nchc.org.tw' ] || sed -i -r "s,^deb http?://[^/]+/(.*),deb $APT_URL/\1,g" /etc/apt/sources.list; \
     # install msbuild for Mono
     # https://www.mono-project.com/download/stable/#download-lin-debian
     apt-get update; \
