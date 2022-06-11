@@ -15,8 +15,8 @@ docker compose build
 docker compose build mono
 
 # 建置指定系統架構的映像檔
-docker build build --platform=linux/amd64 -t dotnet-sdk:mono .
-docker build build --platform=linux/amd64 -t dotnet-sdk:node -f ./Dockerfile.node .
+docker build --platform=linux/amd64 -t dotnet-sdk:mono .
+docker build --platform=linux/amd64 -t dotnet-sdk:node -f ./Dockerfile.node .
 ```
 
 ## 利用容器執行指令
