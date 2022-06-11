@@ -2,12 +2,10 @@
 ARG DEBIAN_VERSION=11
 FROM debian:$DEBIAN_VERSION
 
-ARG APT_URL=""
 ENV container docker
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN [ -n "${APT_URL}" ] && sed -i "s,^\deb http://deb.debian.org,deb ${APT_URL},g" /etc/apt/sources.list; \ 
-    apt-get update; \
+RUN apt-get update; \
     apt-get install -y systemd systemd-sysv; \
     apt-get clean; \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*; \
