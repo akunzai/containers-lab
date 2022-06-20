@@ -13,7 +13,7 @@ RUN set -eux; \
     apt-get update; \
     apt-get install -y --no-install-recommends nodejs; \
     # https://classic.yarnpkg.com/en/docs/install
-    npm install --global yarn; \
+    npm install --location=global yarn; \
     # clean up
     rm -rf /var/lib/apt/lists/* /tmp/*; \
     # smoke test
