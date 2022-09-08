@@ -78,7 +78,7 @@ $ docker compose run --rm node yarn --version
 可透過安裝 [Microsoft.NETFramework.ReferenceAssemblies](https://www.nuget.org/packages/Microsoft.NETFramework.ReferenceAssemblies/) 套件來解決
 
 ```xml
-<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="All" Condition="$(TargetFramework.StartsWith('net4')) AND '$(OS)' != 'Windows_NT'"/>
+<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" Condition="$(TargetFramework.StartsWith('net4')) AND '$(OS)' != 'Windows_NT'"/>
 ```
 
 ### [如何跨平台測試目標為 .NET Framework 的 .NET SDK 應用程式](https://cake-contrib.github.io/Cake.Recipe/docs/known-issues/running-xunit-tests-on-net-framework)
@@ -88,7 +88,7 @@ $ docker compose run --rm node yarn --version
 可透過安裝 [Microsoft.TestPlatform.ObjectModel](https://www.nuget.org/packages/Microsoft.TestPlatform.ObjectModel/) 套件來達成
 
 ```xml
-<PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="17.1.0" Condition="'$(OS)' != 'Windows_NT'" />
+<PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="17.3.1" Condition="'$(OS)' != 'Windows_NT'" />
 ```
 
 ## 參考資料
