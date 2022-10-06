@@ -14,10 +14,3 @@ services:
       args:
         APT_URL: http://free.nchc.org.tw
     image: dotnet-sdk:node
-  mono-node:
-    build:
-      context: .
-      dockerfile: Dockerfile.mono-node
-      args:
-        APT_URL: http://free.nchc.org.tw
-    image: mono:node
