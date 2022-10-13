@@ -1,4 +1,4 @@
-ARG PHP_VERSION=8.0
+ARG PHP_VERSION=8.1
 # https://hub.docker.com/_/php
 FROM php:$PHP_VERSION-apache
 
