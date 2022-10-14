@@ -97,7 +97,7 @@ www-data
 $ docker compose run --rm php bash
 ```
 
-## [自訂和調整](https://docs.microsoft.com/azure/app-service/configure-language-php?pivots=platform-linux)
+## [自訂和調整](https://learn.microsoft.com/azure/app-service/configure-language-php?pivots=platform-linux)
 
 在 Azure App Service 運行時，網站根目錄位址為 `/home/site/wwwroot`
 
@@ -109,7 +109,7 @@ $ docker compose run --rm php bash
 
 而在 Azure App Service 則可以在組態頁面的一般設定中設定啟動命令
 
-### [自訂 PHP 組態設定](https://docs.microsoft.com/azure/app-service/configure-language-php?pivots=platform-linux#customize-phpini-settings)
+### [自訂 PHP 組態設定](https://learn.microsoft.com/azure/app-service/configure-language-php?pivots=platform-linux#customize-phpini-settings)
 
 請擴展 PHP 容器配置並啟用 [PHP_INI_SCAN_DIR](https://www.php.net/manual/en/configuration.file.php#configuration.file.scan) 環境變數配置
 
@@ -131,7 +131,7 @@ output_buffering=4096
 error_reporting=E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED
 ```
 
-### [啟用 PHP 擴充功能](https://docs.microsoft.com/azure/app-service/configure-language-php?pivots=platform-linux#enable-php-extensions)
+### [啟用 PHP 擴充功能](https://learn.microsoft.com/azure/app-service/configure-language-php?pivots=platform-linux#enable-php-extensions)
 
 必須先參考上面的說明啟用自訂 PHP 組態設定後才能啟用額外的 PHP 擴充功能
 
@@ -221,7 +221,7 @@ rm -i *.jpa
 
 ### [偵錯應用程式](https://xdebug.org/docs/step_debug)
 
-如果需要在 Azure App Service 上偵錯, 請新增[應用系統設定](https://docs.microsoft.com/azure/app-service/configure-common#configure-app-settings) `PHP_ZENDEXTENSIONS` 加入 `xdebug` 設定值
+如果需要在 Azure App Service 上偵錯, 請新增[應用系統設定](https://learn.microsoft.com/azure/app-service/configure-common#configure-app-settings) `PHP_ZENDEXTENSIONS` 加入 `xdebug` 設定值
 
 安裝 XDebug 擴充功能後，請加入以下的環境變數以利啟用偵錯
 

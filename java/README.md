@@ -94,7 +94,7 @@ www-data
 $ docker compose run --rm java bash
 ```
 
-## [自訂和調整](https://docs.microsoft.com/azure/app-service/configure-language-java?pivots=platform-linux#customization-and-tuning)
+## [自訂和調整](https://learn.microsoft.com/azure/app-service/configure-language-java?pivots=platform-linux#customization-and-tuning)
 
 ### 啟動腳本
 
@@ -102,7 +102,7 @@ $ docker compose run --rm java bash
 
 而在 Azure App Service 則可以在組態頁面的一般設定中設定啟動命令
 
-### [設定 Java 執行階段選項](https://docs.microsoft.com/azure/app-service/configure-language-java?pivots=platform-linux#set-java-runtime-options)
+### [設定 Java 執行階段選項](https://learn.microsoft.com/azure/app-service/configure-language-java?pivots=platform-linux#set-java-runtime-options)
 
 如需設定 Java 執行階段選項, 可透過配置 `JAVA_OPTS` 環境變數達成，例如
 

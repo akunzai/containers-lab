@@ -12,7 +12,7 @@ services:
     restart: unless-stopped
     volumes:
       # 在 Azure App Service 運作時，僅有 '/home' 目錄可以跨容器存取並永續儲存
-      # https://docs.microsoft.com/azure/app-service/configure-custom-container#use-persistent-shared-storage
+      # https://learn.microsoft.com/azure/app-service/configure-custom-container#use-persistent-shared-storage
       - app-home:/home
       - ./index.php:/home/site/wwwroot/index.php:ro
       - ./startup.sh:/home/startup.sh:ro
