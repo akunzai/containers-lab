@@ -151,7 +151,7 @@ extension=/home/site/lib/soap.so
 EOF
 
 # 透過 pickle 安裝第三方的擴充功能
-pickle install xdebug
+pickle install --no-interaction xdebug-stable
 find /usr/local/lib/php/extensions -name xdebug.so -exec cp {} /home/site/lib/ \;
 tee -a /home/site/ini/php.ini << EOF
 zend_extension=/home/site/lib/xdebug.so
