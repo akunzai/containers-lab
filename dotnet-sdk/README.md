@@ -25,46 +25,46 @@ docker build --platform=linux/amd64 -t dotnet-sdk:node -f ./Dockerfile.node --bu
 # 執行 dotnet CLI
 $ docker compose run -it --rm mono dotnet --info
 .NET SDK (reflecting any global.json):
- Version:   6.0.300
- Commit:    8473146e7d
+ Version:   6.0.402
+ Commit:    6862418796
 
 Runtime Environment:
  OS Name:     debian
  OS Version:  11
  OS Platform: Linux
  RID:         debian.11-x64
- Base Path:   /usr/share/dotnet/sdk/6.0.300/
 
-Host (useful for support):
-  Version: 6.0.5
-  Commit:  70ae3df4a6
+Host:
+  Version:      6.0.10
+  Architecture: x64
+  Commit:       5a400c212a
 
 .NET SDKs installed:
-  6.0.300 [/usr/share/dotnet/sdk]
+  6.0.402 [/usr/share/dotnet/sdk]
 
 .NET runtimes installed:
-  Microsoft.AspNetCore.App 3.1.25 [/usr/share/dotnet/shared/Microsoft.AspNetCore.App]
-  Microsoft.AspNetCore.App 6.0.5 [/usr/share/dotnet/shared/Microsoft.AspNetCore.App]
-  Microsoft.NETCore.App 3.1.25 [/usr/share/dotnet/shared/Microsoft.NETCore.App]
-  Microsoft.NETCore.App 6.0.5 [/usr/share/dotnet/shared/Microsoft.NETCore.App]
+  Microsoft.AspNetCore.App 3.1.30 [/usr/share/dotnet/shared/Microsoft.AspNetCore.App]
+  Microsoft.AspNetCore.App 6.0.10 [/usr/share/dotnet/shared/Microsoft.AspNetCore.App]
+  Microsoft.NETCore.App 3.1.30 [/usr/share/dotnet/shared/Microsoft.NETCore.App]
+  Microsoft.NETCore.App 6.0.10 [/usr/share/dotnet/shared/Microsoft.NETCore.App]
 
 To install additional .NET runtimes or SDKs:
   https://aka.ms/dotnet-download
 
 # 執行 msbuild
 $ docker compose run --rm mono msbuild -version
-Microsoft (R) Build Engine version 16.6.0 for Mono
+Microsoft (R) Build Engine version 16.10.1 for Mono
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-16.6.0.15201
+16.10.1.31701
 
 # 執行 npm
 $ docker compose run --rm node npm --version
-8.5.5
+8.19.2
 
 # 執行 yarn
 $ docker compose run --rm node yarn --version
-1.22.18
+1.22.19
 ```
 
 ## 疑難排解
