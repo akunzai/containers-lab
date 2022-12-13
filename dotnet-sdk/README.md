@@ -24,32 +24,44 @@ docker build --platform=linux/amd64 -t dotnet-sdk:node -f ./Dockerfile.node --bu
 ```sh
 # 執行 dotnet CLI
 $ docker compose run -it --rm mono dotnet --info
-.NET SDK (reflecting any global.json):
- Version:   6.0.402
- Commit:    6862418796
+.NET SDK:                                                                                                                                                                                       Version:   7.0.100                                                                                                                                                                            
+ Commit:    e12b7af219
 
 Runtime Environment:
  OS Name:     debian
  OS Version:  11
  OS Platform: Linux
  RID:         debian.11-x64
+ Base Path:   /usr/share/dotnet/sdk/7.0.100/
 
 Host:
-  Version:      6.0.10
+  Version:      7.0.0
   Architecture: x64
-  Commit:       5a400c212a
+  Commit:       d099f075e4
 
 .NET SDKs installed:
-  6.0.402 [/usr/share/dotnet/sdk]
+  7.0.100 [/usr/share/dotnet/sdk]
 
 .NET runtimes installed:
-  Microsoft.AspNetCore.App 3.1.30 [/usr/share/dotnet/shared/Microsoft.AspNetCore.App]
-  Microsoft.AspNetCore.App 6.0.10 [/usr/share/dotnet/shared/Microsoft.AspNetCore.App]
-  Microsoft.NETCore.App 3.1.30 [/usr/share/dotnet/shared/Microsoft.NETCore.App]
-  Microsoft.NETCore.App 6.0.10 [/usr/share/dotnet/shared/Microsoft.NETCore.App]
+  Microsoft.AspNetCore.App 6.0.11 [/usr/share/dotnet/shared/Microsoft.AspNetCore.App]
+  Microsoft.AspNetCore.App 7.0.0 [/usr/share/dotnet/shared/Microsoft.AspNetCore.App]
+  Microsoft.NETCore.App 6.0.11 [/usr/share/dotnet/shared/Microsoft.NETCore.App]
+  Microsoft.NETCore.App 7.0.0 [/usr/share/dotnet/shared/Microsoft.NETCore.App]
 
-To install additional .NET runtimes or SDKs:
-  https://aka.ms/dotnet-download
+Other architectures found:
+  None
+
+Environment variables:
+  Not set
+
+global.json file:
+  Not found
+
+Learn more:
+  https://aka.ms/dotnet/info
+
+Download .NET:
+  https://aka.ms/dotnet/download
 
 # 執行 msbuild
 $ docker compose run --rm mono msbuild -version
@@ -88,7 +100,7 @@ $ docker compose run --rm node yarn --version
 可透過安裝 [Microsoft.TestPlatform.ObjectModel](https://www.nuget.org/packages/Microsoft.TestPlatform.ObjectModel/) 套件來達成
 
 ```xml
-<PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="17.3.1" Condition="'$(OS)' != 'Windows_NT'" />
+<PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="17.4.0" Condition="$(TargetFramework.StartsWith('net4')) AND '$(OS)' != 'Windows_NT'" />
 ```
 
 ## 參考資料
