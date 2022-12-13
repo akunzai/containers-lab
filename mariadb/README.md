@@ -1,4 +1,4 @@
-# MySQL 開發環境 for Docker
+# MariaDB 開發環境 for Docker
 
 ## 環境需求
 
@@ -44,19 +44,19 @@ COMPOSE_FILE=docker-compose.yml:docker-compose.adminer.yml docker compose up -d
 
 ## [啟用 SSL 加密連線](https://mariadb.com/kb/en/securing-connections-for-client-and-server/)
 
-> 如果 mysql 伺服器支援加密連線的話，用戶端預設會嘗試使用
+> 如果 mariadb 伺服器支援加密連線的話，用戶端預設會嘗試使用
 
 ```sh
 # 啟用 SSL 加密連線
 COMPOSE_FILE=docker-compose.yml:docker-compose.ssl.yml docker compose up -d
 
 # 確認已正確啟用
-docker compose exec mysql mysql -p -e 'show variables like "%ssl%";'
+docker compose exec mariadb mysql -p -e 'show variables like "%ssl%";'
 
 # 如果要使用者必須使用加密連線登入的話
-docker compose exec mysql mysql -p -e 'alter user "alice"@"%" require ssl;'
+docker compose exec mariadb mysql -p -e 'alter user "alice"@"%" require ssl;'
 # 也可以反過來取消加密連線的登入限制
-docker compose exec mysql mysql -p -e 'alter user "alice"@"localhost" require none;'
+docker compose exec mariadb mysql -p -e 'alter user "alice"@"localhost" require none;'
 
 # 測試用戶端加密連線
 mysql -h db.example.test -u root -p -e 'show status like "ssl_version";'
@@ -89,7 +89,7 @@ mkcert -cert-file ssl/cert.pem -key-file ssl/key.pem '*.example.test'
 
 ```sh
 # 進入容器的 Bash Shell
-docker compose exec mysql bash
+docker compose exec mariadb bash
 
 # 直接重設 root 帳號密碼
 mysqladmin -u root password 'secret'
@@ -114,7 +114,7 @@ mysql -e "ALTER USER root@'%' IDENTIFIED BY 'secret';FLUSH PRIVILEGES;"
 
 ```sh
 # 進入容器的 Bash Shell
-docker compose exec mysql bash
+docker compose exec mariadb bash
 
 # 完整備份指定資料庫
 mysqldump --single-transaction --add-drop-database --insert-ignore --databases sample | gzip > backup.sql.gz
