@@ -3,6 +3,9 @@ FROM mcr.microsoft.com/dotnet/sdk:7.0
 
 ARG APT_URL=""
 
+# install ASP.NET Core 6.0 Runtime
+COPY --from=mcr.microsoft.com/dotnet/aspnet:6.0 /usr/share/dotnet /usr/share/dotnet
+
 RUN set -eux; \
     # preferred mirror site
     [ -n "$APT_URL" ] && [ "$APT_URL" = 'http://free.nchc.org.tw' ] && [ $(uname -m) = 'x86_64' ] && sed -i -r "/-security/! s,^deb http?://[^/]+/(.*),deb $APT_URL/\1,g" /etc/apt/sources.list; \
