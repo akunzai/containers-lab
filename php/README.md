@@ -205,7 +205,7 @@ rsync --dry-run -lcrvhP --delete \
 3. 利用瀏覽器開啟解壓縮的 [Kickstart 主頁面](http://127.0.0.1/kickstart.php)
 4. 選取要還原的備份檔並選以解壓縮檔模式為 `Directly` 後開始進行解壓縮
 5. 解壓縮完成後將開啟 [Kickstart 安裝頁面](http://127.0.0.1/installation/) 進行網站還原
-6. 還原資料庫 (建議保留表格名稱前綴，當使用本機的資料庫服務容器時，資料庫主機名稱請設定為 `mysql`)
+6. 還原資料庫 (建議保留表格名稱前綴，當使用本機的資料庫服務容器時，資料庫主機名稱請設定為 `mariadb`)
 7. 網站還原完成後，回到 Kickstart 主頁面執行 `Clean Up`
 
 如果無法執行 `Clean Up`, 請手動清理

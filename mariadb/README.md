@@ -79,7 +79,7 @@ mkcert -cert-file ssl/cert.pem -key-file ssl/key.pem '*.example.test'
 
 ## 初始化資料庫
 
-將資料庫匯出檔 `*.sql` 或 `*.sql.gz` 掛載於 `mysql` 容器的 `/docker-entrypoint-initdb.d` 目錄下即可
+將資料庫匯出檔 `*.sql` 或 `*.sql.gz` 掛載於 `mariadb` 容器的 `/docker-entrypoint-initdb.d` 目錄下即可
 
 > 只有在初始化資料庫(第一次建立)時會自動匯入
 
@@ -106,7 +106,7 @@ mysql -e "ALTER USER root@'%' IDENTIFIED BY 'secret';FLUSH PRIVILEGES;"
 
 ## 管理資料庫
 
-以下示範使用 `mysql` 容器本身的工具來管理資料庫
+以下示範使用 `mariadb` 容器本身的工具來管理資料庫
 
 > 執行前請先啟動資料庫服務
 
