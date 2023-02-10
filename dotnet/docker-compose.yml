@@ -6,7 +6,7 @@ volumes:
 services:
   dotnet:
     # https://hub.docker.com/_/microsoft-dotnet-aspnet/
-    image: mcr.microsoft.com/dotnet/aspnet:6.0
+    image: mcr.microsoft.com/dotnet/samples:aspnetapp
     restart: unless-stopped
     volumes:
       # 在 Azure App Service 運作時，僅有 '/home' 目錄可以跨容器存取並永續儲存
