@@ -230,7 +230,7 @@ rm -i *.jpa
 
 可參考 [PHP Debug for VSCode](https://code.visualstudio.com/docs/languages/php#_debugging) 或 [PHPStorm](https://www.jetbrains.com/help/phpstorm/zero-configuration-debugging.html) 等 IDE 的配置說明
 
-> 需要在 HTTP 請求中加入 `XDEBUG_SESSION_START` URL 參數或 `XDEBUG_SESSION` Cookie 以啟用遠端偵錯
+> 需要在 HTTP 請求中加入 [XDEBUG_TRIGGER](https://xdebug.org/docs/step_debug#start_with_request) 的 Cookie 或 URL 參數以啟用遠端偵錯
 > 建議可透過[瀏覽器外掛](https://xdebug.org/docs/step_debug#browser-extensions)來切換
 
 ### 啟用 HTTPS 後, 瀏覽器連線時出現重導迴圈的狀況
