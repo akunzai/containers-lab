@@ -1,11 +1,11 @@
-# Redis 開發環境 for Docker
+# Redis 鍵值資料庫
 
 ## 環境需求
 
 - [Docker Engine](https://docs.docker.com/install/)
 - [Docker Compose V2](https://docs.docker.com/compose/cli-command/)
 
-## 運行開發環境
+## 使用方式
 
 > `docker compose` 指令必須要在 `docker-compose.yml` 所在的目錄下執行
 >

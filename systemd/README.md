@@ -1,11 +1,13 @@
-# systemd for Docker
+# systemd 服務管理器
+
+在 Docker 容器內運行 systemd 服務管理器
 
 ## 環境需求
 
 - [Docker Engine](https://docs.docker.com/install/)
 - [Docker Compose V2](https://docs.docker.com/compose/cli-command/)
 
-## systemd 服務整合範例
+## 使用方式
 
 ```sh
 # 建置指定服務的映像檔

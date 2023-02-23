@@ -1,11 +1,11 @@
-# 自建 [Docker Registry](https://docs.docker.com/registry/)
+# [Docker 容器映像儲存庫](https://docs.docker.com/registry/)
 
 ## 環境需求
 
 - [Docker Engine](https://docs.docker.com/install/)
 - [Docker Compose V2](https://docs.docker.com/compose/cli-command/)
 
-## 運行開發環境
+## 使用方式
 
 > `docker compose` 指令必須要在 `docker-compose.yml` 所在的目錄下執行
 

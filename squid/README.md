@@ -1,4 +1,4 @@
-# [Squid](http://www.squid-cache.org/) 快取代理伺服器 for Docker
+# [Squid](http://www.squid-cache.org/) 快取代理伺服器
 
 可用來快取、監控或限制 Docker 容器的對外連線
 
@@ -7,7 +7,7 @@
 - [Docker Engine](https://docs.docker.com/install/)
 - [Docker Compose V2](https://docs.docker.com/compose/cli-command/)
 
-## 利用容器執行指令
+## 使用方式
 
 ```sh
 # 在背景啟動並執行 squid 容器
