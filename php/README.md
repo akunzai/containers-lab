@@ -225,8 +225,15 @@ rm -i *.jpa
 
 安裝 XDebug 擴充功能後，請加入以下的環境變數以利啟用偵錯
 
-- XDEBUG_CONFIG: client_host=host.docker.internal
-- XDEBUG_MODE: debug
+- `XDEBUG_MODE: debug`
+
+> 如果 XDebug 擴充功能是安裝在宿主的話
+
+- `XDEBUG_CONFIG: client_host=host.docker.internal`
+
+> 如果 XDebug 擴充功能是安裝在容器的話
+
+- `XDEBUG_CONFIG: client_host=localhost`
 
 可參考 [PHP Debug for VSCode](https://code.visualstudio.com/docs/languages/php#_debugging) 或 [PHPStorm](https://www.jetbrains.com/help/phpstorm/zero-configuration-debugging.html) 等 IDE 的配置說明
 
