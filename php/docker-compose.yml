@@ -23,11 +23,11 @@ services:
       # PHP_INI_SCAN_DIR: '/usr/local/etc/php/conf.d:/home/site/ini'
     command: bash /home/startup.sh
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.php.rule=Host(`dev.example.test`)"
+      - traefik.enable=true
+      - traefik.http.routers.php.rule=Host(`dev.example.test`)
       # 如果要啟用 HTTPS 連線的話
-      # - "traefik.http.routers.php.tls=true"
-      - "traefik.http.services.php.loadBalancer.server.port=80"
+      # - traefik.http.routers.php.entrypoints=websecure
+      - traefik.http.services.php.loadBalancer.server.port=80
   # https://doc.traefik.io/traefik/
   traefik:
     # https://hub.docker.com/_/traefik
@@ -52,7 +52,7 @@ services:
       # - --providers.file.directory=/etc/traefik/dynamic/
       # - --providers.file.watch=true
     ports:
-      - '127.0.0.1:80:80'
-      - '127.0.0.1:8080:8080'
+      - 127.0.0.1:80:80
+      - 127.0.0.1:8080:8080
       # 如果要啟用 HTTPS 連線的話
-      # - '127.0.0.1:443:443'
+      # - 127.0.0.1:443:443

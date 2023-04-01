@@ -15,9 +15,9 @@ services:
     command:
       - '-config.file=/etc/loki/config.yaml'
     ports:
-      - '3100:3100'
+      - 3100:3100
     labels:
-      - 'traefik.enable=true'
+      - traefik.enable=true
 
   promtail:
     # https://grafana.com/docs/loki/latest/clients/promtail/installation/
@@ -43,9 +43,9 @@ services:
       - grafana-data:/var/lib/grafana
       - ./grafana/provisioning:/etc/grafana/provisioning
     labels:
-      - 'traefik.enable=true'
-      - 'traefik.http.services.grafana.loadbalancer.server.port=3000'
-      - 'traefik.http.routers.grafana.rule=Host(`dev.example.test`)'
+      - traefik.enable=true
+      - traefik.http.services.grafana.loadbalancer.server.port=3000
+      - traefik.http.routers.grafana.rule=Host(`dev.example.test`)
 
   traefik:
     image: traefik
@@ -60,18 +60,11 @@ services:
       - --providers.docker=true
       - --providers.docker.exposedByDefault=false
       - --entrypoints.web.address=:80
-      # 如果要啟用 HTTPS 連線的話
-      # - --entrypoints.websecure.address=:443
-      # 如果要自動重導為 HTTPS 的話
-      # - --entrypoints.web.http.redirections.entryPoint.to=websecure
-      # - --entrypoints.web.http.redirections.entryPoint.scheme=https
       # 如果要使用 file provider 的話
       # - --providers.file.directory=/etc/traefik/dynamic/
       # - --providers.file.watch=true
       # https://doc.traefik.io/traefik/observability/metrics/prometheus/
       - --metrics.prometheus=true
     ports:
-      - '127.0.0.1:80:80'
-      - '127.0.0.1:8080:8080'
-      # 如果要啟用 HTTPS 連線的話
-      # - '127.0.0.1:443:443'
+      - 127.0.0.1:80:80
+      - 127.0.0.1:8080:8080

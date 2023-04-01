@@ -24,7 +24,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.dotnet.rule=Host(`dev.example.test`)"
       # 如果要啟用 HTTPS 連線的話
-      # - "traefik.http.routers.dotnet.tls=true"
+      # - "traefik.http.routers.dotnet.entrypoints=websecure"
       - "traefik.http.services.dotnet.loadbalancer.server.port=80"
   # https://docs.traefik.io/
   traefik:

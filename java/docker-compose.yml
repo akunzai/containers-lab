@@ -20,11 +20,11 @@ services:
       JAVA_TOOL_OPTIONS: '-Djava.net.preferIPv4Stack=true'
     command: sh -c 'java -noverify -Djava.security.egd=file:/dev/./urandom $$JAVA_OPTS -jar /home/site/wwwroot/app.jar'
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.java.rule=Host(`dev.example.test`)"
+      - traefik.enable=true
+      - traefik.http.routers.java.rule=Host(`dev.example.test`)
       # 如果要啟用 HTTPS 連線的話
-      # - "traefik.http.routers.java.tls=true"
-      - "traefik.http.services.java.loadBalancer.server.port=8080"
+      # - traefik.http.routers.java.entrypoints=websecure
+      - traefik.http.services.java.loadBalancer.server.port=8080
   # https://doc.traefik.io/traefik/
   traefik:
     # https://hub.docker.com/_/traefik

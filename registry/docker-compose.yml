@@ -11,15 +11,15 @@ services:
     volumes:
       - registry-data:/var/lib/registry
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.registry.rule=Host(`registry.example.test`)"
+      - traefik.enable=true
+      - traefik.http.routers.registry.rule=Host(`registry.example.test`)
       # 如果要啟用 HTTPS 連線的話
-      # - "traefik.http.routers.registry.tls=true"
-      - "traefik.http.services.registry.loadBalancer.server.port=5000"
+      # - traefik.http.routers.registry.entrypoints=websecure
+      - traefik.http.services.registry.loadBalancer.server.port=5000
       # 如果要限制存取的話
-      # - "traefik.http.routers.registry.middlewares=auth-users"
+      # - traefik.http.routers.registry.middlewares=auth-users
       # echo $(htpasswd -nb user password) | sed -e s/\\$/\\$\\$/g
-      # - "traefik.http.middlewares.auth-users.basicauth.users=test:$$apr1$$H6uskkkW$$IgXLP6ewTrSuBkTrqE8wj/"
+      # - traefik.http.middlewares.auth-users.basicauth.users=test:$$apr1$$H6uskkkW$$IgXLP6ewTrSuBkTrqE8wj/
   traefik:
     # https://hub.docker.com/_/traefik
     image: traefik
@@ -42,7 +42,7 @@ services:
       # - --providers.file.directory=/etc/traefik/dynamic/
       # - --providers.file.watch=true
     ports:
-      - '127.0.0.1:80:80'
-      - '127.0.0.1:8080:8080'
+      - 127.0.0.1:80:80
+      - 127.0.0.1:8080:8080
       # 如果要啟用 HTTPS 連線的話
-      # - '127.0.0.1:443:443'
+      # - 127.0.0.1:443:443

@@ -27,7 +27,7 @@ services:
       - ldap-conf:/etc/ldap/slapd.d
       - ldap-data:/var/lib/ldap
     ports:
-      - '127.0.0.1:389:389'
+      - 127.0.0.1:389:389
   ldap-cli:
     # https://github.com/osixia/docker-openldap
     image: osixia/openldap
@@ -56,7 +56,7 @@ services:
       - ldap2-conf:/etc/ldap/slapd.d
       - ldap2-data:/var/lib/ldap
     ports:
-      - '127.0.0.1:10389:389'
+      - 127.0.0.1:10389:389
   ldap2-cli:
     # https://github.com/osixia/docker-openldap
     image: osixia/openldap

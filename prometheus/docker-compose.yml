@@ -54,9 +54,9 @@ services:
       - grafana-storage:/var/lib/grafana
       - ./grafana/provisioning:/etc/grafana/provisioning
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.services.grafana.loadbalancer.server.port=3000"
-      - "traefik.http.routers.grafana.rule=Host(`dev.example.test`)"
+      - traefik.enable=true
+      - traefik.http.services.grafana.loadbalancer.server.port=3000
+      - traefik.http.routers.grafana.rule=Host(`dev.example.test`)
   cadvisor:
     # https://github.com/google/cadvisor
     image: gcr.io/cadvisor/cadvisor
@@ -114,7 +114,7 @@ services:
       # https://doc.traefik.io/traefik/observability/metrics/prometheus/
       - --metrics.prometheus=true
     ports:
-      - '127.0.0.1:80:80'
-      - '127.0.0.1:8080:8080'
+      - 127.0.0.1:80:80
+      - 127.0.0.1:8080:8080
       # 如果要啟用 HTTPS 連線的話
-      # - '127.0.0.1:443:443'
+      # - 127.0.0.1:443:443
