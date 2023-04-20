@@ -128,7 +128,22 @@ upload_max_filesize=256M
 post_max_size=256M
 max_execution_time=300
 output_buffering=4096
+; https://www.php.net/manual/en/errorfunc.configuration.php
 error_reporting=E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED
+display_errors=Off
+display_startup_errors=Off
+log_errors=On
+error_log=/dev/stderr
+log_errors_max_len=1024
+ignore_repeated_errors=On
+ignore_repeated_source=Off
+html_errors=Off
+; https://www.php.net/manual/en/opcache.installation.php
+opcache.memory_consumption=128
+opcache.interned_strings_buffer=8
+opcache.max_accelerated_files=4000
+opcache.revalidate_freq=60
+opcache.enable_cli=1
 ```
 
 ### [啟用 PHP 擴充功能](https://learn.microsoft.com/azure/app-service/configure-language-php?pivots=platform-linux#enable-php-extensions)
