@@ -9,20 +9,25 @@ services:
     # https://github.com/osixia/docker-openldap
     image: osixia/openldap
     restart: unless-stopped
+    # https://github.com/osixia/docker-openldap/tree/master/image/environment
     environment:
       # https://github.com/osixia/docker-openldap/issues/462
       LDAP_NOFILE: 8192
-      # https://www.openldap.org/doc/admin24/slapdconf2.html#olcLogLevel:%20%3Clevel%3E
-      # LDAP_LOG_LEVEL: 256
-      # https://github.com/osixia/docker-openldap/blob/stable/image/environment/default.startup.yaml
-      LDAP_DOMAIN: example.org
-      LDAP_ADMIN_PASSWORD: admin
-      LDAP_CONFIG_PASSWORD: config
     volumes:
       - ldap-conf:/etc/ldap/slapd.d
       - ldap-data:/var/lib/ldap
     ports:
       - 127.0.0.1:389:389
+  ldap-admin:
+    # https://github.com/osixia/docker-phpLDAPadmin
+    image: osixia/phpldapadmin
+    environment:
+      PHPLDAPADMIN_LDAP_HOSTS: ldap
+      PHPLDAPADMIN_HTTPS: false
+    ports:
+      - '127.0.0.1:8080:80'
+    depends_on:
+      - ldap
   ldap-cli:
     # https://github.com/osixia/docker-openldap
     image: osixia/openldap
