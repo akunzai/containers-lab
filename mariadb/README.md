@@ -83,7 +83,7 @@ mkcert -cert-file ssl/cert.pem -key-file ssl/key.pem '*.example.test'
 
 > 只有在初始化資料庫(第一次建立)時會自動匯入
 
-## 重設資料庫密碼
+## 重設資料庫 root 帳號密碼
 
 > 以下指令執行前請先啟動資料庫服務
 
