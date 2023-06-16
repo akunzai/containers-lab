@@ -51,15 +51,15 @@ COMPOSE_FILE=docker-compose.yml:docker-compose.adminer.yml docker compose up -d
 COMPOSE_FILE=docker-compose.yml:docker-compose.ssl.yml docker compose up -d
 
 # 確認已正確啟用
-docker compose exec mariadb mysql -p -e 'show variables like "%ssl%";'
+docker compose exec mariadb mariadb -p -e 'SHOW VARIABLES LIKE "%ssl%";'
 
 # 如果要使用者必須使用加密連線登入的話
-docker compose exec mariadb mysql -p -e 'alter user "alice"@"%" require ssl;'
+docker compose exec mariadb mariadb -p -e 'ALTER USER "alice"@"%" REQUIRE SSL;'
 # 也可以反過來取消加密連線的登入限制
-docker compose exec mariadb mysql -p -e 'alter user "alice"@"localhost" require none;'
+docker compose exec mariadb mariadb -p -e 'ALTER USER "alice"@"localhost" REQUIRE NONE;'
 
 # 測試用戶端加密連線
-mysql -h db.example.test -u root -p -e 'show status like "ssl_version";'
+mariadb -h db.example.test -u root -p -e 'SHOW STATUS LIKE "ssl_version";'
 ```
 
 ### 建立本機開發用的 SSL 憑證
@@ -92,16 +92,16 @@ mkcert -cert-file ssl/cert.pem -key-file ssl/key.pem '*.example.test'
 docker compose exec mariadb bash
 
 # 直接重設 root 帳號密碼
-mysqladmin -u root password 'secret'
+mariadb-admin -u root password 'secret'
 
 # 或是透過以下互動程序來設定所有安全性選項
-mysql_secure_installation
+mariadb-secure-installation
 
 # 建立遠端登入的帳號密碼
-mysql -e "CREATE USER root@'%' IDENTIFIED BY 'secret';FLUSH PRIVILEGES;"
+mariadb -e "CREATE USER root@'%' IDENTIFIED BY 'secret'; FLUSH PRIVILEGES;"
 
 # 更變遠端登入的帳號密碼
-mysql -e "ALTER USER root@'%' IDENTIFIED BY 'secret';FLUSH PRIVILEGES;"
+mariadb -e "ALTER USER root@'%' IDENTIFIED BY 'secret'; FLUSH PRIVILEGES;"
 ```
 
 ## 管理資料庫
@@ -117,14 +117,14 @@ mysql -e "ALTER USER root@'%' IDENTIFIED BY 'secret';FLUSH PRIVILEGES;"
 docker compose exec mariadb bash
 
 # 完整備份指定資料庫
-mysqldump --single-transaction --add-drop-database --insert-ignore --databases sample | gzip > backup.sql.gz
+mariadb-dump --single-transaction --add-drop-database --insert-ignore --databases sample | gzip > backup.sql.gz
 
 # 完整備份所有資料庫
-mysqldump --single-transaction --add-drop-database --insert-ignore --all-databases | gzip > backup.sql.gz
+mariadb-dump --single-transaction --add-drop-database --insert-ignore --all-databases | gzip > backup.sql.gz
 
 # 匯入 SQL 備份檔至資料庫
-cat backup.sql | mysql
+cat backup.sql | mariadb
 
 # 匯入壓縮的 SQL 備份檔至資料庫
-gzip -dc backup.sql.gz | mysql
+gzip -dc backup.sql.gz | mariadb
 ```
