@@ -1,4 +1,4 @@
-# MariaDB 資料庫
+# MySQL 資料庫
 
 ## 環境需求
 
@@ -42,24 +42,24 @@ COMPOSE_FILE=docker-compose.yml:docker-compose.adminer.yml docker compose up -d
 
 - 3306: MySQL
 
-## [啟用 SSL 加密連線](https://mariadb.com/kb/en/securing-connections-for-client-and-server/)
+## [啟用 SSL 加密連線](https://dev.mysql.com/doc/refman/8.0/en/using-encrypted-connections.html)
 
-> 如果 `mariadb` 伺服器支援加密連線的話，用戶端預設會嘗試使用
+> 如果 `mysql` 伺服器支援加密連線的話，用戶端預設會嘗試使用
 
 ```sh
 # 啟用 SSL 加密連線
 COMPOSE_FILE=docker-compose.yml:docker-compose.ssl.yml docker compose up -d
 
 # 確認已正確啟用
-docker compose exec mariadb mariadb -p -e 'SHOW VARIABLES LIKE "%ssl%";'
+docker compose exec mysql mysql -p -e 'SHOW VARIABLES LIKE "%ssl%";'
 
 # 如果要使用者必須使用加密連線登入的話
-docker compose exec mariadb mariadb -p -e 'ALTER USER "alice"@"%" REQUIRE SSL;'
+docker compose exec mysql mysql -p -e 'ALTER USER "alice"@"%" REQUIRE SSL;'
 # 也可以反過來取消加密連線的登入限制
-docker compose exec mariadb mariadb -p -e 'ALTER USER "alice"@"localhost" REQUIRE NONE;'
+docker compose exec mysql mysql -p -e 'ALTER USER "alice"@"localhost" REQUIRE NONE;'
 
 # 測試用戶端加密連線
-mariadb -h db.example.test -u root -p -e 'SHOW STATUS LIKE "ssl_version";'
+mysql -h db.example.test -u root -p -e 'SHOW STATUS LIKE "ssl_version";'
 ```
 
 ### 建立本機開發用的 SSL 憑證
@@ -79,7 +79,7 @@ mkcert -cert-file ssl/cert.pem -key-file ssl/key.pem '*.example.test'
 
 ## 初始化資料庫
 
-將資料庫匯出檔 `*.sql` 或 `*.sql.gz` 掛載於 `mariadb` 容器的 `/docker-entrypoint-initdb.d` 目錄下即可
+將資料庫匯出檔 `*.sql` 或 `*.sql.gz` 掛載於 `mysql` 容器的 `/docker-entrypoint-initdb.d` 目錄下即可
 
 > 只有在初始化資料庫(第一次建立)時會自動匯入
 
@@ -89,24 +89,24 @@ mkcert -cert-file ssl/cert.pem -key-file ssl/key.pem '*.example.test'
 
 ```sh
 # 進入容器的 Bash Shell
-docker compose exec mariadb bash
+docker compose exec mysql bash
 
 # 直接重設 root 帳號密碼
-mariadb-admin -u root password 'secret'
+mysqladmin -u root password 'secret'
 
 # 或是透過以下互動程序來設定所有安全性選項
-mariadb-secure-installation
+mysql_secure_installation
 
 # 建立遠端登入的帳號密碼
-mariadb -e "CREATE USER root@'%' IDENTIFIED BY 'secret'; FLUSH PRIVILEGES;"
+mysql -e "CREATE USER root@'%' IDENTIFIED BY 'secret'; FLUSH PRIVILEGES;"
 
 # 更變遠端登入的帳號密碼
-mariadb -e "ALTER USER root@'%' IDENTIFIED BY 'secret'; FLUSH PRIVILEGES;"
+mysql -e "ALTER USER root@'%' IDENTIFIED BY 'secret'; FLUSH PRIVILEGES;"
 ```
 
 ## 管理資料庫
 
-以下示範使用 `mariadb` 容器本身的工具來管理資料庫
+以下示範使用 `mysql` 容器本身的工具來管理資料庫
 
 > 執行前請先啟動資料庫服務
 
@@ -114,17 +114,17 @@ mariadb -e "ALTER USER root@'%' IDENTIFIED BY 'secret'; FLUSH PRIVILEGES;"
 
 ```sh
 # 進入容器的 Bash Shell
-docker compose exec mariadb bash
+docker compose exec mysql bash
 
 # 完整備份指定資料庫
-mariadb-dump --single-transaction --add-drop-database --insert-ignore --databases sample | gzip > backup.sql.gz
+mysqldump --single-transaction --add-drop-database --insert-ignore --databases sample | gzip > backup.sql.gz
 
 # 完整備份所有資料庫
-mariadb-dump --single-transaction --add-drop-database --insert-ignore --all-databases | gzip > backup.sql.gz
+mysqldump --single-transaction --add-drop-database --insert-ignore --all-databases | gzip > backup.sql.gz
 
 # 匯入 SQL 備份檔至資料庫
-cat backup.sql | mariadb
+cat backup.sql | mysql
 
 # 匯入壓縮的 SQL 備份檔至資料庫
-gzip -dc backup.sql.gz | mariadb
+gzip -dc backup.sql.gz | mysql
 ```
