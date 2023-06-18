@@ -152,6 +152,12 @@ server.use-forward-headers=true
 server.forward-headers-strategy=NATIVE
 ```
 
+如果你使用的反向代理伺服器並不是使用預設的信任 IP 範圍的話(例如: OrbStack)
+
+```ini:application.properties
+server.tomcat.remoteip.internal-proxies=198\\.19\\.\\d{1,3}\\.\\d{1,3}
+```
+
 ### 以非 root 身分執行應用程式
 
 可利用先前提到的自訂啟動腳本，在容器內透過 [gosu](https://github.com/tianon/gosu) 或 [su-exec](https://github.com/ncopa/su-exec) 等工具以非 root 身分執行應用程式
