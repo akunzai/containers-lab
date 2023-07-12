@@ -7,7 +7,7 @@ volumes:
 services:
   java:
     # https://hub.docker.com/_/eclipse-temurin
-    image:  eclipse-temurin:11
+    image: eclipse-temurin:11
     restart: unless-stopped
     volumes:
       # 在 Azure App Service 運作時，僅有 '/home' 目錄可以跨容器存取並永續儲存

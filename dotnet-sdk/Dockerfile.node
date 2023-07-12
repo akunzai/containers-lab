@@ -1,15 +1,15 @@
 # https://hub.docker.com/_/microsoft-dotnet-sdk/
-FROM mcr.microsoft.com/dotnet/sdk:7.0
+FROM mcr.microsoft.com/dotnet/sdk:7.0-bookworm-slim
 
 ARG APT_URL=""
 
 # install ASP.NET Core 6.0 Runtime
-COPY --from=mcr.microsoft.com/dotnet/aspnet:6.0 /usr/share/dotnet /usr/share/dotnet
+COPY --from=mcr.microsoft.com/dotnet/aspnet:6.0-bookworm-slim /usr/share/dotnet /usr/share/dotnet
 
 RUN set -eux; \
     # preferred mirror site
-    [ -n "$APT_URL" ] && [ "$APT_URL" = 'http://free.nchc.org.tw' ] && [ $(uname -m) = 'x86_64' ] && sed -i -r "/-security/! s,^deb http?://[^/]+/(.*),deb $APT_URL/\1,g" /etc/apt/sources.list; \
-    [ -n "$APT_URL" ] && [ "$APT_URL" != 'http://free.nchc.org.tw' ] && sed -i -r "s,^deb http?://[^/]+/(.*),deb $APT_URL/\1,g" /etc/apt/sources.list; \
+    [ -n "$APT_URL" ] && [ "$APT_URL" = 'http://free.nchc.org.tw' ] && [ $(uname -m) = 'x86_64' ] && [ -e "/etc/apt/sources.list.d/debian.sources" ] && sed -i -E "/-security/! s,URIs: http?://[^\/]+,URIs: $APT_URL,g" /etc/apt/sources.list.d/debian.sources; \
+    [ -n "$APT_URL" ] && [ "$APT_URL" != 'http://free.nchc.org.tw' ] && [ -e "/etc/apt/sources.list.d/debian.sources" ] && sed -i -E "s,URIs: http?://[^\/]+,URIs: $APT_URL,g" /etc/apt/sources.list.d/debian.sources; \
     # install Node.js LTS
     # https://github.com/nodesource/distributions/blob/master/README.md#debinstall
     curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -; \
