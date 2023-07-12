@@ -1,17 +1,6 @@
 version: '2'
 services:
   # https://github.com/j8r/dockerfiles/issues/10
-  centos:
-    build:
-      context: .
-      dockerfile: Dockerfile.centos
-    image: centos/systemd:8
-    tmpfs:
-      - /tmp
-      - /run
-      - /run/lock
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
   debian:
     build: .
     image: debian/systemd:11
