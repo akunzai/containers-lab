@@ -1,6 +1,4 @@
 version: '2'
-volumes:
-  app-home:
 
 services:
   php:
@@ -56,3 +54,6 @@ services:
       - 127.0.0.1:8080:8080
       # 如果要啟用 HTTPS 連線的話
       # - 127.0.0.1:443:443
+
+volumes:
+  app-home:

@@ -1,4 +1,5 @@
 version: '2'
+
 services:
   # https://mariadb.com/kb/en/securing-connections-for-client-and-server/#enabling-tls-for-mariadb-server
   mariadb:

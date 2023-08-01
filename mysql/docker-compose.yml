@@ -1,8 +1,5 @@
 version: '2'
 
-volumes:
-    mysql-data: 
-
 services:
   mysql:
     # https://hub.docker.com/_/mysql
@@ -19,3 +16,6 @@ services:
       # - ./initdb:/docker-entrypoint-initdb.d
     ports:
      - 127.0.0.1:3306:3306
+
+volumes:
+    mysql-data:

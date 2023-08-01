@@ -1,8 +1,5 @@
 version: '2'
 
-volumes:
-    mariadb-data: 
-
 services:
   mariadb:
     # https://hub.docker.com/_/mariadb
@@ -19,3 +16,6 @@ services:
       # - ./initdb:/docker-entrypoint-initdb.d
     ports:
      - 127.0.0.1:3306:3306
+
+volumes:
+    mariadb-data:

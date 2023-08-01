@@ -1,8 +1,5 @@
 version: '2'
 
-volumes:
-    registry-data: 
-
 services:
   registry:
     # https://hub.docker.com/_/registry
@@ -46,3 +43,6 @@ services:
       - 127.0.0.1:8080:8080
       # 如果要啟用 HTTPS 連線的話
       # - 127.0.0.1:443:443
+
+volumes:
+    registry-data:

@@ -1,4 +1,5 @@
 version: '2'
+
 services:
   # https://github.com/j8r/dockerfiles/issues/10
   debian:
