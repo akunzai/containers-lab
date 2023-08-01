@@ -42,12 +42,12 @@ COMPOSE_FILE=docker-compose.yml:docker-compose.adminer.yml docker compose up -d
 
 - 3306: MySQL
 
-## [啟用 SSL 加密連線](https://mariadb.com/kb/en/securing-connections-for-client-and-server/)
+## [啟用 TLS 加密連線](https://mariadb.com/kb/en/securing-connections-for-client-and-server/)
 
 > 如果 `mariadb` 伺服器支援加密連線的話，用戶端預設會嘗試使用
 
 ```sh
-# 啟用 SSL 加密連線
+# 啟用 TLS 加密連線
 COMPOSE_FILE=docker-compose.yml:docker-compose.ssl.yml docker compose up -d
 
 # 確認已正確啟用
@@ -62,9 +62,9 @@ docker compose exec mariadb mariadb -p -e 'ALTER USER "alice"@"localhost" REQUIR
 mariadb -h db.example.test -u root -p -e 'SHOW STATUS LIKE "ssl_version";'
 ```
 
-### 建立本機開發用的 SSL 憑證
+### 建立本機開發用的 TLS 憑證
 
-可透過 [mkcert](https://github.com/FiloSottile/mkcert) 建立本機開發用的 SSL 憑證
+可透過 [mkcert](https://github.com/FiloSottile/mkcert) 建立本機開發用的 TLS 憑證
 
 以網域名稱 `*.example.test` 為例
 
@@ -72,7 +72,7 @@ mariadb -h db.example.test -u root -p -e 'SHOW STATUS LIKE "ssl_version";'
 # 安裝本機開發用的憑證簽發證書
 mkcert -install
 
-# 產生 SSL 憑證
+# 產生 TLS 憑證
 mkdir -p ssl
 mkcert -cert-file ssl/cert.pem -key-file ssl/key.pem '*.example.test'
 ```

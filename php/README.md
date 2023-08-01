@@ -53,9 +53,9 @@ docker build --platform=linux/amd64 -t php:8.1-apache-ext --build-arg APT_URL=ht
 
 ### [使用 Let's Encrypt 自動產生憑證](https://doc.traefik.io/traefik/https/acme/)
 
-### 建立本機開發用的 SSL 憑證
+### 建立本機開發用的 TLS 憑證
 
-可透過 [mkcert](https://github.com/FiloSottile/mkcert) 建立本機開發用的 SSL 憑證
+可透過 [mkcert](https://github.com/FiloSottile/mkcert) 建立本機開發用的 TLS 憑證
 
 以網域名稱 `*.example.test` 為例
 
@@ -63,12 +63,12 @@ docker build --platform=linux/amd64 -t php:8.1-apache-ext --build-arg APT_URL=ht
 # 安裝本機開發用的憑證簽發證書
 mkcert -install
 
-# 產生 SSL 憑證
-mkdir -p traefik/etc/ssl
-mkcert -cert-file traefik/etc/ssl/cert.pem -key-file traefik/etc/ssl/key.pem '*.example.test'
+# 產生 TLS 憑證
+mkdir -p traefik/etc
+mkcert -cert-file traefik/etc/cert.pem -key-file traefik/etc/key.pem '*.example.test'
 ```
 
-配置完成 SSL 憑證後，可修改 `docker-compose.yml` 並加入 TLS 檔案配置以啟用 HTTPS 連線
+配置完成 TLS 憑證後，可修改 `docker-compose.yml` 並加入 TLS 檔案配置以啟用 HTTPS 連線
 
 ```sh
 mkdir -p traefik/etc/dynamic
@@ -77,8 +77,8 @@ tls:
   stores:
     default:
       defaultCertificate:
-        certFile: /etc/traefik/ssl/cert.pem
-        keyFile: /etc/traefik/ssl/key.pem
+        certFile: /etc/traefik/cert.pem
+        keyFile: /etc/traefik/key.pem
 EOF
 ```
 

@@ -4,6 +4,7 @@ services:
   # https://dev.mysql.com/doc/refman/8.0/en/using-encrypted-connections.html
   mysql:
     volumes:
-      - ./ssl:/etc/ssl:ro
+      - ./etc/ca.pem:/etc/mysql/ca.pem:ro
+      - ./etc/cert.pem:/etc/mysql/cert.pem:ro
     # 如果要強制所有用戶端連線都必須加密的話可加入 --require-secure-transport 選項
-    command: mysqld --ssl-cert=/etc/ssl/cert.pem --ssl-key=/etc/ssl/key.pem
+    command: mysqld --ssl-cert=/etc/mysql/cert.pem --ssl-key=/etc/mysql/key.pem

@@ -62,9 +62,9 @@ COMPOSE_FILE=docker-compose.yml:docker-compose.tls.yml docker compose up -d
 
 # 確認已正確啟用
 COMPOSE_FILE=docker-compose.yml:docker-compose.tls.yml docker compose exec redis redis-cli -p 6380 --tls \
-    --cert /etc/tls/cert.pem \
-    --key /etc/tls/key.pem \
-    --cacert /etc/tls/ca.pem info
+    --cert /usr/local/etc/redis/cert.pem \
+    --key /usr/local/etc/redis/key.pem \
+    --cacert /usr/local/etc/redis/ca.pem info
 ```
 
 ### 建立本機開發用的 TLS 憑證
@@ -78,9 +78,9 @@ COMPOSE_FILE=docker-compose.yml:docker-compose.tls.yml docker compose exec redis
 mkcert -install
 
 # 產生 TLS 憑證
-mkdir -p tls
-mkcert -cert-file tls/cert.pem -key-file tls/key.pem '*.example.test'
+mkdir -p etc
+mkcert -cert-file etc/cert.pem -key-file etc/key.pem '*.example.test'
 
 # redis 需要額外指定簽發根憑證
-cp -v "$(mkcert -CAROOT)/rootCA.pem" tls/ca.pem
+cp -v "$(mkcert -CAROOT)/rootCA.pem" etc/ca.pem
 ```
