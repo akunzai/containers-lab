@@ -19,12 +19,12 @@ RUN set -eux; \
     apt-get update; \
     apt-get install -y --no-install-recommends \
     libfreetype6-dev libicu-dev libjpeg62-turbo-dev \
-    libpng-dev libxslt1-dev libzip-dev libwebp-dev \
+    libpng-dev libxml2-dev libxslt1-dev libzip-dev libwebp-dev \
     ${PHP_EXTRA_BUILD_DEPS:-}; \
     # https://www.php.net/manual/en/image.installation.php
     docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp; \
     docker-php-ext-install -j$(nproc) opcache \
-    intl gd mysqli pcntl pdo_mysql xsl zip; \
+    intl gd mysqli pcntl pdo_mysql soap xsl zip; \
     # reset apt-mark's "manual" list so that "purge --auto-remove" will remove all build dependencies
     apt-mark auto '.*' > /dev/null; \
     [ -z "$savedAptMark" ] || apt-mark manual $savedAptMark; \
@@ -36,10 +36,15 @@ RUN set -eux; \
     | sort -u \
     | xargs -r apt-mark manual; \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
-    rm -rf /var/lib/apt/lists/*; \
+    rm -rf /var/lib/apt/lists/*;
+RUN set -eux; \
     # https://github.com/FriendsOfPHP/pickle
     curl -Lo /usr/local/bin/pickle https://github.com/FriendsOfPHP/pickle/releases/latest/download/pickle.phar && \
-    chmod +x /usr/local/bin/pickle;
+    chmod +x /usr/local/bin/pickle; \
+    pickle install --no-interaction apcu; \
+    pickle install --no-interaction redis; \
+    pickle install --no-interaction xdebug; \
+    docker-php-ext-enable apcu redis xdebug;
 
 # https://hub.docker.com/_/composer
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
