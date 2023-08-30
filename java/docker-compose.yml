@@ -17,7 +17,7 @@ services:
     command: sh -c 'java -noverify -Djava.security.egd=file:/dev/./urandom $$JAVA_OPTS -jar /home/site/wwwroot/app.jar'
     labels:
       - traefik.enable=true
-      - traefik.http.routers.java.rule=Host(`dev.example.test`)
+      - traefik.http.routers.java.rule=Host(`www.dev.local`)
       # 如果要啟用 HTTPS 連線的話
       # - traefik.http.routers.java.entrypoints=websecure
       - traefik.http.services.java.loadBalancer.server.port=8080

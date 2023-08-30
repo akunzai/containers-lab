@@ -49,7 +49,7 @@ docker ps
 
 可透過 [mkcert](https://github.com/FiloSottile/mkcert) 建立本機開發用的 TLS 憑證
 
-以網域名稱 `*.example.test` 為例
+以網域名稱 `*.dev.local` 為例
 
 ```sh
 # 安裝本機開發用的憑證簽發證書
@@ -57,7 +57,7 @@ mkcert -install
 
 # 產生 TLS 憑證
 mkdir -p traefik/etc
-mkcert -cert-file traefik/etc/cert.pem -key-file traefik/etc/key.pem '*.example.test'
+mkcert -cert-file traefik/etc/cert.pem -key-file traefik/etc/key.pem '*.dev.local'
 ```
 
 配置完成 TLS 憑證後，可修改 `docker-compose.yml` 並加入 TLS 檔案配置以啟用 HTTPS 連線
@@ -83,7 +83,7 @@ EOF
 echo $(htpasswd -nb user password) | sed -e s/\\$/\\$\\$/g
 
 # 登入自建的 Registry
-docker login registry.example.test
+docker login registry.dev.local
 ```
 
 ## 測試
@@ -91,10 +91,10 @@ docker login registry.example.test
 ```sh
 # 上傳映像檔專案至自建的 Registry
 docker pull hello-world
-docker tag hello-world registry.example.test/hello-world
-docker push registry.example.test/hello-world
+docker tag hello-world registry.dev.local/hello-world
+docker push registry.dev.local/hello-world
 
 # 列出 Registry 上的所有映像檔專案
-$ curl -L http://registry.example.test/v2/_catalog
+$ curl -L http://registry.dev.local/v2/_catalog
 {"repositories":["hello-world"]}
 ```

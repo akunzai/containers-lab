@@ -9,7 +9,7 @@ services:
       - registry-data:/var/lib/registry
     labels:
       - traefik.enable=true
-      - traefik.http.routers.registry.rule=Host(`registry.example.test`)
+      - traefik.http.routers.registry.rule=Host(`registry.dev.local`)
       # 如果要啟用 HTTPS 連線的話
       # - traefik.http.routers.registry.entrypoints=websecure
       - traefik.http.services.registry.loadBalancer.server.port=5000

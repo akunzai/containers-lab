@@ -15,7 +15,7 @@ services:
     environment:
       http_proxy: http://squid:3128
       https_proxy: http://squid:3128
-      NO_PROXY: localhost,127.0.0.1,.example.test
+      NO_PROXY: localhost,127.0.0.1,.dev.local
     depends_on:
       - squid
 

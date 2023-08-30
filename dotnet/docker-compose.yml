@@ -19,7 +19,7 @@ services:
     # command: sh -c "cd /home/site/wwwroot && dotnet WebApp.dll"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.dotnet.rule=Host(`dev.example.test`)"
+      - "traefik.http.routers.dotnet.rule=Host(`www.dev.local`)"
       # 如果要啟用 HTTPS 連線的話
       # - "traefik.http.routers.dotnet.entrypoints=websecure"
       - "traefik.http.services.dotnet.loadbalancer.server.port=80"

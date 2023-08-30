@@ -59,14 +59,14 @@ docker compose exec mariadb mariadb -p -e 'ALTER USER "alice"@"%" REQUIRE SSL;'
 docker compose exec mariadb mariadb -p -e 'ALTER USER "alice"@"localhost" REQUIRE NONE;'
 
 # 測試用戶端加密連線
-mariadb -h db.example.test -u root -p -e 'SHOW STATUS LIKE "ssl_version";'
+mariadb -h db.dev.local -u root -p -e 'SHOW STATUS LIKE "ssl_version";'
 ```
 
 ### 建立本機開發用的 TLS 憑證
 
 可透過 [mkcert](https://github.com/FiloSottile/mkcert) 建立本機開發用的 TLS 憑證
 
-以網域名稱 `*.example.test` 為例
+以網域名稱 `*.dev.local` 為例
 
 ```sh
 # 安裝本機開發用的憑證簽發證書
@@ -74,7 +74,7 @@ mkcert -install
 
 # 產生 TLS 憑證
 mkdir -p ssl
-mkcert -cert-file ssl/cert.pem -key-file ssl/key.pem '*.example.test'
+mkcert -cert-file ssl/cert.pem -key-file ssl/key.pem '*.dev.local'
 ```
 
 ## 初始化資料庫

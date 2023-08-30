@@ -41,7 +41,7 @@ services:
     restart: unless-stopped
     environment:
       # https://grafana.com/docs/grafana/latest/administration/configuration/
-      GF_SERVER_ROOT_URL: 'http://dev.example.test'
+      GF_SERVER_ROOT_URL: 'http://www.dev.local'
       # 管理者帳號密碼, 應避免在正式環境中使用預設值
       # GF_SECURITY_ADMIN_USER: 'admin'
       # GF_SECURITY_ADMIN_PASSWORD: 'admin'
@@ -51,7 +51,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.services.grafana.loadbalancer.server.port=3000
-      - traefik.http.routers.grafana.rule=Host(`dev.example.test`)
+      - traefik.http.routers.grafana.rule=Host(`www.dev.local`)
   cadvisor:
     # https://github.com/google/cadvisor
     image: gcr.io/cadvisor/cadvisor

@@ -22,7 +22,7 @@ services:
     command: bash /home/startup.sh
     labels:
       - traefik.enable=true
-      - traefik.http.routers.php.rule=Host(`dev.example.test`)
+      - traefik.http.routers.php.rule=Host(`www.dev.local`)
       # 如果要啟用 HTTPS 連線的話
       # - traefik.http.routers.php.entrypoints=websecure
       - traefik.http.services.php.loadBalancer.server.port=80

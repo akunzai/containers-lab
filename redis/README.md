@@ -71,7 +71,7 @@ COMPOSE_FILE=docker-compose.yml:docker-compose.tls.yml docker compose exec redis
 
 可透過 [mkcert](https://github.com/FiloSottile/mkcert) 建立本機開發用的 TLS 憑證
 
-以網域名稱 `*.example.test` 為例
+以網域名稱 `*.dev.local` 為例
 
 ```sh
 # 安裝本機開發用的憑證簽發證書
@@ -79,7 +79,7 @@ mkcert -install
 
 # 產生 TLS 憑證
 mkdir -p etc
-mkcert -cert-file etc/cert.pem -key-file etc/key.pem '*.example.test'
+mkcert -cert-file etc/cert.pem -key-file etc/key.pem '*.dev.local'
 
 # redis 需要額外指定簽發根憑證
 cp -v "$(mkcert -CAROOT)/rootCA.pem" etc/ca.pem

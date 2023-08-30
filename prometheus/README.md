@@ -51,7 +51,7 @@ docker ps
 
 可透過 [mkcert](https://github.com/FiloSottile/mkcert) 建立本機開發用的 TLS 憑證
 
-以網域名稱 `*.example.test` 為例
+以網域名稱 `*.dev.local` 為例
 
 ```sh
 # 安裝本機開發用的憑證簽發證書
@@ -59,7 +59,7 @@ mkcert -install
 
 # 產生 TLS 憑證
 mkdir -p traefik/etc
-mkcert -cert-file traefik/etc/cert.pem -key-file traefik/etc/key.pem '*.example.test'
+mkcert -cert-file traefik/etc/cert.pem -key-file traefik/etc/key.pem '*.dev.local'
 ```
 
 配置完成 TLS 憑證後，可修改 `docker-compose.yml` 並加入 TLS 檔案配置以啟用 HTTPS 連線
@@ -108,7 +108,7 @@ docker compose exec grafana grafana-cli plugins install grafana-piechart-panel
 docker compose kill -s SIGHUP prometheus
 
 # 透過 CURL
-curl -X POST http://prometheus.example.test/-/reload
+curl -X POST http://prometheus.dev.local/-/reload
 ```
 
 ### [smtp.plainAuth failed: unencrypted connection](https://github.com/prometheus/alertmanager/issues/1358)
