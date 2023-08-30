@@ -38,6 +38,7 @@ services:
       - --entrypoints.web.address=:80
       # 如果要啟用 HTTPS 連線的話
       # - --entrypoints.websecure.address=:443
+      # - --entrypoints.websecure.http.tls=true
       # 如果要自動重導為 HTTPS 的話
       # - --entrypoints.web.http.redirections.entryPoint.to=websecure
       # - --entrypoints.web.http.redirections.entryPoint.scheme=https
