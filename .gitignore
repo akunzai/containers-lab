@@ -3,6 +3,9 @@
 !.vscode/extensions.json
 .history/*
 
+# TLS Certificates
+*.pem
+
 # System Files
 .DS_Store
 Thumbs.db
