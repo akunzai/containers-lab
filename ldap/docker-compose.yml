@@ -28,7 +28,7 @@ services:
     # https://github.com/osixia/docker-openldap
     image: osixia/openldap
     volumes:
-      - ldap-config:/etc/ldap/slapd.d
+      - ldap-conf:/etc/ldap/slapd.d
       - ldap-data:/var/lib/ldap
     # https://github.com/osixia/docker-light-baseimage#run-command-line-options
     entrypoint: /container/tool/run --loglevel warning --skip-env-files --skip-startup-files --skip-process-files --
