@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/env bash
 
 # fix: Require ip not working
 if ! grep -q RemoteIPHeader /etc/apache2/apache2.conf; then

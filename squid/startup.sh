@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/env bash
 set -e
 
 # ensure log directory exists and fixes permission

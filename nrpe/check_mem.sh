@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/env bash
 
 if [ "$1" = "-w" ] && [ "$2" -gt "0" ] && [ "$3" = "-c" ] && [ "$4" -gt "0" ]; then
 FreeM=`free -m`
