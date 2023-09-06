@@ -20,6 +20,8 @@ services:
     environment:
       PHPLDAPADMIN_LDAP_HOSTS: ldap
       PHPLDAPADMIN_HTTPS: false
+    volumes:
+      - ldapadmin-data:/var/www/phpldapadmin
     ports:
       - '127.0.0.1:8080:80'
     depends_on:
@@ -36,3 +38,4 @@ services:
 volumes:
   ldap-conf:
   ldap-data:
+  ldapadmin-data:
