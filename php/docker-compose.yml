@@ -20,6 +20,9 @@ services:
       # 如果要自訂 PHP 組態設定的話
       # PHP_INI_SCAN_DIR: '/usr/local/etc/php/conf.d:/home/site/ini'
     command: bash /home/startup.sh
+    extra_hosts:
+      # https://stackoverflow.com/a/61424570
+      - host.docker.internal:host-gateway
     labels:
       - traefik.enable=true
       - traefik.http.routers.php.rule=Host(`www.dev.local`)

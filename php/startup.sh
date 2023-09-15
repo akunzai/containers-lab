@@ -9,13 +9,7 @@ fi
 hash gosu >/dev/null 2>&1
 if [ "$?" -ne "0" ]; then
     apt-get update -qq >/dev/null
-    apt-get install --no-install-recommends -yqq cron gosu dnsutils iproute2 >/dev/null
-fi
-
-# set up the host alias
-host host.docker.internal >/dev/null 2>&1
-if [ "$?" -ne "0" ]; then
-    ip route show | awk '/default/ {print $3,"host.docker.internal"}' >>/etc/hosts
+    apt-get install --no-install-recommends -yqq cron gosu >/dev/null
 fi
 
 if [ -d "$APACHE_DOCUMENT_ROOT" -a "$APACHE_DOCUMENT_ROOT" != "/var/www/html" ]; then
