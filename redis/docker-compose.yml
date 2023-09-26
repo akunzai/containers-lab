@@ -6,7 +6,7 @@ services:
     image: redis
     restart: unless-stopped
     volumes:
-      - redis-storage:/data
+      - redis-data:/data
       # 如果需要自訂組態的話
       # - ./etc:/usr/local/etc/redis:ro
     # 如果需要自訂組態的話
@@ -15,4 +15,4 @@ services:
       - 127.0.0.1:6379:6379
 
 volumes:
-    redis-storage:
+    redis-data:

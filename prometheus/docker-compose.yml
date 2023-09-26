@@ -6,7 +6,7 @@ services:
     image: prom/prometheus
     restart: unless-stopped
     volumes:
-      - prometheus-storage:/prometheus
+      - prometheus-data:/prometheus
       - ./prometheus/etc:/etc/prometheus:ro
     command:
       # https://github.com/prometheus/prometheus/blob/main/Dockerfile
@@ -26,7 +26,7 @@ services:
     image: prom/alertmanager
     restart: unless-stopped
     volumes:
-      - alertmanager-storage:/alertmanager
+      - alertmanager-data:/alertmanager
       - ./prometheus/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
   line-notify-gateway:
     # https://github.com/blakey22/line-notify-gateway
@@ -46,7 +46,7 @@ services:
       # GF_SECURITY_ADMIN_USER: 'admin'
       # GF_SECURITY_ADMIN_PASSWORD: 'admin'
     volumes:
-      - grafana-storage:/var/lib/grafana
+      - grafana-data:/var/lib/grafana
       - ./grafana/provisioning:/etc/grafana/provisioning
     labels:
       - traefik.enable=true
@@ -116,6 +116,6 @@ services:
       # - 127.0.0.1:443:443
 
 volumes:
-  alertmanager-storage:
-  prometheus-storage:
-  grafana-storage:
+  alertmanager-data:
+  prometheus-data:
+  grafana-data:
