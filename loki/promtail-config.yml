@@ -25,4 +25,19 @@ scrape_configs:
     labels:
       __path__: /var/log/traefik/access.log
       job: traefik-accesslog
-      host: traefik
+  pipeline_stages:
+    - match: 
+        selector: '{job="traefik-accesslog"}'
+        stages:
+          - json:
+              expressions:
+                host: RequestHost
+                method: RequestMethod
+                path: RequestPath
+                src_ip: ClientHost
+              drop_malformed: true
+          - labels:
+              host:
+              method:
+              path:
+              src_ip:
