@@ -7,7 +7,7 @@ services:
     restart: unless-stopped
     volumes:
       - prometheus-data:/prometheus
-      - ./prometheus/etc:/etc/prometheus:ro
+      - ./prometheus:/etc/prometheus:ro
     command:
       # https://github.com/prometheus/prometheus/blob/main/Dockerfile
       - '--config.file=/etc/prometheus/prometheus.yml'
@@ -27,7 +27,7 @@ services:
     restart: unless-stopped
     volumes:
       - alertmanager-data:/alertmanager
-      - ./prometheus/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+      - ./alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
   line-notify-gateway:
     # https://github.com/blakey22/line-notify-gateway
     image: blakey22/line-notify-gateway:v0.0.1
@@ -36,8 +36,8 @@ services:
       TOKEN: 'CHANGEME'
       LOCALE: zh_TW
   grafana:
-    # https://github.com/grafana/grafana
-    image: grafana/grafana
+    # https://grafana.com/docs/grafana/latest/setup-grafana/installation/docker/
+    image: grafana/grafana-enterprise
     restart: unless-stopped
     environment:
       # https://grafana.com/docs/grafana/latest/administration/configuration/
@@ -47,7 +47,10 @@ services:
       # GF_SECURITY_ADMIN_PASSWORD: 'admin'
     volumes:
       - grafana-data:/var/lib/grafana
-      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+      # https://grafana.com/tutorials/provision-dashboards-and-data-sources/#introduction
+      - ./grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml:ro
+      - ./grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml:ro
     labels:
       - traefik.enable=true
       - traefik.http.services.grafana.loadbalancer.server.port=3000
@@ -84,7 +87,7 @@ services:
     image: prom/blackbox-exporter
     restart: unless-stopped
     volumes:
-      - ./prometheus/blackbox.yml:/etc/blackbox_exporter/config.yml:ro
+      - ./blackbox.yml:/etc/blackbox_exporter/config.yml:ro
   traefik:
     image: traefik
     restart: unless-stopped

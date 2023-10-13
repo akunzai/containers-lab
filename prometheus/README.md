@@ -85,7 +85,7 @@ EOF
 
 ## [Dashboards](https://grafana.com/grafana/dashboards)
 
-請透過 Grafana 管理介面的 Dashboards -> Manage -> Import 功能進行匯入
+請透過 Grafana 管理介面的 Dashboards -> New -> Import 功能進行匯入
 
 - [Node exporter](https://grafana.com/grafana/dashboards/10180)
 - [Windows exporter](https://grafana.com/grafana/dashboards/13261)
