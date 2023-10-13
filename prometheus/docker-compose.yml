@@ -55,20 +55,6 @@ services:
       - traefik.enable=true
       - traefik.http.services.grafana.loadbalancer.server.port=3000
       - traefik.http.routers.grafana.rule=Host(`www.dev.local`)
-  cadvisor:
-    # https://github.com/google/cadvisor
-    image: gcr.io/cadvisor/cadvisor
-    restart: unless-stopped
-    volumes:
-      - /:/rootfs:ro
-      - /var/run:/var/run:rw
-      - /sys:/sys:ro
-      - /var/lib/docker:/var/lib/docker:ro
-      # - /dev/disk:/dev/disk:ro # Linux only
-      # Linux only
-      # devices: 
-      #   - /dev/kmsg:/dev/kmsg
-      # privileged: true
   node-exporter:
     # https://github.com/prometheus/node_exporter
     image: prom/node-exporter

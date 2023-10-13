@@ -90,7 +90,6 @@ EOF
 - [Node exporter](https://grafana.com/grafana/dashboards/10180)
 - [Windows exporter](https://grafana.com/grafana/dashboards/13261)
 - [Blackbox exporter](https://grafana.com/grafana/dashboards/11529)
-- [cAdvisor](https://grafana.com/grafana/dashboards/12831)
 
 ## [Plugins](https://grafana.com/grafana/plugins)
 
