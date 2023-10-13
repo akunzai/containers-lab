@@ -34,10 +34,12 @@ scrape_configs:
                 host: RequestHost
                 method: RequestMethod
                 path: RequestPath
+                status: DownstreamStatus
                 src_ip: ClientHost
               drop_malformed: true
           - labels:
               host:
               method:
               path:
+              status:
               src_ip:
