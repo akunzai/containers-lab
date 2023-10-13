@@ -94,6 +94,12 @@ Grafana Loki 支援許多用戶端應用程式來收集記錄檔
 - [Fluentbit](https://grafana.com/docs/loki/latest/clients/fluentbit/)
 - [Fluentd](https://grafana.com/docs/loki/latest/clients/fluentd/)
 
+## [Dashboards](https://grafana.com/grafana/dashboards)
+
+請透過 Grafana 管理介面的 Dashboards -> New -> Import 功能進行匯入
+
+- [Logs / App](https://grafana.com/grafana/dashboards/13639-logs-app/)
+
 ## 疑難排解
 
 ### 重新載入 Loki 配置
@@ -101,4 +107,35 @@ Grafana Loki 支援許多用戶端應用程式來收集記錄檔
 ```sh
 # 透過 docker compose
 docker compose kill -s SIGHUP loki
+```
+
+### [自動整理 log 檔案](https://stackoverflow.com/q/49450422)
+
+> [traefik 在接收到 USR1 訊號時會關閉重新開啟記錄檔](https://doc.traefik.io/traefik/observability/logs/#log-rotation)
+
+```sh
+sudo tee /etc/logrotate.d/traefik <<'EOF'
+/var/log/traefik/*.log {
+    daily
+    rotate 180
+    missingok
+    notifempty
+    compress
+    dateext
+    dateformat .%Y-%m-%d
+    create 0644 root adm
+    postrotate
+      docker kill -s USR1 $(docker ps -qf name=traefik) >/dev/null 2>&1
+    endscript
+}
+EOF
+
+# 預設 logrotate 的安全性設計並不允許處理目錄權限不為 root:root 的檔案
+sudo chown root:root /var/log/traefik/
+
+# 測試執行
+logrotate -d /etc/logrotate.d/traefik
+
+# 實際執行
+sudo logrotate -v /etc/logrotate.d/traefik
 ```

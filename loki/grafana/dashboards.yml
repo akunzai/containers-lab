@@ -7,7 +7,9 @@ providers:
     updateIntervalSeconds: 30
     disableDeletion: false
     editable: true
+    # 讓 dashboard 可以在 UI 上異動
     allowUiUpdates: true
     options:
-      path: /etc/grafana/provisioning/dashboards
+      # 指定 Grafana 起動時要自動載入的 dashboard 檔案路徑
+      path: /var/lib/grafana/dashboards
       foldersFromFilesStructure: true

@@ -2,32 +2,34 @@ version: '2'
 
 services:
   loki:
-    # https://github.com/grafana/loki
+    # https://grafana.com/docs/loki/latest/setup/install/docker/
     image: grafana/loki
     restart: unless-stopped
     volumes:
       - loki-data:/loki
-      - ./loki:/etc/loki:ro
+      - ./loki-config.yml:/etc/loki/loki-config.yml:ro
     command:
-      - '-config.file=/etc/loki/config.yaml'
+      - -config.expand-env=true
+      - -config.file=/etc/loki/loki-config.yml
     ports:
-      - 3100:3100
-    labels:
-      - traefik.enable=true
+      - 127.0.0.1:3100:3100
 
   promtail:
     # https://grafana.com/docs/loki/latest/clients/promtail/installation/
     image: grafana/promtail
     restart: unless-stopped
     volumes:
-      - /var/log:/var/log:ro
-      - ./promtail:/etc/promtail:ro
+      - ./traefik/log:/var/log/traefik:ro
+      - ./promtail-config.yml:/etc/promtail/promtail-config.yml:ro
+    environment:
+      LOKI_URL: 'http://loki:3100/loki/api/v1/push'
     command:
-      - '-config.file=/etc/promtail/config.yml'
+      - -config.expand-env=true
+      - -config.file=/etc/promtail/promtail-config.yml
 
   grafana:
-    # https://github.com/grafana/grafana
-    image: grafana/grafana
+    # https://grafana.com/docs/grafana/latest/setup-grafana/installation/docker/
+    image: grafana/grafana-enterprise
     restart: unless-stopped
     environment:
       # https://grafana.com/docs/grafana/latest/administration/configuration/
@@ -37,7 +39,10 @@ services:
       # GF_SECURITY_ADMIN_PASSWORD: 'admin'
     volumes:
       - grafana-data:/var/lib/grafana
-      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+      # https://grafana.com/tutorials/provision-dashboards-and-data-sources/#introduction
+      - ./grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml:ro
+      - ./grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml:ro
     labels:
       - traefik.enable=true
       - traefik.http.services.grafana.loadbalancer.server.port=3000
@@ -50,6 +55,9 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       # 如果有相關配置檔案的話
       # - ./traefik/etc:/etc/traefik
+      - ./traefik/log:/var/log/traefik
+    environment:
+      TZ: Asia/Taipei
     command:
       # https://doc.traefik.io/traefik/operations/dashboard/#secure-mode
       - --api.insecure=true
@@ -61,6 +69,11 @@ services:
       # - --providers.file.watch=true
       # https://doc.traefik.io/traefik/observability/metrics/prometheus/
       - --metrics.prometheus=true
+      # https://doc.traefik.io/traefik/observability/access-logs/
+      - --accesslog=true
+      - --accesslog.filepath=/var/log/traefik/access.log
+      - --accesslog.format=json
+      - --accesslog.fields.names.StartUTC=drop
     ports:
       - 127.0.0.1:80:80
       - 127.0.0.1:8080:8080
