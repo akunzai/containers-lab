@@ -11,8 +11,6 @@ services:
     command:
       - -config.expand-env=true
       - -config.file=/etc/loki/loki-config.yml
-    ports:
-      - 127.0.0.1:3100:3100
 
   promtail:
     # https://grafana.com/docs/loki/latest/clients/promtail/installation/
