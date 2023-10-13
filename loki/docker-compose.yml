@@ -37,10 +37,11 @@ services:
       # GF_SECURITY_ADMIN_PASSWORD: 'admin'
     volumes:
       - grafana-data:/var/lib/grafana
-      - ./grafana/dashboards:/var/lib/grafana/dashboards
       # https://grafana.com/tutorials/provision-dashboards-and-data-sources/#introduction
       - ./grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml:ro
-      - ./grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml:ro
+      # 如果要自動匯入 dashboard 的話
+      # - ./grafana/dashboards:/var/lib/grafana/dashboards
+      # - ./grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml:ro
     labels:
       - traefik.enable=true
       - traefik.http.services.grafana.loadbalancer.server.port=3000
