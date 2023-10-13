@@ -41,7 +41,7 @@ docker ps
 啟動環境後預設會開始監聽本機的以下連線埠
 
 - 80: HTTP
-- 8080: Traefik 負載平衡器管理後台
+- 9090: Traefik 負載平衡器管理後台
 - 3100: Loki 記錄收集伺服器
 
 ## [啟用 HTTPS 連線](https://doc.traefik.io/traefik/https/tls/)
