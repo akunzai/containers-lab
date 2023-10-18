@@ -3,6 +3,8 @@ version: '2'
 services:
   keycloak:
     # https://github.com/keycloak/keycloak/tree/main/quarkus/container
+    # 如果要優化容器節省啟動時間的話, 需自訂建置映像檔
+    # https://www.keycloak.org/server/containers
     image: quay.io/keycloak/keycloak
     restart: unless-stopped
     environment:
@@ -35,10 +37,10 @@ services:
       - keycloak-data:/opt/keycloak/data
       - ./import:/opt/keycloak/data/import
       - ./export:/opt/keycloak/data/export
-    # 正式環境, 請修改 command 為 start --optimized
+    # 如果要切換至開發模式請修改 command 為 start-dev
     # 如果要偵錯容器內的應用程式的話, 請加上 --debug 參數
     # https://www.keycloak.org/server/configuration#_starting_keycloak
-    command: start-dev --import-realm
+    command: start --import-realm
     # ports:
       # 如果要偵錯容器內的應用程式的話
       # - '127.0.0.1:5005:8787'
@@ -46,7 +48,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.keycloak.rule=Host(`auth.dev.local`)"
       # 如果要啟用 HTTPS 連線的話
-      # - "traefik.http.routers.keycloak.entrypoints=websecure"
+      - "traefik.http.routers.keycloak.entrypoints=websecure"
       - "traefik.http.services.keycloak.loadbalancer.server.port=8080"
       - "traefik.http.services.keycloak.loadbalancer.healthCheck.path=/health/ready"
     depends_on:
@@ -72,7 +74,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       # 如果有相關配置檔案的話
-      # - ./traefik/etc:/etc/traefik
+      - ./traefik/etc:/etc/traefik
     command:
       # https://doc.traefik.io/traefik/operations/dashboard/#secure-mode
       - --api.insecure=true
@@ -80,19 +82,18 @@ services:
       - --providers.docker.exposedByDefault=false
       - --entrypoints.web.address=:80
       # 如果要啟用 HTTPS 連線的話
-      # - --entrypoints.websecure.address=:443
-      # - --entrypoints.websecure.http.tls=true
+      - --entrypoints.websecure.address=:443
+      - --entrypoints.websecure.http.tls=true
       # 如果要自動重導為 HTTPS 的話
-      # - --entrypoints.web.http.redirections.entryPoint.to=websecure
-      # - --entrypoints.web.http.redirections.entryPoint.scheme=https
+      - --entrypoints.web.http.redirections.entryPoint.to=websecure
+      - --entrypoints.web.http.redirections.entryPoint.scheme=https
       # 如果要使用 file provider 的話
-      # - --providers.file.directory=/etc/traefik/dynamic/
-      # - --providers.file.watch=true
+      - --providers.file.directory=/etc/traefik/dynamic/
+      - --providers.file.watch=true
     ports:
       - 127.0.0.1:80:80
       - 127.0.0.1:9090:8080
-      # 如果要啟用 HTTPS 連線的話
-      # - 127.0.0.1:443:443
+      - 127.0.0.1:443:443
 
 volumes:
     keycloak-data:

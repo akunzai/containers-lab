@@ -23,6 +23,9 @@ docker compose up -d
 # 在背景啟動並執行指定服務
 docker compose up -d keycloak
 
+# 在背景啟動並擴展指定服務的容器個數
+docker compose up -d --scale keycloak=2
+
 # 顯示記錄
 docker compose logs
 
@@ -41,6 +44,7 @@ docker ps
 啟動環境後預設會開始監聽本機的以下連線埠
 
 - 80: HTTP
+- 443: HTTPS
 - 9090: Traefik 負載平衡器管理後台
 
 ## [啟用 HTTPS 連線](https://doc.traefik.io/traefik/https/tls/)
@@ -49,31 +53,9 @@ docker ps
 
 ### 建立本機開發用的 TLS 憑證
 
-可透過 [mkcert](https://github.com/FiloSottile/mkcert) 建立本機開發用的 TLS 憑證
-
-以網域名稱 `*.dev.local` 為例
-
 ```sh
-# 安裝本機開發用的憑證簽發證書
-mkcert -install
-
-# 產生 TLS 憑證
-mkdir -p traefik/etc
-mkcert -cert-file traefik/etc/cert.pem -key-file traefik/etc/key.pem '*.dev.local'
-```
-
-配置完成 TLS 憑證後，可修改 `docker-compose.yml` 並加入 TLS 檔案配置以啟用 HTTPS 連線
-
-```sh
-mkdir -p traefik/etc/dynamic
-cat <<EOF > traefik/etc/dynamic/tls.yml
-tls:
-  stores:
-    default:
-      defaultCertificate:
-        certFile: /etc/traefik/cert.pem
-        keyFile: /etc/traefik/key.pem
-EOF
+# 設定本機開發用的主機名稱及 TLS 憑證
+./init.sh auth.dev.local
 ```
 
 ## 匯入與匯出
