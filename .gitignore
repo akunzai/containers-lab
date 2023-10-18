@@ -5,6 +5,7 @@
 
 # TLS Certificates
 *.pem
+tls.yml
 
 # System Files
 .DS_Store
