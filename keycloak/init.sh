@@ -30,7 +30,7 @@ fi
 CERT_FILE="${CURRENTDIR}/traefik/etc/cert.pem"
 KEY_FILE="${CURRENTDIR}/traefik/etc/key.pem"
 
-if [ -e "${KEY_FILE}" ] && [ -e "${CERT_FILE}" ] && [ -e "${CA_FILE}" ]; then
+if [ -e "${KEY_FILE}" ] && [ -e "${CERT_FILE}" ]; then
 	echo "Certificate already exists"
 	exit 0
 fi
@@ -42,4 +42,4 @@ fi
 
 mkcert -install
 mkdir -vp $(dirname "$CERT_FILE")
-mkcert -cert-file "$CERT_FILE" -key-file "$KEY_FILE" '*.dev.local'
+mkcert -cert-file "$CERT_FILE" -key-file "$KEY_FILE" $@

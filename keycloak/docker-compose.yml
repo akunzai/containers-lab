@@ -7,16 +7,16 @@ services:
     # https://www.keycloak.org/server/containers
     image: quay.io/keycloak/keycloak
     restart: unless-stopped
+    volumes:
+      - keycloak-data:/opt/keycloak/data
+      - ./import:/opt/keycloak/data/import
+      - ./export:/opt/keycloak/data/export
     environment:
       # https://www.keycloak.org/server/configuration
       # 管理者帳號密碼, 應避免在正式環境中使用預設值
       KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:-admin}
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin}
       # https://www.keycloak.org/server/all-config
-      KC_DB: mysql
-      KC_DB_URL: jdbc:mysql://mysql:3306/${MYSQL_DATABASE:-keycloak}
-      KC_DB_USERNAME: ${MYSQL_USER:-keycloak}
-      KC_DB_PASSWORD: ${MYSQL_PASSWORD:-keycloak}
       # 如果前端有使用反向代理的話
       KC_PROXY: edge
       # 非開發模式要啟用 HTTP 連線的話
@@ -33,10 +33,6 @@ services:
       # DEBUG_SUSPEND: 'y'
       # 如果要偵錯容器內的應用程式的話, 預設為 8787
       # DEBUG_PORT: '*:8787'
-    volumes:
-      - keycloak-data:/opt/keycloak/data
-      - ./import:/opt/keycloak/data/import
-      - ./export:/opt/keycloak/data/export
     # 如果要切換至開發模式請修改 command 為 start-dev
     # 如果要偵錯容器內的應用程式的話, 請加上 --debug 參數
     # https://www.keycloak.org/server/configuration#_starting_keycloak
@@ -46,26 +42,9 @@ services:
       # - '127.0.0.1:5005:8787'
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.keycloak.rule=Host(`auth.dev.local`)"
-      # 如果要啟用 HTTPS 連線的話
       - "traefik.http.routers.keycloak.entrypoints=websecure"
+      - "traefik.http.routers.keycloak.rule=Host(`auth.dev.local`)"
       - "traefik.http.services.keycloak.loadbalancer.server.port=8080"
-      - "traefik.http.services.keycloak.loadbalancer.healthCheck.path=/health/ready"
-    depends_on:
-      - mysql
-  mysql:
-    # https://hub.docker.com/_/mysql
-    image: mysql
-    restart: unless-stopped
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-secret}
-      MYSQL_USER: ${MYSQL_USER:-keycloak}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-keycloak}
-      MYSQL_DATABASE: ${MYSQL_DATABASE:-keycloak}
-    volumes:
-      - mysql-data:/var/lib/mysql
-    ports:
-      - 127.0.0.1:3306:3306
   # https://doc.traefik.io/traefik/
   traefik:
     # https://hub.docker.com/_/traefik
@@ -97,4 +76,3 @@ services:
 
 volumes:
     keycloak-data:
-    mysql-data:
