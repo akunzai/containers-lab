@@ -1,11 +1,5 @@
 version: '2'
 
-volumes:
-  ldap-conf:
-  ldap-data: 
-  ldap2-conf:
-  ldap2-data: 
-
 services:
   ldap:
     # https://github.com/osixia/docker-openldap
@@ -65,3 +59,9 @@ services:
       - ldap2-data:/var/lib/ldap
     # https://github.com/osixia/docker-light-baseimage#run-command-line-options
     entrypoint: /container/tool/run --loglevel warning --skip-env-files --skip-startup-files --skip-process-files --
+
+volumes:
+  ldap-conf:
+  ldap-data: 
+  ldap2-conf:
+  ldap2-data: 
