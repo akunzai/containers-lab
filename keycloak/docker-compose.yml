@@ -3,7 +3,7 @@ version: '2'
 services:
   keycloak:
     # https://github.com/keycloak/keycloak/tree/main/quarkus/container
-    # 如果要優化容器節省啟動時間的話, 需自訂建置映像檔
+    # 如果要優化容器節省啟動時間的話, 需以建置選項自訂建置映像檔
     # https://www.keycloak.org/server/containers
     image: quay.io/keycloak/keycloak
     restart: unless-stopped
@@ -22,13 +22,8 @@ services:
       # 非開發模式要啟用 HTTP 連線的話
       KC_HTTP_ENABLED: 'true'
       KC_HOSTNAME: 'auth.dev.local'
-      # https://www.keycloak.org/server/health
-      KC_HEALTH_ENABLED: 'true'
-      KC_METRICS_ENABLED: 'true'
       # https://www.keycloak.org/server/logging
       # KC_LOG_LEVEL: 'info,org.keycloak:debug'
-      # https://www.keycloak.org/server/features
-      # KC_FEATURES: scripts
       # 如果要等待連接偵錯用戶端的話
       # DEBUG_SUSPEND: 'y'
       # 如果要偵錯容器內的應用程式的話, 預設為 8787
@@ -36,7 +31,7 @@ services:
     # 如果要切換至開發模式請修改 command 為 start-dev
     # 如果要偵錯容器內的應用程式的話, 請加上 --debug 參數
     # https://www.keycloak.org/server/configuration#_starting_keycloak
-    command: start --import-realm
+    command: start --import-realm --optimized
     # ports:
       # 如果要偵錯容器內的應用程式的話
       # - '127.0.0.1:5005:8787'
