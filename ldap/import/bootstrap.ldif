@@ -1,0 +1,15 @@
+version: 1
+
+dn: ou=users,dc=example,dc=org
+objectclass: organizationalUnit
+objectclass: top
+ou: users
+
+dn: uid=foobar,ou=users,dc=example,dc=org
+cn: Foo
+mail: foobar@example.org
+objectclass: inetOrgPerson
+objectclass: organizationalPerson
+sn: Bar
+uid: foobar
+userpassword: test

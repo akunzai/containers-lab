@@ -12,6 +12,9 @@ services:
     volumes:
       - ldap-conf:/etc/ldap/slapd.d
       - ldap-data:/var/lib/ldap
+      # https://github.com/osixia/docker-openldap#seed-ldap-database-with-ldif
+      - ./import:/container/service/slapd/assets/config/bootstrap/ldif/custom:ro
+    command: --copy-service
     ports:
       - 127.0.0.1:389:389
   ldap-admin:
