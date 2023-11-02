@@ -155,7 +155,7 @@ server.forward-headers-strategy=NATIVE
 如果你使用的反向代理伺服器並不是使用預設的信任 IP 範圍的話
 
 ```ini:application.properties
-server.tomcat.remoteip.internal-proxies=198\\.19\\.\\d{1,3}\\.\\d{1,3}
+server.tomcat.remoteip.trusted-proxies=198\\.19\\.\\d{1,3}\\.\\d{1,3}
 ```
 
 ### 以非 root 身分執行應用程式
