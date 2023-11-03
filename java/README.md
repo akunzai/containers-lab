@@ -154,6 +154,8 @@ server.forward-headers-strategy=NATIVE
 
 如果你使用的反向代理伺服器並不是使用預設的信任 IP 範圍的話
 
+> Java properties 檔案需要跳脫特殊字元，若使用其它配置形式可將 `\\` 替換為 `\`
+
 ```ini:application.properties
 server.tomcat.remoteip.trusted-proxies=198\\.19\\.\\d{1,3}\\.\\d{1,3}
 ```
