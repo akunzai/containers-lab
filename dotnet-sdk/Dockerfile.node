@@ -2,7 +2,7 @@
 FROM mcr.microsoft.com/dotnet/sdk:7.0-bookworm-slim
 
 ARG APT_URL=""
-ARG NODE_MAJOR=18
+ARG NODE_MAJOR=20
 
 # install ASP.NET Core 6.0 Runtime
 COPY --from=mcr.microsoft.com/dotnet/aspnet:6.0-bookworm-slim /usr/share/dotnet /usr/share/dotnet
