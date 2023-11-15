@@ -25,29 +25,34 @@ docker build --platform=linux/amd64 -t dotnet-sdk:node -f ./Dockerfile.node --bu
 # 執行 dotnet CLI
 $ docker compose run -it --rm mono dotnet --info
 .NET SDK:
- Version:   7.0.201
- Commit:    68f2d7e7a3
+ Version:           8.0.100
+ Commit:            57efcf1350
+ Workload version:  8.0.100-manifests.6c33ef20
 
 Runtime Environment:
  OS Name:     debian
- OS Version:  11
+ OS Version:  12
  OS Platform: Linux
- RID:         debian.11-x64
- Base Path:   /usr/share/dotnet/sdk/7.0.201/
+ RID:         linux-arm64
+ Base Path:   /usr/share/dotnet/sdk/8.0.100/
+
+.NET workloads installed:
+ Workload version: 8.0.100-manifests.6c33ef20
+There are no installed workloads to display.
 
 Host:
-  Version:      7.0.3
-  Architecture: x64
-  Commit:       0a2bda10e8
+  Version:      8.0.0
+  Architecture: arm64
+  Commit:       5535e31a71
 
 .NET SDKs installed:
-  7.0.201 [/usr/share/dotnet/sdk]
+  8.0.100 [/usr/share/dotnet/sdk]
 
 .NET runtimes installed:
-  Microsoft.AspNetCore.App 6.0.14 [/usr/share/dotnet/shared/Microsoft.AspNetCore.App]
-  Microsoft.AspNetCore.App 7.0.3 [/usr/share/dotnet/shared/Microsoft.AspNetCore.App]
-  Microsoft.NETCore.App 6.0.14 [/usr/share/dotnet/shared/Microsoft.NETCore.App]
-  Microsoft.NETCore.App 7.0.3 [/usr/share/dotnet/shared/Microsoft.NETCore.App]
+  Microsoft.AspNetCore.App 6.0.25 [/usr/share/dotnet/shared/Microsoft.AspNetCore.App]
+  Microsoft.AspNetCore.App 8.0.0 [/usr/share/dotnet/shared/Microsoft.AspNetCore.App]
+  Microsoft.NETCore.App 6.0.25 [/usr/share/dotnet/shared/Microsoft.NETCore.App]
+  Microsoft.NETCore.App 8.0.0 [/usr/share/dotnet/shared/Microsoft.NETCore.App]
 
 Other architectures found:
   None
@@ -73,15 +78,15 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 # 執行 node
 $ docker compose run --rm node node --version
-v18.14.2
+v20.9.0
 
 # 執行 npm
 $ docker compose run --rm node npm --version
-9.5.0
+10.1.0
 
 # 執行 yarn
 $ docker compose run --rm node yarn --version
-3.4.1
+4.0.2
 ```
 
 ## 疑難排解
