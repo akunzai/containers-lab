@@ -14,7 +14,7 @@ services:
       # Bash 不支援 `:` 做為階層式索引鍵分隔符號, 必須改用 `__`
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_FORWARDEDHEADERS_ENABLED: 'true'
-      ASPNETCORE_URLS: http://+:80
+      ASPNETCORE_HTTP_PORTS: 8080
     # 如果需要自訂啟動腳本的話
     # command: sh -c "cd /home/site/wwwroot && dotnet WebApp.dll"
     labels:
@@ -22,7 +22,7 @@ services:
       - "traefik.http.routers.dotnet.rule=Host(`www.dev.local`)"
       # 如果要啟用 HTTPS 連線的話
       # - "traefik.http.routers.dotnet.entrypoints=websecure"
-      - "traefik.http.services.dotnet.loadbalancer.server.port=80"
+      - "traefik.http.services.dotnet.loadbalancer.server.port=8080"
   # https://docs.traefik.io/
   traefik:
     # https://hub.docker.com/_/traefik
