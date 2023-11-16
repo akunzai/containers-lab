@@ -17,6 +17,11 @@ services:
       # https://grafana.com/docs/loki/latest/operations/storage/table-manager/#retention
       - -table-manager.retention-period=90d
       - -table-manager.retention-deletes-enabled=true
+      # mitigating: too many outstanding requests
+      # https://github.com/grafana/loki/issues/5123#issuecomment-1167018445
+      - -querier.max-outstanding-requests-per-tenant=4096
+      - -querier.split-queries-by-interval=15m
+      - -query-scheduler.max-outstanding-requests-per-tenant=4096
 
   promtail:
     # https://grafana.com/docs/loki/latest/clients/promtail/installation/
