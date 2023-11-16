@@ -99,6 +99,7 @@ Grafana Loki 支援許多用戶端應用程式來收集記錄檔
 請透過 Grafana 管理介面的 Dashboards -> New -> Import 功能進行匯入
 
 - [Logs / App](https://grafana.com/grafana/dashboards/13639-logs-app/)
+- [Nginx access logs](https://grafana.com/grafana/dashboards/16101-grafana-loki-dashboard-for-nginx-service-mesh/)
 
 ## 疑難排解
 
