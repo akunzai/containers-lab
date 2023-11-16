@@ -14,6 +14,9 @@ services:
       - -config.file=/etc/loki/loki-config.yml
       # disable anonymous usage reporting
       - -reporting.enabled=false
+      # https://grafana.com/docs/loki/latest/operations/storage/table-manager/#retention
+      - -table-manager.retention-period=90d
+      - -table-manager.retention-deletes-enabled=true
 
   promtail:
     # https://grafana.com/docs/loki/latest/clients/promtail/installation/
