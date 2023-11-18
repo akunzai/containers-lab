@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-if [ $# -le 0 ] || [ "$@" == "--help" ] || [ "$@" == "-h" ]; then
+if [ $# -le 0 ] || [ "$1" == "--help" ] || [ "$1" == "-h" ]; then
 	echo "Usage: $0 <host> [<host>...]"
 	exit 1
 fi
