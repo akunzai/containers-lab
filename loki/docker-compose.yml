@@ -65,6 +65,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       # 如果有相關配置檔案的話
       # - ./traefik/etc:/etc/traefik
+      # - ./certs:/etc/traefik/certs
       - ./traefik/log:/var/log/traefik
     environment:
       TZ: Asia/Taipei

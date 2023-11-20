@@ -61,8 +61,8 @@ docker ps
 mkcert -install
 
 # 產生 TLS 憑證
-mkdir -p traefik/etc
-mkcert -cert-file traefik/etc/cert.pem -key-file traefik/etc/key.pem '*.dev.local'
+mkdir -p certs
+mkcert -cert-file certs/cert.pem -key-file certs/key.pem '*.dev.local'
 ```
 
 配置完成 TLS 憑證後，可修改 `docker-compose.yml` 並加入 TLS 檔案配置以啟用 HTTPS 連線
@@ -71,11 +71,14 @@ mkcert -cert-file traefik/etc/cert.pem -key-file traefik/etc/key.pem '*.dev.loca
 mkdir -p traefik/etc/dynamic
 cat <<EOF > traefik/etc/dynamic/tls.yml
 tls:
+  options:
+    default:
+      minVersion: VersionTLS12
   stores:
     default:
       defaultCertificate:
-        certFile: /etc/traefik/cert.pem
-        keyFile: /etc/traefik/key.pem
+        certFile: /etc/traefik/certs/cert.pem
+        keyFile: /etc/traefik/certs/key.pem
 EOF
 ```
 

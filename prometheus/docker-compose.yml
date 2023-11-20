@@ -82,6 +82,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       # 如果有相關配置檔案的話
       # - ./traefik/etc:/etc/traefik
+      # - ./certs:/etc/traefik/certs
     command:
       # https://doc.traefik.io/traefik/operations/dashboard/#secure-mode
       - --api.insecure=true

@@ -14,21 +14,8 @@ for host in "$@"; do
 done
 
 CURRENTDIR=$(dirname "$0")
-TLS_CONF="${CURRENTDIR}/traefik/etc/dynamic/tls.yml"
-if [ ! -e "${TLS_CONF}" ]; then
-	mkdir -vp $(dirname "$TLS_CONF")
-	cat <<EOF > $TLS_CONF
-tls:
-  stores:
-    default:
-      defaultCertificate:
-        certFile: /etc/traefik/cert.pem
-        keyFile: /etc/traefik/key.pem
-EOF
-fi
-
-CERT_FILE="${CURRENTDIR}/traefik/etc/cert.pem"
-KEY_FILE="${CURRENTDIR}/traefik/etc/key.pem"
+CERT_FILE="${CURRENTDIR}/certs/cert.pem"
+KEY_FILE="${CURRENTDIR}/certs/key.pem"
 
 if [ -e "${KEY_FILE}" ] && [ -e "${CERT_FILE}" ]; then
 	echo "Certificate already exists"
