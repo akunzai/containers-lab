@@ -6,19 +6,24 @@ services:
       context: .
       args:
         APT_URL: http://free.nchc.org.tw
-    image: php:8.1-apache-ext
+        PHP_VERSION: 8.2
+    image: php:8.2-apache-ext
     restart: unless-stopped
     volumes:
       # 在 Azure App Service 運作時，僅有 '/home' 目錄可以跨容器存取並永續儲存
       # https://learn.microsoft.com/azure/app-service/configure-custom-container#use-persistent-shared-storage
       - app-home:/home
       - ./index.php:/home/site/wwwroot/index.php:ro
+      - ./php.ini:/usr/local/etc/php/php.ini:ro
       - ./startup.sh:/home/startup.sh:ro
     environment:
       LANG: 'C.UTF-8'
       APACHE_DOCUMENT_ROOT: /home/site/wwwroot
       # 如果要自訂 PHP 組態設定的話
       # PHP_INI_SCAN_DIR: '/usr/local/etc/php/conf.d:/home/site/ini'
+      # https://xdebug.org/docs/all_settings
+      # XDEBUG_CONFIG: 'client_host=localhost log=/tmp/xdebug.log'
+      # XDEBUG_MODE: develop,debug
     command: bash /home/startup.sh
     extra_hosts:
       # https://stackoverflow.com/a/61424570

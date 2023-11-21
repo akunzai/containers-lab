@@ -5,13 +5,6 @@ if ! grep -q RemoteIPHeader /etc/apache2/apache2.conf; then
     echo -e "RemoteIPHeader X-Forwarded-For\nRemoteIPInternalProxy 172.16.0.0/12" >>/etc/apache2/apache2.conf
 fi
 
-# install tools
-hash gosu >/dev/null 2>&1
-if [ "$?" -ne "0" ]; then
-    apt-get update -qq >/dev/null
-    apt-get install --no-install-recommends -yqq cron gosu >/dev/null
-fi
-
 if [ -d "$APACHE_DOCUMENT_ROOT" -a "$APACHE_DOCUMENT_ROOT" != "/var/www/html" ]; then
     # link /var/www/html to APACHE_DOCUMENT_ROOT
     rm -rf /var/www/html
@@ -21,6 +14,12 @@ if [ -d "$APACHE_DOCUMENT_ROOT" -a "$APACHE_DOCUMENT_ROOT" != "/var/www/html" ];
 fi
 
 if [ -n "$CRON" ] && [ "$CRON" -eq "1" ]; then
+    # install tools
+    hash gosu >/dev/null 2>&1
+    if [ "$?" -ne "0" ]; then
+        apt-get update -qq >/dev/null
+        apt-get install --no-install-recommends -yqq cron gosu >/dev/null
+    fi
     # fix: Permission denied error caused by empty `which php` in cron jobs
     [ -e /usr/bin/php ] || ln -s /usr/local/bin/php /usr/bin/php
     service cron stauts >/dev/null 2>&1

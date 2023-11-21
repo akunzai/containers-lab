@@ -1,20 +1,33 @@
-ARG PHP_VERSION=8.1
+ARG PHP_VERSION=8.2
 # https://hub.docker.com/_/php
-FROM php:$PHP_VERSION-apache-bookworm
+FROM php:${PHP_VERSION}-apache-bookworm
 
 ARG APT_URL=""
 ENV LANG=C.UTF-8
 
+# preferred mirror site
+RUN ([ -n "$APT_URL" ] && \
+    [ "$APT_URL" = 'http://free.nchc.org.tw' ] && [ $(uname -m) = 'x86_64' ] && \
+    [ -e "/etc/apt/sources.list.d/debian.sources" ] && \
+    sed -i -E "/-security/! s,URIs: http?://[^\/]+,URIs: $APT_URL,g" /etc/apt/sources.list.d/debian.sources) || true; \
+    ([ -n "$APT_URL" ] && [ "$APT_URL" != 'http://free.nchc.org.tw' ] && \
+    [ -e "/etc/apt/sources.list.d/debian.sources" ] && \
+    sed -i -E "s,URIs: http?://[^\/]+,URIs: $APT_URL,g" /etc/apt/sources.list.d/debian.sources) || true;
+
+# install MySQL client
 RUN set -eux; \
-    # preferred mirror site
-    [ -n "$APT_URL" ] && [ "$APT_URL" = 'http://free.nchc.org.tw' ] && [ $(uname -m) = 'x86_64' ] && [ -e "/etc/apt/sources.list.d/debian.sources" ] && sed -i -E "/-security/! s,URIs: http?://[^\/]+,URIs: $APT_URL,g" /etc/apt/sources.list.d/debian.sources; \
-    [ -n "$APT_URL" ] && [ "$APT_URL" != 'http://free.nchc.org.tw' ] && [ -e "/etc/apt/sources.list.d/debian.sources" ] && sed -i -E "s,URIs: http?://[^\/]+,URIs: $APT_URL,g" /etc/apt/sources.list.d/debian.sources; \
-    # enable Apache2 modules
-    a2enmod rewrite expires include deflate remoteip headers; \
-    # disable Apache2 server signature
-    echo 'ServerSignature Off' >> /etc/apache2/apache2.conf; \
-    echo 'ServerTokens Prod' >> /etc/apache2/apache2.conf; \
-    # install common PHP extensions
+    apt-get update && \
+    apt-get install -y --no-install-recommends default-mysql-client && \
+    apt-get clean -y && rm -rf /var/lib/apt/lists/*
+
+# install pickle
+# https://github.com/FriendsOfPHP/pickle
+RUN set -eux; \
+    curl -Lo /usr/local/bin/pickle https://github.com/FriendsOfPHP/pickle/releases/latest/download/pickle.phar && \
+    chmod +x /usr/local/bin/pickle;
+
+# install the PHP extensions we need
+RUN set -eux; \
     savedAptMark="$(apt-mark showmanual)"; \
     apt-get update; \
     apt-get install -y --no-install-recommends \
@@ -25,6 +38,10 @@ RUN set -eux; \
     docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp; \
     docker-php-ext-install -j$(nproc) opcache \
     intl gd mysqli pcntl pdo_mysql soap xsl zip; \
+    pickle install --no-interaction apcu; \
+    pickle install --no-interaction redis; \
+    pickle install --no-interaction xdebug; \
+    docker-php-ext-enable apcu opcache redis xdebug; \
     # reset apt-mark's "manual" list so that "purge --auto-remove" will remove all build dependencies
     apt-mark auto '.*' > /dev/null; \
     [ -z "$savedAptMark" ] || apt-mark manual $savedAptMark; \
@@ -37,14 +54,17 @@ RUN set -eux; \
     | xargs -r apt-mark manual; \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
     rm -rf /var/lib/apt/lists/*;
-RUN set -eux; \
-    # https://github.com/FriendsOfPHP/pickle
-    curl -Lo /usr/local/bin/pickle https://github.com/FriendsOfPHP/pickle/releases/latest/download/pickle.phar && \
-    chmod +x /usr/local/bin/pickle; \
-    pickle install --no-interaction apcu; \
-    pickle install --no-interaction redis; \
-    pickle install --no-interaction xdebug; \
-    docker-php-ext-enable apcu redis xdebug;
 
+# set up Apache2
+RUN set -eux; \
+    # enable Apache2 modules
+    a2enmod rewrite expires include deflate remoteip headers; \
+    # disable Apache2 server signature
+    echo 'ServerSignature Off' >> /etc/apache2/apache2.conf; \
+    echo 'ServerTokens Prod' >> /etc/apache2/apache2.conf; \
+    # enable support for TLS termination
+    echo 'SetEnvIf X-Forwarded-Proto https HTTPS=on' >> /etc/apache2/apache2.conf;
+
+# install composer
 # https://hub.docker.com/_/composer
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
