@@ -1,29 +1,19 @@
+# https://hub.docker.com/_/node
+ARG NODE_VERSION=lts
+FROM node:${NODE_VERSION}-slim AS node
+
 # https://hub.docker.com/_/microsoft-dotnet-sdk/
 FROM mcr.microsoft.com/dotnet/sdk:8.0
-
-ARG APT_URL=""
-ARG NODE_MAJOR=20
 
 # install ASP.NET Core 6.0 Runtime
 COPY --from=mcr.microsoft.com/dotnet/aspnet:6.0-bookworm-slim /usr/share/dotnet /usr/share/dotnet
 
-RUN set -eux; \
-    # preferred mirror site
-    [ -n "$APT_URL" ] && [ "$APT_URL" = 'http://free.nchc.org.tw' ] && [ $(uname -m) = 'x86_64' ] && [ -e "/etc/apt/sources.list.d/debian.sources" ] && sed -i -E "/-security/! s,URIs: http?://[^\/]+,URIs: $APT_URL,g" /etc/apt/sources.list.d/debian.sources; \
-    [ -n "$APT_URL" ] && [ "$APT_URL" != 'http://free.nchc.org.tw' ] && [ -e "/etc/apt/sources.list.d/debian.sources" ] && sed -i -E "s,URIs: http?://[^\/]+,URIs: $APT_URL,g" /etc/apt/sources.list.d/debian.sources; \
-    # install Node.js
-    # https://github.com/nodesource/distributions#debian-and-ubuntu-based-distributions
-    apt-get update; \
-    apt-get install -y --no-install-recommends ca-certificates curl gnupg; \
-    mkdir -p /etc/apt/keyrings; \
-    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg; \
-    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" > /etc/apt/sources.list.d/nodesource.list; \
-    apt-get update; \
-    apt-get install -y --no-install-recommends nodejs; \
-    # https://yarnpkg.com/getting-started/install
-    corepack enable; \
-    corepack prepare yarn@stable --activate; \
-    # clean up
-    rm -rf /var/lib/apt/lists/* /tmp/*; \
-    # smoke test
-    dotnet --info && node --version && npm --version && yarn --version;
+# install the Node.js
+COPY --from=node /usr/local/bin/node /usr/local/bin/node
+COPY --from=node /usr/local/include/node /usr/local/include/node
+COPY --from=node /usr/local/lib/node_modules /usr/local/lib/node_modules
+
+RUN ln -s /usr/local/lib/node_modules/corepack/dist/corepack.js /usr/local/bin/corepack; \
+ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm; \
+ln -s /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx; \
+ln -s /usr/local/bin/node /usr/local/bin/nodejs;
