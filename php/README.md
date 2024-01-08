@@ -39,7 +39,7 @@ docker compose down
 docker ps
 
 # 建置指定系統架構的映像檔
-docker build --platform=linux/amd64 -t php:8.1-apache-ext --build-arg APT_URL=http://free.nchc.org.tw .
+DOCKER_DEFAULT_PLATFORM=linux/amd64 docker compose build
 ```
 
 ## 連線埠配置
