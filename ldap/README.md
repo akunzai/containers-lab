@@ -41,6 +41,18 @@ docker ps
 - 389: LDAP
 - 8080: LDAP 網頁管理介面
 
+## [預設存取憑證](https://github.com/osixia/docker-openldap#defaultyaml)
+
+- BaseDN: dc=example,dc=org
+- BindDN: cn=admin,dc=example,dc=org
+- Password: admin
+
+---
+
+- BaseDN: cn=config
+- BindDN: cn=admin,cn=config
+- Password: config
+
 ## 管理資料庫
 
 以下示範使用 `ldap-cli` 容器來管理資料庫
