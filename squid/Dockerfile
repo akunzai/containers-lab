@@ -8,8 +8,7 @@ RUN set -eux; \
     rm -rf /var/lib/apt/lists/*; \
     sed -i -E 's/^#(http_access allow localnet)/\1/' /etc/squid/conf.d/debian.conf;
 
-COPY startup.sh /
-RUN chmod 755 /startup.sh
+COPY --chmod=755 startup.sh /
 
 VOLUME /var/spool/squid
 

@@ -9,10 +9,8 @@ RUN set -eux; \
     rm -rf /var/lib/apt/lists/*; \
     sed -i -E 's|^#(log_file=/var/log/nrpe.log)|\1|' /etc/nagios/nrpe.cfg;
 
-COPY check_mem.sh /usr/lib/nagios/plugins/
-COPY startup.sh /
-
-RUN chmod 755 /startup.sh /usr/lib/nagios/plugins/check_mem.sh
+COPY --chmod=755 check_mem.sh /usr/lib/nagios/plugins/
+COPY --chmod=755 startup.sh /
 
 EXPOSE 5666
 
