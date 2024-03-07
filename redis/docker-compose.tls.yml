@@ -4,9 +4,9 @@ services:
   # https://redis.io/docs/management/security/encryption/
   redis:
     volumes:
-      - ./etc/ca.pem:/usr/local/etc/redis/ca.pem:ro
-      - ./etc/cert.pem:/usr/local/etc/redis/cert.pem:ro
-      - ./etc/key.pem:/usr/local/etc/redis/key.pem:ro
+      - ./certs/ca.pem:/usr/local/etc/redis/ca.pem:ro
+      - ./certs/cert.pem:/usr/local/etc/redis/cert.pem:ro
+      - ./certs/key.pem:/usr/local/etc/redis/key.pem:ro
     command: --port 6379 --tls-port 6380 --tls-cert-file /usr/local/etc/redis/cert.pem --tls-key-file /usr/local/etc/redis/key.pem --tls-ca-cert-file /usr/local/etc/redis/ca.pem --tls-auth-clients no
     ports:
       - 127.0.0.1:6380:6380

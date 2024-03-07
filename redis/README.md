@@ -78,9 +78,9 @@ COMPOSE_FILE=docker-compose.yml:docker-compose.tls.yml docker compose exec redis
 mkcert -install
 
 # 產生 TLS 憑證
-mkdir -p etc
-mkcert -cert-file etc/cert.pem -key-file etc/key.pem '*.dev.local'
+mkdir -p certs
+mkcert -cert-file certs/cert.pem -key-file certs/key.pem '*.dev.local'
 
 # redis 需要額外指定簽發根憑證
-cp -v "$(mkcert -CAROOT)/rootCA.pem" etc/ca.pem
+cp -v "$(mkcert -CAROOT)/rootCA.pem" certs/ca.pem
 ```
