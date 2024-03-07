@@ -32,7 +32,7 @@ docker compose down
 # 顯示所有啟動中的容器
 docker ps
 
-# 如果需要使用 MySQL 網頁管理介面的話
+# 如果需要使用網頁介面管理資料庫的話
 COMPOSE_FILE=docker-compose.yml:docker-compose.adminer.yml docker compose up -d
 ```
 
@@ -73,8 +73,8 @@ mysql -h db.dev.local -u root -p -e 'SHOW STATUS LIKE "ssl_version";'
 mkcert -install
 
 # 產生 TLS 憑證
-mkdir -p etc
-mkcert -cert-file etc/cert.pem -key-file etc/key.pem '*.dev.local'
+mkdir -p certs
+mkcert -cert-file certs/cert.pem -key-file certs/key.pem '*.dev.local'
 ```
 
 ## 初始化資料庫

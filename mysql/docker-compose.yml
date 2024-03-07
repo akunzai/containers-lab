@@ -7,7 +7,7 @@ services:
     restart: unless-stopped
     environment:
       # 指定初始化資料庫建立的 root 密碼
-      MYSQL_ROOT_PASSWORD: 'CHANGEME'
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-CHANGEME}
     volumes:
       - mysql-data:/var/lib/mysql
       # 如果需要自訂組態的話

@@ -32,7 +32,7 @@ docker compose down
 # 顯示所有啟動中的容器
 docker ps
 
-# 如果需要使用 MySQL 網頁管理介面的話
+# 如果需要使用網頁介面管理資料庫的話
 COMPOSE_FILE=docker-compose.yml:docker-compose.adminer.yml docker compose up -d
 ```
 
@@ -48,7 +48,7 @@ COMPOSE_FILE=docker-compose.yml:docker-compose.adminer.yml docker compose up -d
 
 ```sh
 # 啟用 TLS 加密連線
-COMPOSE_FILE=docker-compose.yml:docker-compose.ssl.yml docker compose up -d
+COMPOSE_FILE=docker-compose.yml:docker-compose.tls.yml docker compose up -d
 
 # 確認已正確啟用
 docker compose exec mariadb mariadb -p -e 'SHOW VARIABLES LIKE "%ssl%";'
@@ -73,8 +73,8 @@ mariadb -h db.dev.local -u root -p -e 'SHOW STATUS LIKE "ssl_version";'
 mkcert -install
 
 # 產生 TLS 憑證
-mkdir -p ssl
-mkcert -cert-file ssl/cert.pem -key-file ssl/key.pem '*.dev.local'
+mkdir -p certs
+mkcert -cert-file certs/cert.pem -key-file certs/key.pem '*.dev.local'
 ```
 
 ## 初始化資料庫

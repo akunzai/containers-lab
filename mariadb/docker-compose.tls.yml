@@ -4,6 +4,7 @@ services:
   # https://mariadb.com/kb/en/securing-connections-for-client-and-server/#enabling-tls-for-mariadb-server
   mariadb:
     volumes:
-      - ./ssl:/etc/ssl:ro
+      - ./certs/cert.pem:/etc/mysql/cert.pem:ro
+      - ./certs/key.pem:/etc/mysql/key.pem:ro
     # 如果要強制所有用戶端連線都必須加密的話可加入 --require-secure-transport 選項
-    command: mariadbd --ssl-cert=/etc/ssl/cert.pem --ssl-key=/etc/ssl/key.pem
+    command: mariadbd --ssl-cert=/etc/mysql/cert.pem --ssl-key=/etc/mysql/key.pem
