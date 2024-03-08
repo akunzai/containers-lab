@@ -1,0 +1,8 @@
+version: '2'
+
+services:
+  mssql:
+    volumes:
+      - ./certs/cert.pem:/etc/mssql/cert.pem:ro
+      - ./certs/key.pem:/etc/mssql/key.pem:ro
+      - ./mssql.conf:/var/opt/mssql/mssql.conf

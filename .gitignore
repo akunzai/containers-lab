@@ -3,6 +3,10 @@
 !.vscode/extensions.json
 .history/*
 
+# dotENV
+.env
+.env.*
+
 # TLS Certificates
 *.pem
 
