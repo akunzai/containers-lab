@@ -9,7 +9,7 @@ services:
     environment:
       # https://learn.microsoft.com/sql/linux/sql-server-linux-configure-environment-variables
       ACCEPT_EULA: 'Y'
-      MSSQL_SA_PASSWORD: '${MSSQL_SA_PASSWORD:-P@ssw0rd}'
+      MSSQL_SA_PASSWORD: '${MSSQL_SA_PASSWORD:-PassW0Rd!}'
       MSSQL_DATABASE: ${MSSQL_DATABASE}
       MSSQL_USER: ${MSSQL_USER}
       MSSQL_PASSWORD: '${MSSQL_PASSWORD}'

@@ -66,7 +66,7 @@ mkcert -cert-file certs/cert.pem -key-file certs/key.pem '*.dev.local'
 COMPOSE_FILE=docker-compose.yml:docker-compose.tls.yml docker compose up -d
 
 # 確認已正確啟用
-docker compose exec mssql bash -c '/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P $MSSQL_SA_PASSWORD -Q "SELECT encrypt_option FROM sys.dm_exec_connections WHERE session_id = @@SPID"'
+docker compose exec mssql bash -c '/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P $MSSQL_SA_PASSWORD -N -C -Q "SELECT encrypt_option FROM sys.dm_exec_connections WHERE session_id = @@SPID"'
 ```
 
 ## 重設資料庫 sa 帳號密碼
@@ -94,12 +94,14 @@ export MSSQL_SA_PASSWORD="P@ssw0rd"
 # 進入容器的 Bash Shell
 docker compose exec mssql bash
 
-# 查詢所有資料庫的擁有者
-/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P $MSSQL_SA_PASSWORD -Q "SELECT d.name as db, p.name as owner FROM sys.databases as d INNER JOIN sys.server_principals as p ON d.owner_sid = p.sid ORDER BY p.name"
+export DBNAME=test
+
+# 查詢指定資料庫的角色及成員
+/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P $MSSQL_SA_PASSWORD -Q "Use [$DBNAME]; SELECT r.name role_principal_name, m.name AS member_principal_name FROM sys.database_role_members rm JOIN sys.database_principals r ON rm.role_principal_id = r.principal_id JOIN sys.database_principals m ON rm.member_principal_id = m.principal_id WHERE r.type = 'R';"
 
 # 備份資料庫
-/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P $MSSQL_SA_PASSWORD -Q "BACKUP DATABASE [sample] TO DISK = N'/var/backups/sample.bak' WITH NOFORMAT, NOINIT, NAME = 'sample-full', SKIP, NOREWIND, NOUNLOAD, STATS = 10"
+/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P $MSSQL_SA_PASSWORD -Q "BACKUP DATABASE [$DBNAME] TO DISK = N'/var/backups/$DBNAME.bak' WITH NOFORMAT, NOINIT, NAME = 'sample-full', SKIP, NOREWIND, NOUNLOAD, STATS = 10"
 
 # 還原資料庫
-/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P $MSSQL_SA_PASSWORD -Q "RESTORE DATABASE [sample] FROM DISK = N'/var/backups/sample.bak' WITH FILE = 1, NOUNLOAD, REPLACE, NORECOVERY, STATS = 5"
+/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P $MSSQL_SA_PASSWORD -Q "RESTORE DATABASE [$DBNAME] FROM DISK = N'/var/backups/$DBNAME.bak' WITH FILE = 1, NOUNLOAD, REPLACE, NORECOVERY, STATS = 5"
 ```
