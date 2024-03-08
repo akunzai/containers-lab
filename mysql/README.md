@@ -44,6 +44,21 @@ COMPOSE_FILE=docker-compose.yml:docker-compose.adminer.yml docker compose up -d
 
 ## [啟用 TLS 加密連線](https://dev.mysql.com/doc/refman/8.0/en/using-encrypted-connections.html)
 
+### 建立本機開發用的 TLS 憑證
+
+可透過 [mkcert](https://github.com/FiloSottile/mkcert) 建立本機開發用的 TLS 憑證
+
+以網域名稱 `*.dev.local` 為例
+
+```sh
+# 安裝本機開發用的憑證簽發證書
+mkcert -install
+
+# 產生 TLS 憑證
+mkdir -p certs
+mkcert -cert-file certs/cert.pem -key-file certs/key.pem '*.dev.local'
+```
+
 > 如果 `mysql` 伺服器支援加密連線的話，用戶端預設會嘗試使用
 
 ```sh
@@ -60,21 +75,6 @@ docker compose exec mysql mysql -p -e 'ALTER USER "alice"@"localhost" REQUIRE NO
 
 # 測試用戶端加密連線
 mysql -h db.dev.local -u root -p -e 'SHOW STATUS LIKE "ssl_version";'
-```
-
-### 建立本機開發用的 TLS 憑證
-
-可透過 [mkcert](https://github.com/FiloSottile/mkcert) 建立本機開發用的 TLS 憑證
-
-以網域名稱 `*.dev.local` 為例
-
-```sh
-# 安裝本機開發用的憑證簽發證書
-mkcert -install
-
-# 產生 TLS 憑證
-mkdir -p certs
-mkcert -cert-file certs/cert.pem -key-file certs/key.pem '*.dev.local'
 ```
 
 ## 初始化資料庫
