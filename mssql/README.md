@@ -55,8 +55,8 @@ COMPOSE_FILE=docker-compose.yml:docker-compose.adminer.yml docker compose up -d
 mkcert -install
 
 # 產生 TLS 憑證
-mkdir -p certs
-mkcert -cert-file certs/cert.pem -key-file certs/key.pem '*.dev.local'
+mkdir -p ../.secrets
+mkcert -cert-file ../.secrets/cert.pem -key-file ../.secrets/key.pem '*.dev.local'
 ```
 
 > 如果是使用自簽憑證的話，用戶端可以加上 `TrustServerCertificate=true` 配置以信任該憑證

@@ -3,6 +3,13 @@ version: '2'
 services:
   mssql:
     volumes:
-      - ./certs/cert.pem:/etc/mssql/cert.pem:ro
-      - ./certs/key.pem:/etc/mssql/key.pem:ro
       - ./mssql.conf:/var/opt/mssql/mssql.conf
+    secrets:
+      - cert.pem
+      - key.pem
+
+secrets:
+  cert.pem:
+    file: ./certs/cert.pem
+  key.pem:
+    file: ./certs/key.pem

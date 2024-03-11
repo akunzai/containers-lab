@@ -9,16 +9,26 @@ services:
     environment:
       # https://learn.microsoft.com/sql/linux/sql-server-linux-configure-environment-variables
       ACCEPT_EULA: 'Y'
-      MSSQL_SA_PASSWORD: '${MSSQL_SA_PASSWORD:-PassW0Rd!}'
+      MSSQL_SA_PASSWORD_FILE: /run/secrets/mssql-root.pwd
       MSSQL_DATABASE: ${MSSQL_DATABASE}
       MSSQL_USER: ${MSSQL_USER}
-      MSSQL_PASSWORD: '${MSSQL_PASSWORD}'
+      MSSQL_PASSWORD_FILE: /run/secrets/mssql-user.pwd
     volumes:
       - mssql-data:/var/opt/mssql
       # 如果需要自訂組態的話
       # - ./mssql.conf:/var/opt/mssql/mssql.conf:ro
     ports:
      - 127.0.0.1:1433:1433
+    init: true
+    secrets:
+      - mssql-root.pwd
+      - mssql-user.pwd
+
+secrets:
+  mssql-root.pwd:
+    file: ../.secrets/mssql-root.pwd
+  mssql-user.pwd:
+    file: ../.secrets/mssql-user.pwd
 
 volumes:
     mssql-data:

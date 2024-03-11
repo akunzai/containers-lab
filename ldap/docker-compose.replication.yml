@@ -11,7 +11,7 @@ services:
       LDAP_NOFILE: 8192
       # https://www.openldap.org/doc/admin24/slapdconf2.html#olcLogLevel:%20%3Clevel%3E
       LDAP_LOG_LEVEL: 16640
-      # https://github.com/osixia/docker-openldap/blob/stable/image/environment/default.startup.yaml
+      # https://github.com/osixia/docker-openldap/blob/master/image/environment/default.startup.yaml
       LDAP_DOMAIN: example.org
       LDAP_ADMIN_PASSWORD: admin
       LDAP_CONFIG_PASSWORD: config

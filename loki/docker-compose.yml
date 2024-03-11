@@ -46,6 +46,7 @@ services:
       # 管理者帳號密碼, 應避免在正式環境中使用預設值
       # GF_SECURITY_ADMIN_USER: 'admin'
       # GF_SECURITY_ADMIN_PASSWORD: 'admin'
+      # GF_SECURITY_ADMIN_PASSWORD__FILE: /run/secrets/grafana-admin.pwd
     volumes:
       - grafana-data:/var/lib/grafana
       # https://grafana.com/tutorials/provision-dashboards-and-data-sources/#introduction

@@ -7,7 +7,9 @@ services:
     restart: unless-stopped
     environment:
       # 指定初始化資料庫建立的 root 密碼
-      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD:-CHANGEME}
+      MARIADB_ROOT_PASSWORD_FILE: /run/secrets/mariadb-root.pwd
+    secrets:
+      - mariadb-root.pwd
     volumes:
       - mariadb-data:/var/lib/mysql
       # 如果需要自訂組態的話
@@ -16,6 +18,10 @@ services:
       # - ./initdb:/docker-entrypoint-initdb.d
     ports:
      - 127.0.0.1:3306:3306
+
+secrets:
+  mariadb-root.pwd:
+    file: ../.secrets/mariadb-root.pwd
 
 volumes:
     mariadb-data:

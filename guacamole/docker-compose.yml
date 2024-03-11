@@ -6,12 +6,15 @@ services:
     image: mysql
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-changeme}
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql-root.pwd
       MYSQL_USER: ${MYSQL_USER:-guacamole}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-changeme}
+      MYSQL_PASSWORD_FILE: /run/secrets/mysql-user.pwd
       MYSQL_DATABASE: ${MYSQL_DATABASE:-guacamole}
     volumes:
       - mysql-data:/var/lib/mysql
+    secrets:
+      - mysql-root.pwd
+      - mysql-user.pwd
   guacd:
     # https://hub.docker.com/r/guacamole/guacd
     image: guacamole/guacd
@@ -28,9 +31,17 @@ services:
       MYSQL_HOSTNAME: mysql
       MYSQL_DATABASE: ${MYSQL_DATABASE:-guacamole}
       MYSQL_USER: ${MYSQL_USER:-guacamole}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-changeme}
+      MYSQL_PASSWORD_FILE: /run/secrets/mysql-user.pwd
     ports:
       - 127.0.0.1:8080:8080
+    secrets:
+      - mysql-user.pwd
+
+secrets:
+  mysql-root.pwd:
+    file: ../.secrets/mysql-root.pwd
+  mysql-user.pwd:
+    file: ../.secrets/mysql-user.pwd
 
 volumes: 
   mysql-data:
