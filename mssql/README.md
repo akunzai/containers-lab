@@ -95,9 +95,19 @@ export MSSQL_SA_PASSWORD="P@ssw0rd"
 docker compose exec mssql bash
 
 export DBNAME=test
+export USERNAME=test
 
-# 查詢指定資料庫的角色及成員
+# 查詢所有資料庫的擁有者
+/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P $MSSQL_SA_PASSWORD -Q "SELECT name AS db, SUSER_SNAME(owner_sid) AS owner FROM sys.databases;"
+
+# 變更資料庫的擁有者
+/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P $MSSQL_SA_PASSWORD -Q "ALTER AUTHORIZATION ON DATABASE::[$DBNAME] TO [$USERNAME];"
+
+# 查詢資料庫層級的角色及成員
 /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P $MSSQL_SA_PASSWORD -Q "Use [$DBNAME]; SELECT r.name role_principal_name, m.name AS member_principal_name FROM sys.database_role_members rm JOIN sys.database_principals r ON rm.role_principal_id = r.principal_id JOIN sys.database_principals m ON rm.member_principal_id = m.principal_id WHERE r.type = 'R';"
+
+# 增加資料庫層級的擁有者角色成員
+/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P $MSSQL_SA_PASSWORD -Q "Use [$DBNAME]; CREATE USER [$USERNAME] FROM LOGIN [$USERNAME]; EXEC sp_addrolemember 'db_owner', '$USERNAME'"
 
 # 備份資料庫
 /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P $MSSQL_SA_PASSWORD -Q "BACKUP DATABASE [$DBNAME] TO DISK = N'/var/backups/$DBNAME.bak' WITH NOFORMAT, NOINIT, NAME = 'sample-full', SKIP, NOREWIND, NOUNLOAD, STATS = 10"

@@ -22,12 +22,12 @@ fi
 
 # Creates a custom database and user if specified
 if  [ -n "$MSSQL_DATABASE" ]; then
-	echo "Creating database $MSSQL_DATABASE ..."
-	/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P $MSSQL_SA_PASSWORD -Q "Use [master]; CREATE DATABASE $MSSQL_DATABASE"
+	echo "> Creating database $MSSQL_DATABASE ..."
+	/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P $MSSQL_SA_PASSWORD -Q "CREATE DATABASE $MSSQL_DATABASE"
 	if  [ -n "$MSSQL_USER" ] && [ -n "$MSSQL_PASSWORD" ]; then
-		echo "Creating user $MSSQL_USER ..."
-		/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P $MSSQL_SA_PASSWORD -Q "Use [master]; CREATE LOGIN $MSSQL_USER WITH PASSWORD = '$MSSQL_PASSWORD'"
-		echo "Granting user [$MSSQL_USER] as db [$MSSQL_DATABASE] owner ..."
+		echo "> Creating user $MSSQL_USER ..."
+		/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P $MSSQL_SA_PASSWORD -Q "CREATE LOGIN $MSSQL_USER WITH PASSWORD = '$MSSQL_PASSWORD';"
+		echo "> Granting user [$MSSQL_USER] as db [$MSSQL_DATABASE] owner ..."
 		/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P $MSSQL_SA_PASSWORD -Q "Use [$MSSQL_DATABASE]; CREATE USER [$MSSQL_USER] FROM LOGIN [$MSSQL_USER]; EXEC sp_addrolemember 'db_owner', '$MSSQL_USER'"
 	fi
 fi
