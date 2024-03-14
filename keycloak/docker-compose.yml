@@ -12,6 +12,8 @@ services:
       - ./import:/opt/keycloak/data/import
       - ./export:/opt/keycloak/data/export
     environment:
+      # https://www.keycloak.org/server/configuration-production#_configure_keycloak_server_with_ipv4_or_ipv6
+      JAVA_OPTS_APPEND: -Djava.net.preferIPv4Stack=true
       # https://www.keycloak.org/server/configuration
       # 管理者帳號密碼, 應避免在正式環境中使用預設值
       KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:-admin}
