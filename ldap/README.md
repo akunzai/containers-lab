@@ -7,9 +7,9 @@
 
 ## 使用方式
 
-> `docker compose` 指令必須要在 `docker-compose.yml` 所在的目錄下執行
+> `docker compose` 指令必須要在 `compose.yml` 所在的目錄下執行
 
-可透過建立 `docker-compose.override.yml` 來擴展 `docker-compose.yml` 組態
+可透過建立 `compose.override.yml` 來擴展 `compose.yml` 組態
 
 ```sh
 # 啟動並執行完整應用

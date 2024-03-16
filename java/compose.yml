@@ -1,0 +1,56 @@
+version: '2'
+
+services:
+  java:
+    # https://hub.docker.com/_/eclipse-temurin
+    image: eclipse-temurin:11
+    restart: unless-stopped
+    volumes:
+      # 在 Azure App Service 運作時，僅有 '/home' 目錄可以跨容器存取並永續儲存
+      # https://learn.microsoft.com/azure/app-service/configure-custom-container#use-persistent-shared-storage
+      # - app-home:/home
+      - ./app.jar:/home/site/wwwroot/app.jar:ro
+    environment:
+      LANG: 'C.UTF-8'
+      JAVA_OPTS: '-server -XX:+UseParallelGC -XX:+TieredCompilation -XX:TieredStopAtLevel=1  -XX:+UseStringDeduplication'
+      JAVA_TOOL_OPTIONS: '-Djava.net.preferIPv4Stack=true'
+    command: sh -c 'java -noverify -Djava.security.egd=file:/dev/./urandom $$JAVA_OPTS -jar /home/site/wwwroot/app.jar'
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.java.rule=Host(`www.dev.local`)
+      # 如果要啟用 HTTPS 連線的話
+      # - traefik.http.routers.java.entrypoints=websecure
+      - traefik.http.services.java.loadBalancer.server.port=8080
+  # https://doc.traefik.io/traefik/
+  traefik:
+    # https://hub.docker.com/_/traefik
+    image: traefik
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      # 如果有相關配置檔案的話
+      # - ./traefik/etc:/etc/traefik
+      # - ./certs:/etc/traefik/certs
+    command:
+      # https://doc.traefik.io/traefik/operations/dashboard/#secure-mode
+      - --api.insecure=true
+      - --providers.docker=true
+      - --providers.docker.exposedByDefault=false
+      - --entrypoints.web.address=:80
+      # 如果要啟用 HTTPS 連線的話
+      # - --entrypoints.websecure.address=:443
+      # - --entrypoints.websecure.http.tls=true
+      # 如果要自動重導為 HTTPS 的話
+      # - --entrypoints.web.http.redirections.entryPoint.to=websecure
+      # - --entrypoints.web.http.redirections.entryPoint.scheme=https
+      # 如果要使用 file provider 的話
+      # - --providers.file.directory=/etc/traefik/dynamic/
+      # - --providers.file.watch=true
+    ports:
+      - '127.0.0.1:80:80'
+      - '127.0.0.1:9090:8080'
+      # 如果要啟用 HTTPS 連線的話
+      # - '127.0.0.1:443:443'
+
+volumes:
+  app-home:

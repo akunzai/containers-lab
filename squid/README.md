@@ -19,7 +19,7 @@ docker compose exec squid tail -f /var/log/squid/access.log
 
 ## [使用 squid 容器代理對外連線](https://docs.docker.com/network/proxy/)
 
-請參見 `docker-compose.yml` 中的範例
+請參見 `compose.yml` 中的範例
 
 ```sh
 docker compose run curl -vI http://example.com

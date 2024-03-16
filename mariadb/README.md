@@ -7,9 +7,9 @@
 
 ## 使用方式
 
-> `docker compose` 指令必須要在 `docker-compose.yml` 所在的目錄下執行
+> `docker compose` 指令必須要在 `compose.yml` 所在的目錄下執行
 >
-> 可透過建立 `docker-compose.override.yml` 來擴展 `docker-compose.yml` 組態
+> 可透過建立 `compose.override.yml` 來擴展 `compose.yml` 組態
 >
 > 還可以利用 [COMPOSE_FILE](https://docs.docker.com/compose/reference/envvars/#compose_file) 環境變數指定多個組態來擴展服務配置
 
@@ -33,7 +33,7 @@ docker compose down
 docker ps
 
 # 如果需要使用網頁介面管理資料庫的話
-COMPOSE_FILE=docker-compose.yml:docker-compose.adminer.yml docker compose up -d
+COMPOSE_FILE=compose.yml:compose.adminer.yml docker compose up -d
 ```
 
 ## 連線埠配置
@@ -63,7 +63,7 @@ mkcert -cert-file ../.secrets/cert.pem -key-file ../.secrets/key.pem '*.dev.loca
 
 ```sh
 # 啟用 TLS 加密連線
-COMPOSE_FILE=docker-compose.yml:docker-compose.tls.yml docker compose up -d
+COMPOSE_FILE=compose.yml:compose.tls.yml docker compose up -d
 
 # 確認已正確啟用
 docker compose exec mariadb mariadb -p -e 'SHOW VARIABLES LIKE "%ssl%";'

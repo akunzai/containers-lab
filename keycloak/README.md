@@ -7,9 +7,9 @@
 
 ## 使用方式
 
-> `docker compose` 指令必須要在 `docker-compose.yml` 所在的目錄下執行
+> `docker compose` 指令必須要在 `compose.yml` 所在的目錄下執行
 >
-> 可透過建立 `docker-compose.override.yml` 來擴展 `docker-compose.yml` 組態
+> 可透過建立 `compose.override.yml` 來擴展 `compose.yml` 組態
 >
 > 還可以利用 [COMPOSE_FILE](https://docs.docker.com/compose/reference/envvars/#compose_file) 環境變數指定多個組態來擴展服務配置
 

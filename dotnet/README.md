@@ -7,9 +7,9 @@
 
 ## 使用方式
 
-> `docker compose` 指令必須要在 `docker-compose.yml` 所在的目錄下執行
+> `docker compose` 指令必須要在 `compose.yml` 所在的目錄下執行
 >
-> 可透過建立 `docker-compose.override.yml` 來擴展 `docker-compose.yml` 組態
+> 可透過建立 `compose.override.yml` 來擴展 `compose.yml` 組態
 >
 > 還可以利用 [COMPOSE_FILE](https://docs.docker.com/compose/reference/envvars/#compose_file) 環境變數指定多個組態來擴展服務配置
 
@@ -65,7 +65,7 @@ mkdir -p certs
 mkcert -cert-file certs/cert.pem -key-file certs/key.pem '*.dev.local'
 ```
 
-配置完成 TLS 憑證後，可修改 `docker-compose.yml` 並加入 TLS 檔案配置以啟用 HTTPS 連線
+配置完成 TLS 憑證後，可修改 `compose.yml` 並加入 TLS 檔案配置以啟用 HTTPS 連線
 
 ```sh
 mkdir -p traefik/etc/dynamic

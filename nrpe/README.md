@@ -7,9 +7,9 @@
 
 ## 使用方式
 
-> `docker compose` 指令必須要在 `docker-compose.yml` 所在的目錄下執行
+> `docker compose` 指令必須要在 `compose.yml` 所在的目錄下執行
 >
-> 可透過建立 `docker-compose.override.yml` 來擴展 `docker-compose.yml` 組態
+> 可透過建立 `compose.override.yml` 來擴展 `compose.yml` 組態
 >
 > 還可以利用 [COMPOSE_FILE](https://docs.docker.com/compose/reference/envvars/#compose_file) 環境變數指定多個組態來擴展服務配置
 
@@ -41,13 +41,13 @@ docker ps
 
 ## 來源 IP 白名單配置
 
-請參考 `docker-compose.yml` 範例設定環境變數 `ALLOWED_HOSTS` 的值，多個 IP 以逗號分隔。
+請參考 `compose.yml` 範例設定環境變數 `ALLOWED_HOSTS` 的值，多個 IP 以逗號分隔。
 
 ## 監控 / 以外的檔案系統
 
 以監控宿主的 `/opt` 目錄為例
 
-請在 `docker-compose.yml` 中新增 volumes 的路徑對應 `/opt:/opt:ro`
+請在 `compose.yml` 中新增 volumes 的路徑對應 `/opt:/opt:ro`
 
 再調整 `nrpe.cfg` 中的參數如下，最後重啟容器即可
 
