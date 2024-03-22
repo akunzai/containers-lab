@@ -6,7 +6,7 @@ services:
     image: squid:debian
     restart: unless-stopped
     volumes:
-      - squid-data:/var/spool/squid
+      - squid_data:/var/spool/squid
       - ./etc/squid.conf:/etc/squid/conf.d/docker.conf:ro
       # 如果要保留存取記錄的話
       # - ./log:/var/log/squid
@@ -20,4 +20,4 @@ services:
       - squid
 
 volumes:
-  squid-data:
+  squid_data:

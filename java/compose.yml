@@ -8,7 +8,7 @@ services:
     volumes:
       # 在 Azure App Service 運作時，僅有 '/home' 目錄可以跨容器存取並永續儲存
       # https://learn.microsoft.com/azure/app-service/configure-custom-container#use-persistent-shared-storage
-      # - app-home:/home
+      # - app_home:/home
       - ./app.jar:/home/site/wwwroot/app.jar:ro
     environment:
       LANG: 'C.UTF-8'
@@ -53,4 +53,4 @@ services:
       # - '127.0.0.1:443:443'
 
 volumes:
-  app-home:
+  app_home:

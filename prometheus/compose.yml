@@ -6,7 +6,7 @@ services:
     image: prom/prometheus
     restart: unless-stopped
     volumes:
-      - prometheus-data:/prometheus
+      - prometheus_data:/prometheus
       - ./prometheus:/etc/prometheus:ro
     command:
       # https://github.com/prometheus/prometheus/blob/main/Dockerfile
@@ -26,7 +26,7 @@ services:
     image: prom/alertmanager
     restart: unless-stopped
     volumes:
-      - alertmanager-data:/alertmanager
+      - alertmanager_data:/alertmanager
       - ./alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
   line-notify-gateway:
     # https://github.com/blakey22/line-notify-gateway
@@ -45,9 +45,9 @@ services:
       # 管理者帳號密碼, 應避免在正式環境中使用預設值
       # GF_SECURITY_ADMIN_USER: 'admin'
       # GF_SECURITY_ADMIN_PASSWORD: 'admin'
-      # GF_SECURITY_ADMIN_PASSWORD__FILE: /run/secrets/grafana-admin.pwd
+      # GF_SECURITY_ADMIN_PASSWORD__FILE: /run/secrets/grafana_admin.pwd
     volumes:
-      - grafana-data:/var/lib/grafana
+      - grafana_data:/var/lib/grafana
       # https://grafana.com/tutorials/provision-dashboards-and-data-sources/#introduction
       - ./grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml:ro
       # 如果要自動匯入 dashboard 的話
@@ -108,6 +108,6 @@ services:
       # - 127.0.0.1:443:443
 
 volumes:
-  alertmanager-data:
-  prometheus-data:
-  grafana-data:
+  alertmanager_data:
+  prometheus_data:
+  grafana_data:

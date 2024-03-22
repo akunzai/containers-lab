@@ -7,21 +7,21 @@ services:
     restart: unless-stopped
     environment:
       # 指定初始化資料庫建立的 root 密碼
-      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql-root.pwd
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_root.pwd
     volumes:
-      - mysql-data:/var/lib/mysql
+      - mysql_data:/var/lib/mysql
       # 如果需要自訂組態的話
-      # - mysql-conf:/etc/mysql/conf.d:ro
+      # - mysql_conf:/etc/mysql/conf.d:ro
       # 如果需要初始化資料庫的話
       # - ./initdb:/docker-entrypoint-initdb.d
     ports:
      - 127.0.0.1:3306:3306
     secrets:
-      - mysql-root.pwd
+      - mysql_root.pwd
 
 secrets:
-  mysql-root.pwd:
-    file: ../.secrets/mysql-root.pwd
+  mysql_root.pwd:
+    file: ../.secrets/mysql_root.pwd
 
 volumes:
-    mysql-data:
+    mysql_data:

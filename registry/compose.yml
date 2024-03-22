@@ -6,7 +6,7 @@ services:
     image: registry:2
     restart: unless-stopped
     volumes:
-      - registry-data:/var/lib/registry
+      - registry_data:/var/lib/registry
     labels:
       - traefik.enable=true
       - traefik.http.routers.registry.rule=Host(`registry.dev.local`)
@@ -47,4 +47,4 @@ services:
       # - 127.0.0.1:443:443
 
 volumes:
-    registry-data:
+    registry_data:

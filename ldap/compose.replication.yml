@@ -18,16 +18,16 @@ services:
       LDAP_REPLICATION: 'true'
       LDAP_REPLICATION_HOSTS: "#PYTHON2BASH:['ldap://ldap','ldap://ldap2']"
     volumes:
-      - ldap-conf:/etc/ldap/slapd.d
-      - ldap-data:/var/lib/ldap
+      - ldap_conf:/etc/ldap/slapd.d
+      - ldap_data:/var/lib/ldap
     ports:
       - 127.0.0.1:389:389
   ldap-cli:
     # https://github.com/osixia/docker-openldap
     image: osixia/openldap
     volumes:
-      - ldap-conf:/etc/ldap/slapd.d
-      - ldap-data:/var/lib/ldap
+      - ldap_conf:/etc/ldap/slapd.d
+      - ldap_data:/var/lib/ldap
     # https://github.com/osixia/docker-light-baseimage#run-command-line-options
     entrypoint: /container/tool/run --loglevel warning --skip-env-files --skip-startup-files --skip-process-files --
   ldap2:
@@ -61,7 +61,7 @@ services:
     entrypoint: /container/tool/run --loglevel warning --skip-env-files --skip-startup-files --skip-process-files --
 
 volumes:
-  ldap-conf:
-  ldap-data: 
+  ldap_conf:
+  ldap_data: 
   ldap2-conf:
   ldap2-data: 

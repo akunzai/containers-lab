@@ -7,11 +7,11 @@ services:
     restart: unless-stopped
     environment:
       # 指定初始化資料庫建立的 root 密碼
-      MARIADB_ROOT_PASSWORD_FILE: /run/secrets/mariadb-root.pwd
+      MARIADB_ROOT_PASSWORD_FILE: /run/secrets/mariadb_root.pwd
     secrets:
-      - mariadb-root.pwd
+      - mariadb_root.pwd
     volumes:
-      - mariadb-data:/var/lib/mysql
+      - mariadb_data:/var/lib/mysql
       # 如果需要自訂組態的話
       # - mariadb-conf:/etc/mysql/conf.d:ro
       # 如果需要初始化資料庫的話
@@ -20,8 +20,8 @@ services:
      - 127.0.0.1:3306:3306
 
 secrets:
-  mariadb-root.pwd:
-    file: ../.secrets/mariadb-root.pwd
+  mariadb_root.pwd:
+    file: ../.secrets/mariadb_root.pwd
 
 volumes:
-    mariadb-data:
+    mariadb_data:

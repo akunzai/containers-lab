@@ -8,7 +8,7 @@ services:
     image: quay.io/keycloak/keycloak
     restart: unless-stopped
     volumes:
-      - keycloak-data:/opt/keycloak/data
+      - keycloak_data:/opt/keycloak/data
       - ./import:/opt/keycloak/data/import
       - ./export:/opt/keycloak/data/export
     environment:
@@ -73,4 +73,4 @@ services:
       - 127.0.0.1:443:443
 
 volumes:
-    keycloak-data:
+    keycloak_data:

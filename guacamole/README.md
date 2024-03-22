@@ -48,7 +48,7 @@ docker ps
 docker compose run --rm guacamole /opt/guacamole/bin/initdb.sh --mysql > initdb.sql
 
 # 在 MySQL 容器執行初始化腳本
-cat initdb.sql | docker exec -i $(docker compose ps -q mysql) bash -c 'mysql -uguacamole -p$(cat /run/secrets/mysql-user.pwd) guacamole'
+cat initdb.sql | docker exec -i $(docker compose ps -q mysql) bash -c 'mysql -uguacamole -p$(cat /run/secrets/mysql_user.pwd) guacamole'
 ```
 
 ## 開始使用
