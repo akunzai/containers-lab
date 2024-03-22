@@ -1,0 +1,30 @@
+services:
+  openldap:
+      build: .
+      image: openldap-kerberos
+      ports:
+        # LDAP
+        - 389:389
+        - 636:636
+        # kadmin server
+        - 749:749
+        # Kerberos v5
+        - 88:88
+        - 88:88/udp
+      environment:
+        LDAP_TLS: false
+        LDAP_REMOVE_CONFIG_AFTER_SETUP: false
+      # `--copy-service` prevents ldif files from being overwritten after subsitution. Add ` --loglevel debug` for debug
+      # command: --copy-service --loglevel debug
+      volumes:
+        - ldap-conf:/etc/ldap/slapd.d
+        - ldap-data:/var/lib/ldap
+        - ./krb5.conf:/etc/krb5.conf
+        - ./krb5kdc:/etc/krb5kdc
+        # - ./openldap/service/z_krb5kdc/process.sh:/container/service/z_krb5kdc/process.sh
+        # For sharing keytab files
+        - ./keytabs:/etc/keytabs
+
+volumes:
+  ldap-conf:
+  ldap-data:
