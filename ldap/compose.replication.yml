@@ -1,5 +1,3 @@
-version: '2'
-
 services:
   ldap:
     # https://github.com/osixia/docker-openldap

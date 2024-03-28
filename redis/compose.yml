@@ -1,5 +1,3 @@
-version: '2'
-
 services:
   redis:
     # https://hub.docker.com/_/redis

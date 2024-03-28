@@ -1,5 +1,3 @@
-version: '2'
-
 services:
   mssql:
     # https://mcr.microsoft.com/product/mssql/server/about
