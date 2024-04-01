@@ -8,8 +8,8 @@ services:
       # https://learn.microsoft.com/sql/linux/sql-server-linux-configure-environment-variables
       ACCEPT_EULA: 'Y'
       MSSQL_SA_PASSWORD_FILE: /run/secrets/mssql_root.pwd
-      MSSQL_DATABASE: ${MSSQL_DATABASE}
-      MSSQL_USER: ${MSSQL_USER}
+      MSSQL_DATABASE: ${MSSQL_DATABASE:-}
+      MSSQL_USER: ${MSSQL_USER:-}
       MSSQL_PASSWORD_FILE: /run/secrets/mssql_user.pwd
     volumes:
       - mssql_data:/var/opt/mssql
