@@ -8,6 +8,6 @@ services:
 
 secrets:
   cert.pem:
-    file: ./certs/cert.pem
+    file: ../.secrets/cert.pem
   key.pem:
-    file: ./certs/key.pem
+    file: ../.secrets/key.pem

@@ -10,8 +10,8 @@ services:
 
 secrets:
   ca.pem:
-    file: ./certs/ca.pem
+    file: ../.secrets/ca.pem
   cert.pem:
-    file: ./certs/cert.pem
+    file: ../.secrets/cert.pem
   key.pem:
-    file: ./certs/key.pem
+    file: ../.secrets/key.pem
