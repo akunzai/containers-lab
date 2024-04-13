@@ -1,0 +1,13 @@
+services:
+  # https://www.postgresql.org/docs/current/ssl-tcp.html
+  postgres:
+    command: -c ssl=on -c ssl_cert_file=/run/secrets/cert.pem -c ssl_key_file=/run/secrets/key.pem
+    secrets:
+      - cert.pem
+      - key.pem
+
+secrets:
+  cert.pem:
+    file: ../.secrets/cert.pem
+  key.pem:
+    file: ../.secrets/key.pem
