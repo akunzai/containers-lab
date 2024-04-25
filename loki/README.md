@@ -40,45 +40,8 @@ docker ps
 
 啟動環境後預設會開始監聽本機的以下連線埠
 
-- 80: HTTP
-- 9090: Traefik 負載平衡器管理後台
+- 3000: Grafana 管理後台
 - 3100: Loki 記錄收集伺服器
-
-## [啟用 HTTPS 連線](https://doc.traefik.io/traefik/https/tls/)
-
-### [使用 Let's Encrypt 自動產生憑證](https://doc.traefik.io/traefik/https/acme/)
-
-### 建立本機開發用的 TLS 憑證
-
-可透過 [mkcert](https://github.com/FiloSottile/mkcert) 建立本機開發用的 TLS 憑證
-
-以網域名稱 `*.dev.local` 為例
-
-```sh
-# 安裝本機開發用的憑證簽發證書
-mkcert -install
-
-# 產生 TLS 憑證
-mkdir -p certs
-mkcert -cert-file certs/cert.pem -key-file certs/key.pem '*.dev.local'
-```
-
-配置完成 TLS 憑證後，可修改 `compose.yml` 並加入 TLS 檔案配置以啟用 HTTPS 連線
-
-```sh
-mkdir -p traefik/etc/dynamic
-cat <<EOF > traefik/etc/dynamic/tls.yml
-tls:
-  options:
-    default:
-      minVersion: VersionTLS12
-  stores:
-    default:
-      defaultCertificate:
-        certFile: /etc/traefik/certs/cert.pem
-        keyFile: /etc/traefik/certs/key.pem
-EOF
-```
 
 ## [查詢記錄檔](https://grafana.com/docs/loki/latest/getting-started/grafana/)
 

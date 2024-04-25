@@ -47,15 +47,21 @@ docker ps
 - 443: HTTPS
 - 9090: Traefik 負載平衡器管理後台
 
-## [啟用 HTTPS 連線](https://doc.traefik.io/traefik/https/tls/)
-
-### [使用 Let's Encrypt 自動產生憑證](https://doc.traefik.io/traefik/https/acme/)
+## [啟用 HTTPS 連線](https://www.keycloak.org/server/enabletls)
 
 ### 建立本機開發用的 TLS 憑證
 
+可透過 [mkcert](https://github.com/FiloSottile/mkcert) 建立本機開發用的 TLS 憑證
+
+以網域名稱 `*.dev.local` 為例
+
 ```sh
-# 設定本機開發用的主機名稱及 TLS 憑證
-./init.sh auth.dev.local
+# 安裝本機開發用的憑證簽發證書
+mkcert -install
+
+# 產生 TLS 憑證
+mkdir -p ../.secrets
+mkcert -cert-file ../.secrets/cert.pem -key-file ../.secrets/key.pem '*.dev.local'
 ```
 
 ## 匯入與匯出

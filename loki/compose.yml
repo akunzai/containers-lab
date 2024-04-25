@@ -52,42 +52,8 @@ services:
       # 如果要自動匯入 dashboard 的話
       # - ./grafana/dashboards:/var/lib/grafana/dashboards
       # - ./grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml:ro
-    labels:
-      - traefik.enable=true
-      - traefik.http.services.grafana.loadbalancer.server.port=3000
-      - traefik.http.routers.grafana.rule=Host(`www.dev.local`)
-
-  traefik:
-    image: traefik
-    restart: unless-stopped
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      # 如果有相關配置檔案的話
-      # - ./traefik/etc:/etc/traefik
-      # - ./certs:/etc/traefik/certs
-      - ./traefik/log:/var/log/traefik
-    environment:
-      TZ: Asia/Taipei
-    command:
-      # https://doc.traefik.io/traefik/operations/dashboard/#secure-mode
-      - --api.insecure=true
-      - --providers.docker=true
-      - --providers.docker.exposedByDefault=false
-      - --entrypoints.web.address=:80
-      # 如果要使用 file provider 的話
-      # - --providers.file.directory=/etc/traefik/dynamic/
-      # - --providers.file.watch=true
-      # https://doc.traefik.io/traefik/observability/metrics/prometheus/
-      - --metrics.prometheus=true
-      # https://doc.traefik.io/traefik/observability/access-logs/
-      - --accesslog=true
-      - --accesslog.filepath=/var/log/traefik/access.log
-      - --accesslog.format=json
-      - --accesslog.fields.names.StartUTC=drop
     ports:
-      - 127.0.0.1:80:80
-      - 127.0.0.1:9090:8080
+      - 127.0.0.1:3000:3000
 
 volumes:
   loki_data:
-  grafana_data:

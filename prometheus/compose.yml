@@ -51,10 +51,8 @@ services:
       # 如果要自動匯入 dashboard 的話
       # - ./grafana/dashboards:/var/lib/grafana/dashboards
       # - ./grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml:ro
-    labels:
-      - traefik.enable=true
-      - traefik.http.services.grafana.loadbalancer.server.port=3000
-      - traefik.http.routers.grafana.rule=Host(`www.dev.local`)
+    ports:
+      - 127.0.0.1:3000:3000
   node-exporter:
     # https://github.com/prometheus/node_exporter
     image: prom/node-exporter
@@ -74,36 +72,6 @@ services:
     restart: unless-stopped
     volumes:
       - ./blackbox.yml:/etc/blackbox_exporter/config.yml:ro
-  traefik:
-    image: traefik
-    restart: unless-stopped
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      # 如果有相關配置檔案的話
-      # - ./traefik/etc:/etc/traefik
-      # - ./certs:/etc/traefik/certs
-    command:
-      # https://doc.traefik.io/traefik/operations/dashboard/#secure-mode
-      - --api.insecure=true
-      - --providers.docker=true
-      - --providers.docker.exposedByDefault=false
-      - --entrypoints.web.address=:80
-      # 如果要啟用 HTTPS 連線的話
-      # - --entrypoints.websecure.address=:443
-      # - --entrypoints.websecure.http.tls=true
-      # 如果要自動重導為 HTTPS 的話
-      # - --entrypoints.web.http.redirections.entryPoint.to=websecure
-      # - --entrypoints.web.http.redirections.entryPoint.scheme=https
-      # 如果要使用 file provider 的話
-      # - --providers.file.directory=/etc/traefik/dynamic/
-      # - --providers.file.watch=true
-      # https://doc.traefik.io/traefik/observability/metrics/prometheus/
-      - --metrics.prometheus=true
-    ports:
-      - 127.0.0.1:80:80
-      - 127.0.0.1:9090:8080
-      # 如果要啟用 HTTPS 連線的話
-      # - 127.0.0.1:443:443
 
 volumes:
   alertmanager_data:

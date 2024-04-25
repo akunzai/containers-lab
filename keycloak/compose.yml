@@ -7,8 +7,9 @@ services:
     restart: unless-stopped
     volumes:
       - keycloak_data:/opt/keycloak/data
-      - ./import:/opt/keycloak/data/import
-      - ./export:/opt/keycloak/data/export
+      # 如果要匯入與匯出的話
+      # - ./import:/opt/keycloak/data/import
+      # - ./export:/opt/keycloak/data/export
     environment:
       # https://www.keycloak.org/server/configuration-production#_configure_keycloak_server_with_ipv4_or_ipv6
       JAVA_OPTS_APPEND: -Djava.net.preferIPv4Stack=true
@@ -18,57 +19,36 @@ services:
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin}
       # https://www.keycloak.org/server/all-config
       # 如果前端有使用反向代理的話
-      KC_PROXY: edge
+      # KC_PROXY_HEADERS: xforwarded
       # 非開發模式要啟用 HTTP 連線的話
       KC_HTTP_ENABLED: 'true'
-      KC_HOSTNAME: 'auth.dev.local'
+      # 如果要啟用 HTTPS 連線的話
+      # KC_HTTPS_CERTIFICATE_KEY_FILE: /run/secrets/key.pem
+      # KC_HTTPS_CERTIFICATE_FILE: /run/secrets/cert.pem
       # https://www.keycloak.org/server/logging
       # KC_LOG_LEVEL: 'info,org.keycloak:debug'
       # 如果要等待連接偵錯用戶端的話
       # DEBUG_SUSPEND: 'y'
       # 如果要偵錯容器內的應用程式的話, 預設為 8787
       # DEBUG_PORT: '*:8787'
-    # 如果要切換至開發模式請修改 command 為 start-dev
     # 如果要偵錯容器內的應用程式的話, 請加上 --debug 參數
     # https://www.keycloak.org/server/configuration#_starting_keycloak
-    command: start --import-realm --optimized
-    # ports:
+    command: start-dev
+    ports:
+      - 127.0.0.1:8080:8080
       # 如果要偵錯容器內的應用程式的話
       # - '127.0.0.1:5005:8787'
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.keycloak.entrypoints=websecure"
-      - "traefik.http.routers.keycloak.rule=Host(`auth.dev.local`)"
-      - "traefik.http.services.keycloak.loadbalancer.server.port=8080"
-  # https://doc.traefik.io/traefik/
-  traefik:
-    # https://hub.docker.com/_/traefik
-    image: traefik
-    restart: unless-stopped
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      # 如果有相關配置檔案的話
-      - ./traefik/etc:/etc/traefik
-      - ./certs:/etc/traefik/certs
-    command:
-      # https://doc.traefik.io/traefik/operations/dashboard/#secure-mode
-      - --api.insecure=true
-      - --providers.docker=true
-      - --providers.docker.exposedByDefault=false
-      - --entrypoints.web.address=:80
       # 如果要啟用 HTTPS 連線的話
-      - --entrypoints.websecure.address=:443
-      - --entrypoints.websecure.http.tls=true
-      # 如果要自動重導為 HTTPS 的話
-      - --entrypoints.web.http.redirections.entryPoint.to=websecure
-      - --entrypoints.web.http.redirections.entryPoint.scheme=https
-      # 如果要使用 file provider 的話
-      - --providers.file.directory=/etc/traefik/dynamic/
-      - --providers.file.watch=true
-    ports:
-      - 127.0.0.1:80:80
-      - 127.0.0.1:9090:8080
-      - 127.0.0.1:443:443
+      # - 127.0.0.1:443:8443
+    # secrets:
+    #   - cert.pem
+    #   - key.pem
+
+# secrets:
+#   cert.pem:
+#     file: ../.secrets/cert.pem
+#   key.pem:
+#     file: ../.secrets/key.pem
 
 volumes:
     keycloak_data:
