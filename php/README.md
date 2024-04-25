@@ -64,8 +64,8 @@ DOCKER_DEFAULT_PLATFORM=linux/amd64 docker compose build
 mkcert -install
 
 # 產生 TLS 憑證
-mkdir -p certs
-mkcert -cert-file certs/cert.pem -key-file certs/key.pem '*.dev.local'
+mkdir -p ../.secrets
+mkcert -cert-file ../.secrets/cert.pem -key-file ../.secrets/key.pem '*.dev.local'
 ```
 
 配置完成 TLS 憑證後，可修改 `compose.yml` 並加入 TLS 檔案配置以啟用 HTTPS 連線
@@ -80,8 +80,8 @@ tls:
   stores:
     default:
       defaultCertificate:
-        certFile: /etc/traefik/certs/cert.pem
-        keyFile: /etc/traefik/certs/key.pem
+        certFile: /run/secrets/cert.pem
+        keyFile: /run/secrets/key.pem
 EOF
 ```
 

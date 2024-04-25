@@ -41,7 +41,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       # 如果有相關配置檔案的話
       # - ./traefik/etc:/etc/traefik
-      # - ./certs:/etc/traefik/certs
     command:
       # https://doc.traefik.io/traefik/operations/dashboard/#secure-mode
       - --api.insecure=true
@@ -62,6 +61,15 @@ services:
       - 127.0.0.1:9090:8080
       # 如果要啟用 HTTPS 連線的話
       # - 127.0.0.1:443:443
+    # secrets:
+    #   - cert.pem
+    #   - key.pem
+
+# secrets:
+#   cert.pem:
+#     file: ../.secrets/cert.pem
+#   key.pem:
+#     file: ../.secrets/key.pem
 
 volumes:
   app_home:
