@@ -5,6 +5,7 @@ services:
     ports:
       - 127.0.0.1:6380:6380
     secrets:
+      - ca.pem
       - cert.pem
       - key.pem
 
