@@ -1,0 +1,19 @@
+services:
+  chisel-server:
+    command: 
+      - server
+      - --reverse
+      - --tls-key=/run/secrets/key.pem
+      - --tls-cert=/run/secrets/cert.pem
+    environment:
+      PORT: 443
+    ports:
+      - 127.0.0.1:443:443
+    secrets:
+      - cert.pem
+      - key.pem
+secrets:
+  cert.pem:
+    file: ../.secrets/cert.pem
+  key.pem:
+    file: ../.secrets/key.pem
