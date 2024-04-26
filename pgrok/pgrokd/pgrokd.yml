@@ -1,0 +1,32 @@
+external_url: "http://tunnel.dev.local"
+web:
+  port: 3320
+proxy:
+  port: 3000
+  scheme: "http"
+  domain: "tunnel.dev.local"
+sshd:
+  port: 2222
+
+database:
+  # This connects to the "postgres" service.
+  host: "postgres"
+  port: 5432
+  # Make sure to match the value of the environment variable "POSTGRES_USER"
+  user: "REDACTED"
+  # Make sure to match the value of the environment variable "POSTGRES_PASSWORD"
+  password: "REDACTED"
+  database: "pgrokd"
+
+identity_provider:
+  type: "oidc"
+  display_name: "Keycloak"
+  issuer: "http://auth.dev.local/realms/demo"
+  client_id: "tunnel"
+  client_secret: "PDpL6F7gPzubzbE11SGd78shvYdK11oz"
+  field_mapping:
+    identifier: "email"
+    display_name: "name"
+    email: "email"
+# # The required domain name, "field_mapping.email" is required to set for this to work.
+#  required_domain: "example.com"
