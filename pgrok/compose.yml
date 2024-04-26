@@ -1,0 +1,64 @@
+services:
+  pgrokd:
+    # https://github.com/pgrok/pgrok
+    image: ghcr.io/pgrok/pgrokd
+    restart: unless-stopped
+    volumes:
+      - ./pgrokd:/var/opt/pgrokd
+    ports:
+      # web
+      - 3320:3320
+      # proxy
+      - 3000:3000
+      # sshd
+      - 2222:2222
+    depends_on:
+      - postgres
+    external_links:
+      - caddy:auth.dev.local
+
+  postgres:
+    # https://hub.docker.com/_/postgres
+    image: postgres
+    restart: unless-stopped
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: pgrokd
+      POSTGRES_USER: ${POSTGRES_USER:-REDACTED}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-REDACTED}
+    ports:
+      - 127.0.0.1:5432:5432
+  
+  caddy:
+    # https://hub.docker.com/_/caddy
+    image: caddy
+    restart: unless-stopped
+    volumes:
+      - caddy_config:/config
+      - caddy_data:/data
+      - ./Caddyfile:/etc/caddy/Caddyfile
+    ports:
+      - 80:80
+    depends_on:
+      - pgrokd
+      - keycloak
+
+  keycloak:
+    # https://www.keycloak.org/server/containers
+    image: quay.io/keycloak/keycloak
+    restart: unless-stopped
+    volumes:
+      - keycloak_data:/opt/keycloak/data
+      - ./import:/opt/keycloak/data/import
+      - ./export:/opt/keycloak/data/export
+    environment:
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:-admin}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin}
+    command: start-dev --import-realm
+
+volumes:
+  caddy_config:
+  caddy_data:
+  keycloak_data:
+  pg_data:

@@ -1,0 +1,11 @@
+http://tunnel.dev.local {
+    reverse_proxy * pgrokd:3320
+}
+
+http://*.tunnel.dev.local {
+    reverse_proxy * pgrokd:3000
+}
+
+http://auth.dev.local {
+	reverse_proxy * keycloak:8080
+}
