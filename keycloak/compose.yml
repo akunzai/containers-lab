@@ -23,6 +23,7 @@ services:
       # 非開發模式要啟用 HTTP 連線的話
       KC_HTTP_ENABLED: 'true'
       # 如果要啟用 HTTPS 連線的話
+      # KC_HTTPS_PORT: '443'
       # KC_HTTPS_CERTIFICATE_KEY_FILE: /run/secrets/key.pem
       # KC_HTTPS_CERTIFICATE_FILE: /run/secrets/cert.pem
       # https://www.keycloak.org/server/logging
@@ -39,7 +40,7 @@ services:
       # 如果要偵錯容器內的應用程式的話
       # - '127.0.0.1:5005:8787'
       # 如果要啟用 HTTPS 連線的話
-      # - 127.0.0.1:443:8443
+      # - 127.0.0.1:443:443
     # secrets:
     #   - cert.pem
     #   - key.pem
