@@ -1,0 +1,9 @@
+services:
+  tomcat:
+    # https://hub.docker.com/_/tomcat
+    image: tomcat
+    restart: unless-stopped
+    volumes:
+      - ./sample.war:/usr/local/tomcat/webapps/ROOT.war
+    ports:
+      - '127.0.0.1:8080:8080'

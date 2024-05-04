@@ -1,0 +1,12 @@
+services:
+  tomcat:
+    volumes:
+      - ./server.xml:/usr/local/tomcat/conf/server.xml
+    ports:
+      - '127.0.0.1:8443:8443'
+    secrets:
+      - cert.p12
+
+secrets:
+  cert.p12:
+    file: ./cert.p12
