@@ -53,6 +53,28 @@ docker ps
 - BindDN: cn=admin,cn=config
 - Password: config
 
+## [啟用 TLS 加密連線](https://github.com/osixia/docker-openldap?tab=readme-ov-file#use-your-own-certificate)
+
+可透過 [mkcert](https://github.com/FiloSottile/mkcert) 建立本機開發用的 TLS 憑證
+
+以網域名稱 `ldap.dev.local` 為例
+
+```sh
+# 安裝本機開發用的憑證簽發證書
+mkcert -install
+
+# 產生 TLS 憑證
+mkdir -p ./certs
+mkcert -cert-file ./certs/cert.pem -key-file ./certs/key.pem 'ldap.dev.local'
+cp -v "$(mkcert -CAROOT)/rootCA.pem" ./certs/rootCA.pem
+
+# 啟用 TLS 加密連線
+COMPOSE_FILE=compose.yml:compose.tls.yml docker compose up -d
+
+# 確認已正確啟用
+curl -kvu 'cn=admin,dc=example,dc=org:admin' 'ldaps://ldap.dev.local/ou=users,dc=example,dc=org??sub'
+```
+
 ## 管理資料庫
 
 以下示範使用 `ldap-cli` 容器來管理資料庫

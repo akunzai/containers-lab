@@ -1,0 +1,16 @@
+services:
+  ldap-admin:
+    # https://github.com/osixia/docker-phpLDAPadmin
+    image: osixia/phpldapadmin
+    environment:
+      PHPLDAPADMIN_LDAP_HOSTS: ldap
+      PHPLDAPADMIN_HTTPS: false
+    volumes:
+      - ldapadmin_data:/var/www/phpldapadmin
+    ports:
+      - '127.0.0.1:8080:80'
+    depends_on:
+      - ldap
+
+volumes:
+  ldapadmin_data:
