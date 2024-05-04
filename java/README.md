@@ -43,14 +43,9 @@ docker ps
 
 啟動環境後預設會開始監聽本機的以下連線埠
 
-- 80: HTTP
-- 9090: Traefik 負載平衡器管理後台
+- 8080: HTTP
 
-## [啟用 HTTPS 連線](https://doc.traefik.io/traefik/https/tls/)
-
-### [使用 Let's Encrypt 自動產生憑證](https://doc.traefik.io/traefik/https/acme/)
-
-### 建立本機開發用的 TLS 憑證
+## [啟用 HTTPS 連線](https://docs.spring.io/spring-boot/docs/current/reference/html/howto.html#howto.webserver.configure-ssl)
 
 可透過 [mkcert](https://github.com/FiloSottile/mkcert) 建立本機開發用的 TLS 憑證
 
@@ -61,25 +56,13 @@ docker ps
 mkcert -install
 
 # 產生 TLS 憑證
-mkdir -p ../.secrets
-mkcert -cert-file ../.secrets/cert.pem -key-file ../.secrets/key.pem '*.dev.local'
-```
+mkcert -pkcs12 -p12-file ./cert.p12 'www.dev.local'
 
-配置完成 TLS 憑證後，可修改 `compose.yml` 並加入 TLS 檔案配置以啟用 HTTPS 連線
+# 啟用 TLS 加密連線
+COMPOSE_FILE=compose.yml:compose.tls.yml docker compose up -d
 
-```sh
-mkdir -p traefik/etc/dynamic
-cat <<EOF > traefik/etc/dynamic/tls.yml
-tls:
-  options:
-    default:
-      minVersion: VersionTLS12
-  stores:
-    default:
-      defaultCertificate:
-        certFile: /run/secrets/cert.pem
-        keyFile: /run/secrets/key.pem
-EOF
+# 確認已正確啟用
+curl -v 'https://www.dev.local:8443'
 ```
 
 ## 利用容器執行指令

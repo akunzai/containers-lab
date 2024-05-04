@@ -1,0 +1,14 @@
+services:
+  java:
+    environment:
+      SERVER_PORT: 8443
+      SERVER_SSL_KEYSTORE: /run/secrets/cert.p12
+      SERVER_SSL_KEYSTOREPASSWORD: 'changeit'
+    ports:
+      - '127.0.0.1:8443:8443'
+    secrets:
+      - cert.p12
+
+secrets:
+  cert.p12:
+    file: ./cert.p12
