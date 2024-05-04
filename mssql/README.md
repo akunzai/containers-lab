@@ -44,8 +44,6 @@ COMPOSE_FILE=compose.yml:compose.adminer.yml docker compose up -d
 
 ## [啟用 TLS 加密連線](https://learn.microsoft.com/sql/linux/sql-server-linux-encrypted-connections)
 
-### 建立本機開發用的 TLS 憑證
-
 可透過 [mkcert](https://github.com/FiloSottile/mkcert) 建立本機開發用的 TLS 憑證
 
 以網域名稱 `*.dev.local` 為例
