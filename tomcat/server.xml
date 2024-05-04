@@ -24,7 +24,9 @@
                >
         <UpgradeProtocol className="org.apache.coyote.http2.Http2Protocol" />
         <SSLHostConfig>
-            <Certificate certificateKeystoreFile="/run/secrets/cert.p12" type="RSA" />
+            <Certificate type="RSA"
+              certificateKeyFile="/run/secrets/key.pem"
+              certificateFile="/run/secrets/cert.pem" />
         </SSLHostConfig>
     </Connector>
     <Engine name="Catalina" defaultHost="localhost">

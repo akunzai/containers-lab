@@ -53,7 +53,8 @@ docker ps
 mkcert -install
 
 # 產生 TLS 憑證
-mkcert -pkcs12 -p12-file ./cert.p12 'www.dev.local'
+mkdir -p ../.secrets
+mkcert -cert-file ../.secrets/cert.pem -key-file ../.secrets/key.pem '*.dev.local'
 
 # 啟用 TLS 加密連線
 COMPOSE_FILE=compose.yml:compose.tls.yml docker compose up -d
