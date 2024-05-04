@@ -12,6 +12,7 @@
 
 # TLS Certificates
 *.pem
+*.p12
 
 # System Files
 .DS_Store

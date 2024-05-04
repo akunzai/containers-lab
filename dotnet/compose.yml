@@ -3,9 +3,6 @@ services:
     # https://hub.docker.com/_/microsoft-dotnet-aspnet/
     image: mcr.microsoft.com/dotnet/samples:aspnetapp
     restart: unless-stopped
-    volumes:
-      # 在 Azure App Service 運作時，僅有 '/home' 目錄可以跨容器存取並永續儲存
-      - app_home:/home
     environment:
       LANG: 'C.UTF-8'
       # https://learn.microsoft.com/aspnet/core/fundamentals/configuration/#environment-variables
@@ -15,50 +12,5 @@ services:
       ASPNETCORE_HTTP_PORTS: 8080
     # 如果需要自訂啟動腳本的話
     # command: sh -c "cd /home/site/wwwroot && dotnet WebApp.dll"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.dotnet.rule=Host(`www.dev.local`)"
-      # 如果要啟用 HTTPS 連線的話
-      # - "traefik.http.routers.dotnet.entrypoints=websecure"
-      - "traefik.http.services.dotnet.loadbalancer.server.port=8080"
-  # https://docs.traefik.io/
-  traefik:
-    # https://hub.docker.com/_/traefik
-    image: traefik
-    restart: unless-stopped
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      # 如果有相關配置檔案的話
-      # - ./traefik/etc:/etc/traefik
-    command:
-      # https://doc.traefik.io/traefik/operations/dashboard/#secure-mode
-      - --api.insecure=true
-      - --providers.docker=true
-      - --providers.docker.exposedByDefault=false
-      - --entrypoints.web.address=:80
-      # 如果要啟用 HTTPS 連線的話
-      # - --entrypoints.websecure.address=:443
-      # - --entrypoints.websecure.http.tls=true
-      # 如果要自動重導為 HTTPS 的話
-      # - --entrypoints.web.http.redirections.entryPoint.to=websecure
-      # - --entrypoints.web.http.redirections.entryPoint.scheme=https
-      # 如果要使用 file provider 的話
-      # - --providers.file.directory=/etc/traefik/dynamic/
-      # - --providers.file.watch=true
     ports:
-      - '127.0.0.1:80:80'
-      - '127.0.0.1:9090:8080'
-      # 如果要啟用 HTTPS 連線的話
-      # - '127.0.0.1:443:443'
-    # secrets:
-    #   - cert.pem
-    #   - key.pem
-
-# secrets:
-#   cert.pem:
-#     file: ../.secrets/cert.pem
-#   key.pem:
-#     file: ../.secrets/key.pem
-
-volumes:
-  app_home:
+      - '127.0.0.1:8080:8080'
