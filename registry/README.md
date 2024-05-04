@@ -52,6 +52,12 @@ mkcert -install
 # 產生 TLS 憑證
 mkdir -p ../.secrets
 mkcert -cert-file ../.secrets/cert.pem -key-file ../.secrets/key.pem '*.dev.local'
+
+# 啟用 TLS 加密連線
+COMPOSE_FILE=compose.yml:compose.tls.yml docker compose up -d
+
+# 確認已正確啟用
+curl -kv 'https://registry.dev.local:8443'
 ```
 
 ## 限制存取
@@ -63,6 +69,9 @@ mkcert -cert-file ../.secrets/cert.pem -key-file ../.secrets/key.pem '*.dev.loca
 docker run \
   --entrypoint htpasswd \
   httpd:2 -Bbn testuser testpassword >> ../.secrets/htpasswd
+
+# 啟用限制存取
+COMPOSE_FILE=compose.yml:compose.auth.yml docker compose up -d
 
 # 登入自建的 Registry
 docker login localhost:5000
