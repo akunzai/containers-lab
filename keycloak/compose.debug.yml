@@ -1,0 +1,8 @@
+services:
+  keycloak:
+    environment:
+      DEBUG_SUSPEND: 'y'
+      DEBUG_PORT: '*:8787'
+    command: start-dev --debug
+    ports:
+      - '127.0.0.1:5005:8787'

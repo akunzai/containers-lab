@@ -22,34 +22,12 @@ services:
       # KC_PROXY_HEADERS: xforwarded
       # 非開發模式要啟用 HTTP 連線的話
       KC_HTTP_ENABLED: 'true'
-      # 如果要啟用 HTTPS 連線的話
-      # KC_HTTPS_PORT: '443'
-      # KC_HTTPS_CERTIFICATE_KEY_FILE: /run/secrets/key.pem
-      # KC_HTTPS_CERTIFICATE_FILE: /run/secrets/cert.pem
       # https://www.keycloak.org/server/logging
       # KC_LOG_LEVEL: 'info,org.keycloak:debug'
-      # 如果要等待連接偵錯用戶端的話
-      # DEBUG_SUSPEND: 'y'
-      # 如果要偵錯容器內的應用程式的話, 預設為 8787
-      # DEBUG_PORT: '*:8787'
-    # 如果要偵錯容器內的應用程式的話, 請加上 --debug 參數
     # https://www.keycloak.org/server/configuration#_starting_keycloak
     command: start-dev
     ports:
       - 127.0.0.1:8080:8080
-      # 如果要偵錯容器內的應用程式的話
-      # - '127.0.0.1:5005:8787'
-      # 如果要啟用 HTTPS 連線的話
-      # - 127.0.0.1:443:443
-    # secrets:
-    #   - cert.pem
-    #   - key.pem
-
-# secrets:
-#   cert.pem:
-#     file: ../.secrets/cert.pem
-#   key.pem:
-#     file: ../.secrets/key.pem
 
 volumes:
     keycloak_data:
