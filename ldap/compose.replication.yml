@@ -45,8 +45,8 @@ services:
       LDAP_REPLICATION: 'true'
       LDAP_REPLICATION_HOSTS: "#PYTHON2BASH:['ldap://ldap','ldap://ldap2']"
     volumes:
-      - ldap2-conf:/etc/ldap/slapd.d
-      - ldap2-data:/var/lib/ldap
+      - ldap2_conf:/etc/ldap/slapd.d
+      - ldap2_data:/var/lib/ldap
     ports:
       - 127.0.0.1:10389:389
   ldap2-cli:
@@ -61,5 +61,5 @@ services:
 volumes:
   ldap_conf:
   ldap_data: 
-  ldap2-conf:
-  ldap2-data: 
+  ldap2_conf:
+  ldap2_data: 

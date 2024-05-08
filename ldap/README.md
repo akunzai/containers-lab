@@ -64,9 +64,9 @@ docker ps
 mkcert -install
 
 # 產生 TLS 憑證
-mkdir -p ./certs
-mkcert -cert-file ./certs/cert.pem -key-file ./certs/key.pem 'ldap.dev.local'
-cp -v "$(mkcert -CAROOT)/rootCA.pem" ./certs/rootCA.pem
+mkdir -p ../.secrets
+mkcert -cert-file ../.secrets/cert.pem -key-file ../.secrets/key.pem '*.dev.local'
+cp -v "$(mkcert -CAROOT)/rootCA.pem" ../.secrets/ca.pem
 
 # 啟用 TLS 加密連線
 COMPOSE_FILE=compose.yml:compose.tls.yml docker compose up -d
