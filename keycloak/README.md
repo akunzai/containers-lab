@@ -43,9 +43,7 @@ docker ps
 
 啟動環境後預設會開始監聽本機的以下連線埠
 
-- 80: HTTP
 - 443: HTTPS
-- 9090: Traefik 負載平衡器管理後台
 
 ## [啟用 HTTPS 連線](https://www.keycloak.org/server/enabletls)
 
@@ -53,7 +51,7 @@ docker ps
 
 可透過 [mkcert](https://github.com/FiloSottile/mkcert) 建立本機開發用的 TLS 憑證
 
-以網域名稱 `*.dev.local` 為例
+以網域名稱 `auth.dev.local` 為例
 
 ```sh
 # 安裝本機開發用的憑證簽發證書
@@ -62,6 +60,12 @@ mkcert -install
 # 產生 TLS 憑證
 mkdir -p ../.secrets
 mkcert -cert-file ../.secrets/cert.pem -key-file ../.secrets/key.pem '*.dev.local'
+
+# 啟用 TLS 加密連線
+COMPOSE_FILE=compose.yml:compose.tls.yml docker compose up -d
+
+# 確認已正確啟用
+curl -v 'https://auth.dev.local'
 ```
 
 ## 匯入與匯出
