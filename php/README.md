@@ -46,18 +46,15 @@ DOCKER_DEFAULT_PLATFORM=linux/amd64 docker compose build
 
 啟動環境後預設會開始監聽本機的以下連線埠
 
-- 80: HTTP
-- 9090: Traefik 負載平衡器管理後台
+- 8080: HTTP
 
-## [啟用 HTTPS 連線](https://doc.traefik.io/traefik/https/tls/)
+## [啟用 TLS 加密連線](https://httpd.apache.org/docs/2.4/ssl/ssl_faq.html)
 
-### [使用 Let's Encrypt 自動產生憑證](https://doc.traefik.io/traefik/https/acme/)
-
-### 建立本機開發用的 TLS 憑證
+建立本機開發用的 TLS 憑證
 
 可透過 [mkcert](https://github.com/FiloSottile/mkcert) 建立本機開發用的 TLS 憑證
 
-以網域名稱 `*.dev.local` 為例
+以網域名稱 `www.dev.local` 為例
 
 ```sh
 # 安裝本機開發用的憑證簽發證書
@@ -66,23 +63,12 @@ mkcert -install
 # 產生 TLS 憑證
 mkdir -p ../.secrets
 mkcert -cert-file ../.secrets/cert.pem -key-file ../.secrets/key.pem '*.dev.local'
-```
 
-配置完成 TLS 憑證後，可修改 `compose.yml` 並加入 TLS 檔案配置以啟用 HTTPS 連線
+# 啟用 TLS 加密連線
+COMPOSE_FILE=compose.yml:compose.tls.yml docker compose up -d
 
-```sh
-mkdir -p traefik/etc/dynamic
-cat <<EOF > traefik/etc/dynamic/tls.yml
-tls:
-  options:
-    default:
-      minVersion: VersionTLS12
-  stores:
-    default:
-      defaultCertificate:
-        certFile: /run/secrets/cert.pem
-        keyFile: /run/secrets/key.pem
-EOF
+# 確認已正確啟用
+curl -v 'https://www.dev.local:8443'
 ```
 
 ## 利用容器執行指令
@@ -100,19 +86,7 @@ www-data
 $ docker compose run --rm php bash
 ```
 
-## [自訂和調整](https://learn.microsoft.com/azure/app-service/configure-language-php?pivots=platform-linux)
-
-在 Azure App Service 運行時，網站根目錄位址為 `/home/site/wwwroot`
-
-在本機開發時，網站根目錄位址為 `/var/www/html`
-
-### [自訂啟動腳本](https://github.com/Azure-App-Service/ImageBuilder/blob/master/GenerateDockerFiles/php/apache/init_container.sh)
-
-在本機開發時可以透過 [command](https://docs.docker.com/compose/compose-file/#command) 屬性設定啟動命令
-
-而在 Azure App Service 則可以在組態頁面的一般設定中設定啟動命令
-
-### [自訂 PHP 組態設定](https://learn.microsoft.com/azure/app-service/configure-language-php?pivots=platform-linux#customize-phpini-settings)
+### 自訂 PHP 組態設定
 
 請擴展 PHP 容器配置並啟用 [PHP_INI_SCAN_DIR](https://www.php.net/manual/en/configuration.file.php#configuration.file.scan) 環境變數配置
 

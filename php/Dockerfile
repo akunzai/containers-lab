@@ -58,7 +58,7 @@ RUN set -eux; \
 # set up Apache2
 RUN set -eux; \
     # enable Apache2 modules
-    a2enmod rewrite expires include deflate remoteip headers; \
+    a2enmod rewrite expires include deflate remoteip headers ssl socache_shmcb; \
     # disable Apache2 server signature
     echo 'ServerSignature Off' >> /etc/apache2/apache2.conf; \
     echo 'ServerTokens Prod' >> /etc/apache2/apache2.conf; \
