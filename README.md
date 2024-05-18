@@ -23,6 +23,7 @@
 ## 應用情境
 
 - [Chisel HTTP 隧道伺服器](./chisel/)
+- [TTYd 終端機網頁伺服器](./ttyd/)
 - [Guacamole 遠端桌面閘道](./guacamole/)
 - [Grafana Loki 日誌收集系統](./loki/)
 - [Nagios NRPE 遠端外掛監控工具](./nrpe/)

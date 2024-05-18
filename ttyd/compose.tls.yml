@@ -1,0 +1,18 @@
+services:
+  ttyd:
+    command:
+      - ttyd
+      - -W
+      - --ssl
+      - --ssl-cert=/run/secrets/cert.pem
+      - --ssl-key=/run/secrets/key.pem
+      - bash
+    secrets:
+      - cert.pem
+      - key.pem
+
+secrets:
+  cert.pem:
+    file: ../.secrets/cert.pem
+  key.pem:
+    file: ../.secrets/key.pem

@@ -1,0 +1,5 @@
+services:
+  ttyd:
+    image: tsl0922/ttyd:alpine
+    ports:
+      - 127.0.0.1:7681:7681
