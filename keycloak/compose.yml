@@ -20,8 +20,8 @@ services:
       # https://www.keycloak.org/server/all-config
       # 如果前端有使用反向代理的話
       # KC_PROXY_HEADERS: xforwarded
-      # 非開發模式要啟用 HTTP 連線的話
-      KC_HTTP_ENABLED: 'true'
+      # 非開發模式要啟用 HTTP 未加密連線的話
+      # KC_HTTP_ENABLED: 'true'
       # https://www.keycloak.org/server/logging
       # KC_LOG_LEVEL: 'info,org.keycloak:debug'
       # https://github.com/keycloak/keycloak/issues/13933
