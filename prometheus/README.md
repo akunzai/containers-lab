@@ -44,9 +44,13 @@ docker ps
 
 ## [Exporters](https://prometheus.io/docs/instrumenting/exporters/)
 
-- [Node/system metrics exporter](https://github.com/prometheus/node_exporter)
+- [Node exporter](https://github.com/prometheus/node_exporter)
 - [Windows exporter](https://github.com/prometheus-community/windows_exporter)
 - [Blackbox exporter](https://github.com/prometheus/blackbox_exporter)
+- [SNMP exporter](https://github.com/prometheus/snmp_exporter)
+- [SQL exporter](https://github.com/burningalchemist/sql_exporter)
+- [Redis exporter](https://github.com/oliver006/redis_exporter)
+- [Ping exporter](https://github.com/czerwonk/ping_exporter)
 - [cAdvisor](https://github.com/google/cadvisor)
 
 ## [Dashboards](https://grafana.com/grafana/dashboards)
