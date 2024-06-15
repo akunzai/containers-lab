@@ -144,7 +144,7 @@ server.forward-headers-strategy=NATIVE
 > Java properties 檔案需要跳脫特殊字元，若使用其它配置形式可將 `\\` 替換為 `\`
 
 ```ini:application.properties
-server.tomcat.remoteip.trusted-proxies=198\\.19\\.\\d{1,3}\\.\\d{1,3}
+server.tomcat.remoteip.trusted-proxies=198\\.19\\.\\d{1,3}\\.\\d{1,3}|35\\.191\\.\\d{1,3}\\.\\d{1,3}
 ```
 
 ### 以非 root 身分執行應用程式
