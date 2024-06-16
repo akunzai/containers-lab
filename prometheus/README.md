@@ -53,6 +53,10 @@ docker ps
 - [Ping exporter](https://github.com/czerwonk/ping_exporter)
 - [cAdvisor](https://github.com/google/cadvisor)
 
+## [Alertmanager webhook receiver](https://prometheus.io/docs/operating/integrations/#alertmanager-webhook-receiver)
+
+- [LINE Notify Gateway](https://github.com/blakey22/line-notify-gateway)
+
 ## [Dashboards](https://grafana.com/grafana/dashboards)
 
 請透過 Grafana 管理介面的 Dashboards -> New -> Import 功能進行匯入
