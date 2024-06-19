@@ -10,8 +10,6 @@ services:
       # https://github.com/prometheus/prometheus/blob/main/Dockerfile
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
-      - '--web.console.libraries=/etc/prometheus/console_libraries'
-      - '--web.console.templates=/etc/prometheus/consoles'
       # https://prometheus.io/docs/prometheus/latest/storage/
       - '--storage.tsdb.retention.time=15d'
       # https://prometheus.io/docs/prometheus/latest/management_api/
@@ -19,6 +17,8 @@ services:
     # 如果需要自訂主機名稱對應IP的話
     # extra_hosts:
     #   - "somehost:127.0.0.2"
+    ports:
+      - 127.0.0.1:9090:9090
   alertmanager:
     # https://github.com/prometheus/alertmanager
     image: prom/alertmanager
@@ -26,6 +26,8 @@ services:
     volumes:
       - alertmanager_data:/alertmanager
       - ./alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+    ports:
+      - 127.0.0.1:9093:9093
   line-notify-gateway:
     # https://github.com/blakey22/line-notify-gateway
     image: blakey22/line-notify-gateway:v0.0.1
@@ -37,9 +39,9 @@ services:
     # https://grafana.com/docs/grafana/latest/setup-grafana/installation/docker/
     image: grafana/grafana-enterprise
     restart: unless-stopped
-    environment:
+    # environment:
       # https://grafana.com/docs/grafana/latest/administration/configuration/
-      GF_SERVER_ROOT_URL: 'http://www.dev.local'
+      # GF_SERVER_ROOT_URL: 'http://monitor.dev.local'
       # 管理者帳號密碼, 應避免在正式環境中使用預設值
       # GF_SECURITY_ADMIN_USER: 'admin'
       # GF_SECURITY_ADMIN_PASSWORD: 'admin'
@@ -47,13 +49,13 @@ services:
     volumes:
       - grafana_data:/var/lib/grafana
       # https://grafana.com/tutorials/provision-dashboards-and-data-sources/#introduction
-      - ./grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml:ro
+      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
       # 如果要自動匯入 dashboard 的話
       # - ./grafana/dashboards:/var/lib/grafana/dashboards
-      # - ./grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml:ro
+      # - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
     ports:
       - 127.0.0.1:3000:3000
-  node-exporter:
+  node_exporter:
     # https://github.com/prometheus/node_exporter
     image: prom/node-exporter
     restart: unless-stopped
@@ -66,7 +68,7 @@ services:
       - '--path.rootfs=/rootfs'
       - '--path.sysfs=/host/sys'
       - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
-  blackbox-exporter:
+  blackbox_exporter:
     # https://github.com/prometheus/blackbox_exporter
     image: prom/blackbox-exporter
     restart: unless-stopped
