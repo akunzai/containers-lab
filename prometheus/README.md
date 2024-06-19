@@ -80,3 +80,23 @@ curl -X POST http://prometheus.dev.local/-/reload
 ### [smtp.plainAuth failed: unencrypted connection](https://github.com/prometheus/alertmanager/issues/1358)
 
 這是因為 Go 的 SMTP 套件實作不允許透過未加密的連線進行認證, 請改用不需要認證的 SMTP Relay 或是改用有支援加密的 SMTP 伺服器配置
+
+### 授權 SQL Server 使用者查看效能資訊
+
+> 請視實際情況修改帳號密碼
+
+```sql
+-- 建立登入帳號
+CREATE LOGIN [monitor] WITH PASSWORD = 'ChangeMe!!'
+
+-- 切換資料庫至 master
+USE [master]
+
+-- 建立登入帳號對應的資料庫使用者
+CREATE USER [monitor] FOR LOGIN [monitor]
+
+-- 授權資料庫使用者查看伺服器狀態
+GRANT VIEW SERVER STATE TO [monitor]
+-- 授權資料庫使用者查看物件定義以查詢各資料庫的 IO 等待時間
+GRANT VIEW ANY DEFINITION TO [monitor]
+```

@@ -74,6 +74,17 @@ services:
     restart: unless-stopped
     volumes:
       - ./blackbox.yml:/etc/blackbox_exporter/config.yml:ro
+  sql_exporter:
+    # https://github.com/burningalchemist/sql_exporter
+    image: burningalchemist/sql_exporter
+    restart: unless-stopped
+    volumes:
+      - ./sql_exporter:/etc/sql_exporter:ro
+    entrypoint:
+      - '/bin/sql_exporter'
+      - '--config.file=/etc/sql_exporter/sql_exporter.yml'
+    ports:
+      - 127.0.0.1:9399:9399
 
 volumes:
   alertmanager_data:
