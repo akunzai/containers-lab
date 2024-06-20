@@ -168,6 +168,15 @@ metrics:
         (total_physical_memory_kb - available_physical_memory_kb) * 1024 AS used,
         available_physical_memory_kb * 1024 AS available
       FROM sys.dm_os_sys_memory
+  - metric_name: mssql_os_memory_usage
+    type: gauge
+    help: 'OS physical memory used percentage.'
+    value_label: 'state'
+    values: [usage]
+    query: |
+      SELECT
+        CONVERT(FLOAT,total_physical_memory_kb-available_physical_memory_kb)/CONVERT(FLOAT,total_physical_memory_kb) AS usage
+      FROM sys.dm_os_sys_memory;
 
   - metric_name: mssql_os_page_file
     type: gauge
