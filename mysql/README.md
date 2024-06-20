@@ -33,7 +33,7 @@ docker compose down
 docker ps
 
 # 如果需要使用網頁介面管理資料庫的話
-COMPOSE_FILE=compose.yml:compose.adminer.yml docker compose up -d
+COMPOSE_FILE=compose.yml:compose.dbgate.yml docker compose up -d
 ```
 
 ## 連線埠配置
