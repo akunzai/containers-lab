@@ -31,9 +31,9 @@ services:
     # https://www.keycloak.org/server/configuration#_starting_keycloak
     command: start-dev
     healthcheck:
-      test: ["CMD-SHELL", "exec 3<>/dev/tcp/127.0.0.1/8080;echo -e \"GET /health/ready HTTP/1.1\r\nhost: http://localhost\r\nConnection: close\r\n\r\n\" >&3;grep \"HTTP/1.1 200 OK\" <&3"]
-      interval: 5s
-      timeout: 5s
+      test: "{ printf >&3 'HEAD /realms/master/.well-known/openid-configuration HTTP/1.0\r\nHost: localhost\r\nConnection: close\r\n\r\n'; cat <&3; } 3<>/dev/tcp/localhost/8080 | head -1 | grep 200"
+      interval: 30s
+      timeout: 10s
       retries: 3
     ports:
       - 127.0.0.1:8080:8080
