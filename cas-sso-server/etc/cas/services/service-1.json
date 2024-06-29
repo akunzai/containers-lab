@@ -1,0 +1,22 @@
+{
+    "@class": "org.apereo.cas.services.RegexRegisteredService",
+    "serviceId" : "^(http)://.*",
+    "name": "service",
+    "id": 1,
+    "description": "This is an example service - Demo Allow All service URL",
+    "evaluationOrder": 1,
+    "logoutType": "BACK_CHANNEL",
+    "attributeReleasePolicy": {
+      "@class": "org.apereo.cas.services.ReturnAllowedAttributeReleasePolicy"
+    },
+    "accessStrategy": {
+      "@class": "org.apereo.cas.services.DefaultRegisteredServiceAccessStrategy",
+      "enabled": true,
+      "ssoEnabled": true
+    },
+    "proxyPolicy": {
+      "@class": "org.apereo.cas.services.RefuseRegisteredServiceProxyPolicy"
+    }
+  }
+  
+  

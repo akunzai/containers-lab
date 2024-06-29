@@ -1,0 +1,8 @@
+services:
+  cas-sso-server:
+    image: apereo/cas:6.6.4
+    ports:
+      - "8080:8080"
+      - "8443:8443"
+    volumes:
+      - ./etc/cas:/etc/cas

@@ -1,0 +1,1 @@
+FROM apereo/cas:6.6.4
