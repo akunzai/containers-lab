@@ -1,0 +1,15 @@
+services:
+  rabbitmq:
+    # https://hub.docker.com/_/rabbitmq
+    image: rabbitmq:management
+    restart: unless-stopped
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    ports:
+      # AMQP
+      - 127.0.0.1:5672:5672
+      # Admin UI
+      - 127.0.0.1:15672:15672
+
+volumes:
+    rabbitmq_data:
