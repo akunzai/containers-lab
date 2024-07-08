@@ -1,0 +1,17 @@
+services:
+  # https://www.rabbitmq.com/docs/ssl
+  rabbitmq:
+    volumes:
+      - ./conf.d/30-tls.conf:/etc/rabbitmq/conf.d/30-tls.conf:ro
+    ports:
+      # AMQP over TLS
+      - 127.0.0.1:5671:5671
+    secrets:
+      - cert.pem
+      - key.pem
+
+secrets:
+  cert.pem:
+    file: ../.secrets/cert.pem
+  key.pem:
+    file: ../.secrets/key.pem

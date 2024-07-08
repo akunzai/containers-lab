@@ -1,4 +1,4 @@
-# Redis 鍵值資料庫
+# [Redis](https://redis.io/) 鍵值資料庫
 
 ## 環境需求
 

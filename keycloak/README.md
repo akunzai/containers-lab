@@ -5,45 +5,18 @@
 - [Docker Engine](https://docs.docker.com/install/)
 - [Docker Compose V2](https://docs.docker.com/compose/cli-command/)
 
-## 使用方式
-
-> `docker compose` 指令必須要在 `compose.yml` 所在的目錄下執行
->
-> 可透過建立 `compose.override.yml` 來擴展 `compose.yml` 組態
->
-> 還可以利用 [COMPOSE_FILE](https://docs.docker.com/compose/reference/envvars/#compose_file) 環境變數指定多個組態來擴展服務配置
+## Getting Started
 
 ```sh
-# 啟動並執行完整應用
-docker compose up
+# 下載所需的容器映像檔
+docker compose pull
 
 # 在背景啟動並執行完整應用
 docker compose up -d
 
-# 在背景啟動並執行指定服務
-docker compose up -d keycloak
-
-# 在背景啟動並擴展指定服務的容器個數
-docker compose up -d --scale keycloak=2
-
-# 顯示記錄
-docker compose logs
-
-# 持續顯示記錄
-docker compose logs -f
-
-# 關閉應用
-docker compose down
-
-# 顯示所有啟動中的容器
-docker ps
+# 開啟管理介面, 預設的帳號與密碼皆為 admin
+open http://localhost:8080
 ```
-
-## 連線埠配置
-
-啟動環境後預設會開始監聽本機的以下連線埠
-
-- 443: HTTPS
 
 ## [啟用 HTTPS 連線](https://www.keycloak.org/server/enabletls)
 
