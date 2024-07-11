@@ -11,7 +11,7 @@ file_env() {
 	local fileVar="${var}_FILE"
 	local def="${2:-}"
 	if [ "${!var:-}" ] && [ "${!fileVar:-}" ]; then
-		mysql_error "Both $var and $fileVar are set (but are exclusive)"
+		echo "Both $var and $fileVar are set (but are exclusive)" >&2
 	fi
 	local val="$def"
 	if [ "${!var:-}" ]; then
