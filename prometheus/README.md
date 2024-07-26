@@ -41,6 +41,8 @@ docker ps
 啟動環境後預設會開始監聽本機的以下連線埠
 
 - 3000: Grafana 管理後台
+- 9090: Prometheus 管理後台
+- 9093: Alertmanager 管理後台
 
 ## [Exporters](https://prometheus.io/docs/instrumenting/exporters/)
 
@@ -75,6 +77,12 @@ docker compose kill -s SIGHUP prometheus
 
 # 透過 CURL
 curl -X POST http://prometheus.dev.local/-/reload
+```
+
+### 檢查 Prometheus 組態語法
+
+```sh
+docker compose exec prometheus promtool check config /etc/prometheus/prometheus.yml
 ```
 
 ### [smtp.plainAuth failed: unencrypted connection](https://github.com/prometheus/alertmanager/issues/1358)
