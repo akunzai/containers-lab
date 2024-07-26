@@ -85,6 +85,22 @@ services:
       - '--config.file=/etc/sql_exporter/sql_exporter.yml'
     ports:
       - 127.0.0.1:9399:9399
+  cadvisor:
+    # https://github.com/google/cadvisor
+    image: gcr.io/cadvisor/cadvisor
+    restart: unless-stopped
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      # - /dev/disk:/dev/disk:ro # Linux only
+    # Linux only
+    # devices: 
+    #   - /dev/kmsg:/dev/kmsg
+    # privileged: true
+    ports:
+      - 127.0.0.1:8080:8080
 
 volumes:
   alertmanager_data:

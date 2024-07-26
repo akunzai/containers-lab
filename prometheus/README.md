@@ -41,18 +41,19 @@ docker ps
 啟動環境後預設會開始監聽本機的以下連線埠
 
 - 3000: Grafana 管理後台
+- 8080: cAdvisor 管理後台
 - 9090: Prometheus 管理後台
 - 9093: Alertmanager 管理後台
 
 ## [Exporters](https://prometheus.io/docs/instrumenting/exporters/)
 
-- [Node exporter](https://github.com/prometheus/node_exporter)
-- [Windows exporter](https://github.com/prometheus-community/windows_exporter)
 - [Blackbox exporter](https://github.com/prometheus/blackbox_exporter)
+- [cAdvisor](https://github.com/google/cadvisor)
 - [SNMP exporter](https://github.com/prometheus/snmp_exporter)
 - [SQL exporter](https://github.com/burningalchemist/sql_exporter)
+- [Node exporter](https://github.com/prometheus/node_exporter)
 - [Redis exporter](https://github.com/oliver006/redis_exporter)
-- [cAdvisor](https://github.com/google/cadvisor)
+- [Windows exporter](https://github.com/prometheus-community/windows_exporter)
 
 ## [Alertmanager webhook receiver](https://prometheus.io/docs/operating/integrations/#alertmanager-webhook-receiver)
 
@@ -62,10 +63,11 @@ docker ps
 
 請透過 Grafana 管理介面的 Dashboards -> New -> Import 功能進行匯入
 
-- [Node exporter](https://grafana.com/grafana/dashboards/10180-kds-linux-hosts/)
-- [Windows exporter](https://grafana.com/grafana/dashboards/6593-windows-node/)
 - [Blackbox exporter](https://grafana.com/grafana/dashboards/11529-blackbox-exporter-quick-overview/)
+- [Cadvisor exporter](https://grafana.com/grafana/dashboards/14282-cadvisor-exporter/)
+- [Node exporter](https://grafana.com/grafana/dashboards/10180-kds-linux-hosts/)
 - [Prometheus](https://grafana.com/grafana/dashboards/12054-prometheus-benchmark-2-17-x/)
+- [Windows exporter](https://grafana.com/grafana/dashboards/6593-windows-node/)
 
 ## 疑難排解
 
