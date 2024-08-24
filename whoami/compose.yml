@@ -2,6 +2,7 @@ services:
   whoami:
     # https://hub.docker.com/r/traefik/whoami/
     image: traefik/whoami
+    init: true
     restart: unless-stopped
     ports:
       - "127.0.0.1:8080:80"

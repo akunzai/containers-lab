@@ -26,7 +26,6 @@ services:
     image: grafana/promtail
     restart: unless-stopped
     volumes:
-      - ./traefik/log:/var/log/traefik:ro
       - ./promtail-config.yml:/etc/promtail/promtail-config.yml:ro
     environment:
       LOKI_URL: 'http://loki:3100/loki/api/v1/push'
@@ -56,4 +55,5 @@ services:
       - 127.0.0.1:3000:3000
 
 volumes:
+  grafana_data:
   loki_data:

@@ -9,4 +9,4 @@ services:
     volumes:
       - ../.secrets:/container/service/slapd/assets/certs:ro
     ports:
-      - 127.0.0.1:636:636
+      - 127.0.0.1:10636:636

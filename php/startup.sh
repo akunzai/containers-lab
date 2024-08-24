@@ -1,5 +1,10 @@
 #!/bin/env bash
 
+if [ $(id -u) -ne 0 ]; then
+    echo "Please run startup script as root!"
+    exit
+fi
+
 # fix: Require ip not working
 if ! grep -q RemoteIPHeader /etc/apache2/apache2.conf; then
     echo -e "RemoteIPHeader X-Forwarded-For\nRemoteIPInternalProxy 172.16.0.0/12" >>/etc/apache2/apache2.conf

@@ -2,6 +2,7 @@ services:
   squid:
     build: .
     image: squid:debian
+    init: true
     restart: unless-stopped
     volumes:
       - squid_data:/var/spool/squid

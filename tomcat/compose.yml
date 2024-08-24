@@ -2,6 +2,8 @@ services:
   tomcat:
     # https://hub.docker.com/_/tomcat
     image: tomcat
+    user: www-data
+    init: true
     restart: unless-stopped
     volumes:
       - ./sample.war:/usr/local/tomcat/webapps/ROOT.war
