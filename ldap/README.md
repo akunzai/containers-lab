@@ -38,7 +38,7 @@ docker ps
 
 啟動環境後預設會開始監聽本機的以下連線埠
 
-- 389: LDAP
+- 10389: LDAP
 - 8080: LDAP 網頁管理介面
 
 ## [預設存取憑證](https://github.com/osixia/docker-openldap#defaultyaml)
