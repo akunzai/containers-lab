@@ -2,6 +2,7 @@ services:
   postgres:
     # https://hub.docker.com/_/postgres
     image: postgres
+    user: postgres
     restart: unless-stopped
     environment:
       # 指定初始化資料庫建立的帳號及密碼

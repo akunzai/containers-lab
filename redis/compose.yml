@@ -2,6 +2,7 @@ services:
   redis:
     # https://hub.docker.com/_/redis
     image: redis
+    user: redis
     restart: unless-stopped
     volumes:
       - redis_data:/data

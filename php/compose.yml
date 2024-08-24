@@ -6,6 +6,7 @@ services:
         APT_URL: http://free.nchc.org.tw
         PHP_VERSION: 8.2
     image: php:8.2-apache-ext
+    user: www-data
     restart: unless-stopped
     volumes:
       # 在 Azure App Service 運作時，僅有 '/home' 目錄可以跨容器存取並永續儲存

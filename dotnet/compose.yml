@@ -2,6 +2,7 @@ services:
   dotnet:
     # https://hub.docker.com/_/microsoft-dotnet-aspnet/
     image: mcr.microsoft.com/dotnet/samples:aspnetapp
+    user: app
     restart: unless-stopped
     environment:
       LANG: 'C.UTF-8'

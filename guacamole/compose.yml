@@ -2,6 +2,7 @@ services:
   mysql:
     # https://hub.docker.com/_/mysql
     image: mysql
+    user: mysql
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_root.pwd

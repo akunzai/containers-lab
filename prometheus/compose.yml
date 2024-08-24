@@ -31,6 +31,7 @@ services:
   line-notify-gateway:
     # https://github.com/blakey22/line-notify-gateway
     image: blakey22/line-notify-gateway:v0.0.1
+    user: nobody
     restart: unless-stopped
     environment:
       TOKEN: 'CHANGEME'
