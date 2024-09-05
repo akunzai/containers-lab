@@ -1,5 +1,7 @@
 # Docker Lab
 
+[![Super-Linter](https://github.com/akunzai/docker-lab/actions/workflows/lint/badge.svg)](https://github.com/marketplace/actions/super-linter)
+
 收集及整理 Docker 不同的開發及應用情境
 
 ## 開發情境
