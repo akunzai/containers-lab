@@ -90,11 +90,11 @@ $ docker compose run --rm node yarn --version
 
 ## 疑難排解
 
-### 如何跨平台建置目標為 .NET Framework  的傳統 .NET 應用程式
+### 如何跨平台建置目標為 .NET Framework 的傳統 .NET 應用程式
 
 可透過 msbuild for [Mono](https://www.mono-project.com/) 來達成
 
-### 如何跨平台建置目標為 .NET Framework  的 [.NET SDK 應用程式](https://learn.microsoft.com/dotnet/core/project-sdk/overview)
+### 如何跨平台建置目標為 .NET Framework 的 [.NET SDK 應用程式](https://learn.microsoft.com/dotnet/core/project-sdk/overview)
 
 可透過安裝 [Microsoft.NETFramework.ReferenceAssemblies](https://www.nuget.org/packages/Microsoft.NETFramework.ReferenceAssemblies/) 套件來解決
 

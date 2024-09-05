@@ -42,5 +42,5 @@ secrets:
   mysql_user.pwd:
     file: ../.secrets/mysql_user.pwd
 
-volumes: 
+volumes:
   mysql_data:

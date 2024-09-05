@@ -1,6 +1,6 @@
 services:
   php:
-    build: 
+    build:
       context: .
       args:
         APT_URL: http://free.nchc.org.tw
@@ -16,7 +16,7 @@ services:
       - ./php.ini:/usr/local/etc/php/php.ini:ro
       # - ./startup.sh:/home/startup.sh:ro
     environment:
-      LANG: 'C.UTF-8'
+      LANG: "C.UTF-8"
       # APACHE_DOCUMENT_ROOT: /var/www/html
       # https://xdebug.org/docs/all_settings
       # XDEBUG_CONFIG: 'client_host=localhost log=/tmp/xdebug.log'
@@ -24,6 +24,5 @@ services:
     # command: bash /home/startup.sh
     ports:
       - 127.0.0.1:8080:80
-
 # volumes:
 #   app_home:

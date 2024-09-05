@@ -227,7 +227,7 @@ rm -i *.jpa
 
 - `XDEBUG_CONFIG: client_host=localhost`
 
-可參考 [PHP Debug for VSCode](https://code.visualstudio.com/docs/languages/php#_debugging) 或 [PHPStorm](https://www.jetbrains.com/help/phpstorm/zero-configuration-debugging.html) 等 IDE 的配置說明
+可參考 [PHP Debug for Visual Studio Code](https://code.visualstudio.com/docs/languages/php#_debugging) 或 [PhpStorm](https://www.jetbrains.com/help/phpstorm/zero-configuration-debugging.html) 等 IDE 的配置說明
 
 > 需要在 HTTP 請求中加入 [XDEBUG_TRIGGER](https://xdebug.org/docs/step_debug#start_with_request) 的 Cookie 或 URL 參數以啟用遠端偵錯
 > 建議可透過[瀏覽器外掛](https://xdebug.org/docs/step_debug#browser-extensions)來切換

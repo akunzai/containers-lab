@@ -10,17 +10,17 @@ file_env() {
 	local var="$1"
 	local fileVar="${var}_FILE"
 	local def="${2:-}"
-	if [ "${!var:-}" ] && [ "${!fileVar:-}" ]; then
-		mysql_error "Both $var and $fileVar are set (but are exclusive)"
+	if [[ -n "${!var:-}" ]] && [[ -n "${!fileVar:-}" ]]; then
+		mysql_error "Both ${var} and ${fileVar} are set (but are exclusive)"
 	fi
-	local val="$def"
-	if [ "${!var:-}" ]; then
+	local val="${def}"
+	if [[ -n "${!var:-}" ]]; then
 		val="${!var}"
-	elif [ "${!fileVar:-}" ]; then
+	elif [[ -n "${!fileVar:-}" ]]; then
 		val="$(<"${!fileVar}")"
 	fi
-	export "$var"="$val"
-	unset "$fileVar"
+	export "${var}"="${val}"
+	unset "${fileVar}"
 }
 
 file_env 'MSSQL_SA_PASSWORD'
@@ -28,17 +28,21 @@ file_env 'MSSQL_SA_PASSWORD'
 DBSTATUS=1
 ERRCODE=1
 
-if [ -n "$MSSQL_DATABASE" ]; then
-	DBSTATUS=$(/opt/mssql-tools/bin/sqlcmd -h -1 -t 1 -U sa -P $MSSQL_SA_PASSWORD -Q "SET NOCOUNT ON; SELECT state FROM sys.databases WHERE name = N'$MSSQL_DATABASE'" | tr -d '[:space:]')
+if [[ -n "${MSSQL_DATABASE}" ]] && [[ -n "${MSSQL_SA_PASSWORD}" ]]; then
+	DBSTATUS=$(/opt/mssql-tools/bin/sqlcmd -h -1 -t 1 -U sa -P "${MSSQL_SA_PASSWORD}" -Q "SET NOCOUNT ON; SELECT state FROM sys.databases WHERE name = N'${MSSQL_DATABASE}'")
 else
-	DBSTATUS=$(/opt/mssql-tools/bin/sqlcmd -h -1 -t 1 -U sa -P $MSSQL_SA_PASSWORD -Q "SET NOCOUNT ON; SELECT SUM(state) FROM sys.databases" | tr -d '[:space:]')
+	DBSTATUS=$(/opt/mssql-tools/bin/sqlcmd -h -1 -t 1 -U sa -P "${MSSQL_SA_PASSWORD}" -Q "SET NOCOUNT ON; SELECT SUM(state) FROM sys.databases")
+fi
+
+if [[ -n "${DBSTATUS}" ]]; then
+	DBSTATUS=$(echo "${DBSTATUS}" | tr -d '[:space:]')
 fi
 
 ERRCODE=$?
 
-echo "db: $MSSQL_DATABASE, status: $DBSTATUS, error: $ERRCODE"
+echo "db: ${MSSQL_DATABASE}, status: ${DBSTATUS}, error: ${ERRCODE}"
 
-if [[ $DBSTATUS -ne 0 ]] || [[ $ERRCODE -ne 0 ]]; then
+if [[ ${DBSTATUS} -ne 0 ]] || [[ ${ERRCODE} -ne 0 ]]; then
 	echo "SQL Server database not ready"
 	exit 1
 fi

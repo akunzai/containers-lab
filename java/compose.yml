@@ -3,8 +3,9 @@ services:
     build: ./demo
     image: spring-boot:demo
     restart: unless-stopped
+    init: true
     environment:
-      LANG: 'C.UTF-8'
-      JAVA_TOOL_OPTIONS: '-Djava.net.preferIPv4Stack=true'
+      LANG: "C.UTF-8"
+      JAVA_TOOL_OPTIONS: "-Djava.net.preferIPv4Stack=true"
     ports:
-      - '127.0.0.1:8080:8080'
+      - "127.0.0.1:8080:8080"

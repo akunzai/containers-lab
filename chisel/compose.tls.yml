@@ -1,6 +1,6 @@
 services:
   chisel-server:
-    command: 
+    command:
       - server
       - --reverse
       - --tls-key=/run/secrets/key.pem

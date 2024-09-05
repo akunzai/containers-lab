@@ -23,11 +23,11 @@ services:
       # 非開發模式要啟用 HTTP 未加密連線的話
       # KC_HTTP_ENABLED: 'true'
       # 如果要啟用健康檢查的話
-      KC_HEALTH_ENABLED: 'true'
+      KC_HEALTH_ENABLED: "true"
       # https://www.keycloak.org/server/logging
       # KC_LOG_LEVEL: 'info,org.keycloak:debug'
       # https://github.com/keycloak/keycloak/issues/13933
-      QUARKUS_HTTP_HTTP2: 'false'
+      QUARKUS_HTTP_HTTP2: "false"
     # https://www.keycloak.org/server/configuration#_starting_keycloak
     command: start-dev
     healthcheck:
@@ -39,4 +39,4 @@ services:
       - 127.0.0.1:8080:8080
 
 volumes:
-    keycloak_data:
+  keycloak_data:

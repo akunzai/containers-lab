@@ -116,7 +116,7 @@ services:
         "--notus-feed-dir",
         "/var/lib/notus/advisories",
         "-m",
-        "666"
+        "666",
       ]
     volumes:
       - gpg_data_vol:/etc/openvas/gnupg

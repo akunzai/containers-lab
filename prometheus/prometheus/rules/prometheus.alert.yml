@@ -1,28 +1,28 @@
 # https://awesome-prometheus-alerts.grep.to/rules#prometheus-internals
 groups:
-- name: prometheus
-  rules:
-  - alert: PrometheusConfigurationReloadFailure
-    expr: prometheus_config_last_reload_successful != 1
-    for: 5m
-    labels:
-      severity: warning
-    annotations:
-      summary: Prometheus configuration reload failure (instance {{ $labels.instance }})
-      description: "Prometheus configuration reload error\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
-  - alert: PrometheusTooManyRestarts
-    expr: changes(process_start_time_seconds{job=~"prometheus|pushgateway|alertmanager"}[15m]) > 2
-    for: 5m
-    labels:
-      severity: warning
-    annotations:
-      summary: Prometheus too many restarts (instance {{ $labels.instance }})
-      description: "Prometheus has restarted more than twice in the last 15 minutes. It might be crashlooping.\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
-  - alert: PrometheusAlertmanagerConfigurationReloadFailure
-    expr: alertmanager_config_last_reload_successful != 1
-    for: 5m
-    labels:
-      severity: warning
-    annotations:
-      summary: Prometheus AlertManager configuration reload failure (instance {{ $labels.instance }})
-      description: "AlertManager configuration reload error\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+  - name: prometheus
+    rules:
+      - alert: PrometheusConfigurationReloadFailure
+        expr: prometheus_config_last_reload_successful != 1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: Prometheus configuration reload failure (instance {{ $labels.instance }})
+          description: "Prometheus configuration reload error\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+      - alert: PrometheusTooManyRestarts
+        expr: changes(process_start_time_seconds{job=~"prometheus|pushgateway|alertmanager"}[15m]) > 2
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: Prometheus too many restarts (instance {{ $labels.instance }})
+          description: "Prometheus has restarted more than twice in the last 15 minutes. It might be crashlooping.\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
+      - alert: PrometheusAlertmanagerConfigurationReloadFailure
+        expr: alertmanager_config_last_reload_successful != 1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: Prometheus AlertManager configuration reload failure (instance {{ $labels.instance }})
+          description: "AlertManager configuration reload error\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"

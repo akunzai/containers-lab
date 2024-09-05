@@ -8,12 +8,12 @@ services:
       - ./prometheus:/etc/prometheus:ro
     command:
       # https://github.com/prometheus/prometheus/blob/main/Dockerfile
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
       # https://prometheus.io/docs/prometheus/latest/storage/
-      - '--storage.tsdb.retention.time=15d'
+      - "--storage.tsdb.retention.time=15d"
       # https://prometheus.io/docs/prometheus/latest/management_api/
-      - '--web.enable-lifecycle'
+      - "--web.enable-lifecycle"
     # 如果需要自訂主機名稱對應IP的話
     # extra_hosts:
     #   - "somehost:127.0.0.2"
@@ -34,19 +34,19 @@ services:
     user: nobody
     restart: unless-stopped
     environment:
-      TOKEN: 'CHANGEME'
+      TOKEN: "CHANGEME"
       LOCALE: zh_TW
   grafana:
     # https://grafana.com/docs/grafana/latest/setup-grafana/installation/docker/
     image: grafana/grafana-enterprise
     restart: unless-stopped
     # environment:
-      # https://grafana.com/docs/grafana/latest/administration/configuration/
-      # GF_SERVER_ROOT_URL: 'http://monitor.dev.local'
-      # 管理者帳號密碼, 應避免在正式環境中使用預設值
-      # GF_SECURITY_ADMIN_USER: 'admin'
-      # GF_SECURITY_ADMIN_PASSWORD: 'admin'
-      # GF_SECURITY_ADMIN_PASSWORD__FILE: /run/secrets/grafana_admin.pwd
+    # https://grafana.com/docs/grafana/latest/administration/configuration/
+    # GF_SERVER_ROOT_URL: 'http://monitor.dev.local'
+    # 管理者帳號密碼, 應避免在正式環境中使用預設值
+    # GF_SECURITY_ADMIN_USER: 'admin'
+    # GF_SECURITY_ADMIN_PASSWORD: 'admin'
+    # GF_SECURITY_ADMIN_PASSWORD__FILE: /run/secrets/grafana_admin.pwd
     volumes:
       - grafana_data:/var/lib/grafana
       # https://grafana.com/tutorials/provision-dashboards-and-data-sources/#introduction
@@ -65,10 +65,10 @@ services:
       - /sys:/host/sys:ro
       - /:/rootfs:ro
     command:
-      - '--path.procfs=/host/proc'
-      - '--path.rootfs=/rootfs'
-      - '--path.sysfs=/host/sys'
-      - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
+      - "--path.procfs=/host/proc"
+      - "--path.rootfs=/rootfs"
+      - "--path.sysfs=/host/sys"
+      - "--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)"
   blackbox_exporter:
     # https://github.com/prometheus/blackbox_exporter
     image: prom/blackbox-exporter
@@ -82,8 +82,8 @@ services:
     volumes:
       - ./sql_exporter:/etc/sql_exporter:ro
     entrypoint:
-      - '/bin/sql_exporter'
-      - '--config.file=/etc/sql_exporter/sql_exporter.yml'
+      - "/bin/sql_exporter"
+      - "--config.file=/etc/sql_exporter/sql_exporter.yml"
     ports:
       - 127.0.0.1:9399:9399
   cadvisor:
@@ -97,7 +97,7 @@ services:
       - /var/lib/docker/:/var/lib/docker:ro
       # - /dev/disk:/dev/disk:ro # Linux only
     # Linux only
-    # devices: 
+    # devices:
     #   - /dev/kmsg:/dev/kmsg
     # privileged: true
     ports:

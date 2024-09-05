@@ -4,7 +4,7 @@ services:
     image: dotnet-sdk:mono
     user: app
   node:
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile.node
     image: dotnet-sdk:node

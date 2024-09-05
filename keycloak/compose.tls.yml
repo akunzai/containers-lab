@@ -1,7 +1,7 @@
 services:
   keycloak:
     environment:
-      KC_HTTPS_PORT: '443'
+      KC_HTTPS_PORT: "443"
       KC_HTTPS_CERTIFICATE_KEY_FILE: /run/secrets/key.pem
       KC_HTTPS_CERTIFICATE_FILE: /run/secrets/cert.pem
     ports:

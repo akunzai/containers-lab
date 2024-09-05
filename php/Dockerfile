@@ -7,7 +7,7 @@ ENV LANG=C.UTF-8
 
 # preferred mirror site
 RUN ([ -n "$APT_URL" ] && \
-    [ "$APT_URL" = 'http://free.nchc.org.tw' ] && [ $(uname -m) = 'x86_64' ] && \
+    [ "$APT_URL" = 'http://free.nchc.org.tw' ] && [ "$(uname -m)" = 'x86_64' ] && \
     [ -e "/etc/apt/sources.list.d/debian.sources" ] && \
     sed -i -E "/-security/! s,URIs: http?://[^\/]+,URIs: $APT_URL,g" /etc/apt/sources.list.d/debian.sources) || true; \
     ([ -n "$APT_URL" ] && [ "$APT_URL" != 'http://free.nchc.org.tw' ] && \
@@ -33,10 +33,10 @@ RUN set -eux; \
     apt-get install -y --no-install-recommends \
     libfreetype6-dev libicu-dev libjpeg62-turbo-dev \
     libpng-dev libxml2-dev libxslt1-dev libzip-dev libwebp-dev \
-    ${PHP_EXTRA_BUILD_DEPS:-}; \
+    "${PHP_EXTRA_BUILD_DEPS:-}"; \
     # https://www.php.net/manual/en/image.installation.php
     docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp; \
-    docker-php-ext-install -j$(nproc) opcache \
+    docker-php-ext-install -j"$(nproc)" opcache \
     intl gd mysqli pcntl pdo_mysql soap xsl zip; \
     pickle install --no-interaction apcu; \
     pickle install --no-interaction redis; \
@@ -44,7 +44,7 @@ RUN set -eux; \
     docker-php-ext-enable apcu opcache redis xdebug; \
     # reset apt-mark's "manual" list so that "purge --auto-remove" will remove all build dependencies
     apt-mark auto '.*' > /dev/null; \
-    [ -z "$savedAptMark" ] || apt-mark manual $savedAptMark; \
+    [ -z "${savedAptMark}" ] || apt-mark manual "${savedAptMark}"; \
     find /usr/local -type f -executable -exec ldd '{}' ';' \
     | awk '/=>/ { so = $(NF-1); if (index(so, "/usr/local/") == 1) { next }; gsub("^/(usr/)?", "", so); print so }' \
     | sort -u \
@@ -59,11 +59,13 @@ RUN set -eux; \
 RUN set -eux; \
     # enable Apache2 modules
     a2enmod rewrite expires include deflate remoteip headers ssl socache_shmcb; \
-    # disable Apache2 server signature
-    echo 'ServerSignature Off' >> /etc/apache2/apache2.conf; \
-    echo 'ServerTokens Prod' >> /etc/apache2/apache2.conf; \
-    # enable support for TLS termination
-    echo 'SetEnvIf X-Forwarded-Proto https HTTPS=on' >> /etc/apache2/apache2.conf;
+    { \
+        # disable Apache2 server signature
+        echo 'ServerSignature Off'; \
+        echo 'ServerTokens Prod'; \
+        # enable support for TLS termination
+        echo 'SetEnvIf X-Forwarded-Proto https HTTPS=on';  \
+    } >> /etc/apache2/apache2.conf;
 
 # install composer
 # https://hub.docker.com/_/composer

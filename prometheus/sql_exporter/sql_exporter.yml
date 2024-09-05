@@ -18,7 +18,7 @@ global:
 
 # Collector files specifies a list of globs. One collector definition is read from each matching file.
 # Glob patterns are supported (see <https://pkg.go.dev/path/filepath#Match> for syntax).
-collector_files: 
+collector_files:
   - "*.collector.yml"
 
 jobs:
@@ -30,7 +30,7 @@ jobs:
       - targets:
           # DBURL 語法可參見 https://github.com/xo/dburl
           # 密碼部分要記得做 URL Encode
-          mssql: 'sqlserver://monitor:PassW0Rd!@host.docker.internal?trustServerCertificate=true'
+          mssql: "sqlserver://monitor:PassW0Rd!@host.docker.internal?trustServerCertificate=true"
         labels:
           env: dev
           app: demo
