@@ -8,4 +8,4 @@ services:
     volumes:
       - ./sample.war:/usr/local/tomcat/webapps/ROOT.war
     ports:
-      - '127.0.0.1:8080:8080'
+      - "127.0.0.1:8080:8080"

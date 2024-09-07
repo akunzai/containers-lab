@@ -16,11 +16,11 @@ services:
       # 如果需要初始化資料庫的話
       # - ./initdb:/docker-entrypoint-initdb.d
     ports:
-     - 127.0.0.1:3306:3306
+      - 127.0.0.1:3306:3306
 
 secrets:
   mariadb_root.pwd:
     file: ../.secrets/mariadb_root.pwd
 
 volumes:
-    mariadb_data:
+  mariadb_data:

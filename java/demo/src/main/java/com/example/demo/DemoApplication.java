@@ -8,14 +8,29 @@ import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
 @RestController
-public class DemoApplication {
+public final class DemoApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(DemoApplication.class, args);
-	}
+  /**
+   * Main entry point.
+   * 
+   * @param args
+   */
+  public static void main(final String[] args) {
+    SpringApplication.run(
+        DemoApplication.class, args);
+  }
 
-	@GetMapping("/")
-	public String index(HttpServletRequest req) {
-		return "Hello from server: " + req.getServerName() + " via scheme: " + req.getScheme();
-	}
+  /**
+   * root path.
+   * 
+   * @param req
+   * @return response
+   */
+  @GetMapping("/")
+  public String index(final HttpServletRequest req) {
+    return "Hello from server: "
+        + req.getServerName()
+        + " via scheme: "
+        + req.getScheme();
+  }
 }

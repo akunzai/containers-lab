@@ -11,4 +11,4 @@ COPY --from=builder /src/target/*.jar ./app.jar
 EXPOSE 8080
 ENV JAVA_OPTS=""
 USER www-data
-CMD exec java $JAVA_OPTS -jar /app/app.jar
+CMD ["sh","-c","java $JAVA_OPTS -jar /app/app.jar"]

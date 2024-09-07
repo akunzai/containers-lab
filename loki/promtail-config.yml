@@ -10,36 +10,36 @@ clients:
   - url: ${LOKI_URL:-http://loki:3100/loki/api/v1/push}
 
 scrape_configs:
-# - job_name: system
-#   static_configs:
-#   - targets:
-#       - localhost
-#     labels:
-#       job: varlogs
-#       __path__: /var/log/*log
+  # - job_name: system
+  #   static_configs:
+  #   - targets:
+  #       - localhost
+  #     labels:
+  #       job: varlogs
+  #       __path__: /var/log/*log
 
-- job_name: traefik
-  static_configs:
-  - targets:
-      - localhost
-    labels:
-      __path__: /var/log/traefik/access.log
-      job: traefik-accesslog
-  pipeline_stages:
-    - match: 
-        selector: '{job="traefik-accesslog"}'
-        stages:
-          - json:
-              expressions:
-                host: RequestHost
-                method: RequestMethod
-                path: RequestPath
-                status: DownstreamStatus
-                src_ip: ClientHost
-              drop_malformed: true
-          - labels:
-              host:
-              method:
-              path:
-              status:
-              src_ip:
+  - job_name: traefik
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          __path__: /var/log/traefik/access.log
+          job: traefik-accesslog
+    pipeline_stages:
+      - match:
+          selector: '{job="traefik-accesslog"}'
+          stages:
+            - json:
+                expressions:
+                  host: RequestHost
+                  method: RequestMethod
+                  path: RequestPath
+                  status: DownstreamStatus
+                  src_ip: ClientHost
+                drop_malformed: true
+            - labels:
+                host:
+                method:
+                path:
+                status:
+                src_ip:

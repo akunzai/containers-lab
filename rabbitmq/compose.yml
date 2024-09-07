@@ -13,4 +13,4 @@ services:
       - 127.0.0.1:15672:15672
 
 volumes:
-    rabbitmq_data:
+  rabbitmq_data:
