@@ -1,7 +1,7 @@
 services:
   loki:
     # https://grafana.com/docs/loki/latest/setup/install/docker/
-    image: grafana/loki
+    image: docker.io/grafana/loki
     restart: unless-stopped
     volumes:
       - loki_data:/loki
@@ -23,7 +23,7 @@ services:
 
   promtail:
     # https://grafana.com/docs/loki/latest/clients/promtail/installation/
-    image: grafana/promtail
+    image: docker.io/grafana/promtail
     restart: unless-stopped
     volumes:
       - ./promtail-config.yml:/etc/promtail/promtail-config.yml:ro
@@ -35,7 +35,7 @@ services:
 
   grafana:
     # https://grafana.com/docs/grafana/latest/setup-grafana/installation/docker/
-    image: grafana/grafana-enterprise
+    image: docker.io/grafana/grafana-enterprise
     restart: unless-stopped
     environment:
       # https://grafana.com/docs/grafana/latest/administration/configuration/

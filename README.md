@@ -1,8 +1,8 @@
-# Docker Lab
+# Containers Lab
 
-[![Super-Linter](https://github.com/akunzai/docker-lab/actions/workflows/lint/badge.svg)](https://github.com/marketplace/actions/super-linter)
+[![Super-Linter](https://github.com/akunzai/containers-lab/actions/workflows/lint/badge.svg)](https://github.com/marketplace/actions/super-linter)
 
-收集及整理 Docker 不同的開發及應用情境
+收集及整理不同的容器開發及應用情境
 
 ## 開發情境
 
@@ -14,13 +14,13 @@
 
 ## 資料庫
 
+- [OpenLDAP 目錄伺服器](./ldap/)
 - [MariaDB 關連式資料庫](./mariadb/)
 - [MySQL 關連式資料庫](./mysql/)
 - [SQL Server 關連式資料庫](./mssql/)
 - [PostgreSQL 關連式資料庫](./postgresql/)
 - [Redis 鍵值資料庫](./redis/)
-- [Docker 容器映像儲存庫](./registry/)
-- [OpenLDAP 目錄伺服器](./ldap/)
+- [容器映像儲存庫](./registry/)
 
 ## 應用情境
 

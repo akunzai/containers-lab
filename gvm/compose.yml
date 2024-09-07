@@ -1,65 +1,65 @@
 services:
   vulnerability-tests:
-    image: greenbone/vulnerability-tests
+    image: docker.io/greenbone/vulnerability-tests
     environment:
       STORAGE_PATH: /var/lib/openvas/22.04/vt-data/nasl
     volumes:
       - vt_data_vol:/mnt
 
   notus-data:
-    image: greenbone/notus-data
+    image: docker.io/greenbone/notus-data
     volumes:
       - notus_data_vol:/mnt
 
   scap-data:
-    image: greenbone/scap-data
+    image: docker.io/greenbone/scap-data
     volumes:
       - scap_data_vol:/mnt
 
   cert-bund-data:
-    image: greenbone/cert-bund-data
+    image: docker.io/greenbone/cert-bund-data
     volumes:
       - cert_data_vol:/mnt
 
   dfn-cert-data:
-    image: greenbone/dfn-cert-data
+    image: docker.io/greenbone/dfn-cert-data
     volumes:
       - cert_data_vol:/mnt
     depends_on:
       - cert-bund-data
 
   data-objects:
-    image: greenbone/data-objects
+    image: docker.io/greenbone/data-objects
     volumes:
       - data_objects_vol:/mnt
 
   report-formats:
-    image: greenbone/report-formats
+    image: docker.io/greenbone/report-formats
     volumes:
       - data_objects_vol:/mnt
     depends_on:
       - data-objects
 
   gpg-data:
-    image: greenbone/gpg-data
+    image: docker.io/greenbone/gpg-data
     volumes:
       - gpg_data_vol:/mnt
 
   redis-server:
-    image: greenbone/redis-server
+    image: docker.io/greenbone/redis-server
     restart: on-failure
     volumes:
       - redis_socket_vol:/run/redis/
 
   pg-gvm:
-    image: greenbone/pg-gvm:stable
+    image: docker.io/greenbone/pg-gvm:stable
     restart: on-failure
     volumes:
       - psql_data_vol:/var/lib/postgresql
       - psql_socket_vol:/var/run/postgresql
 
   gvmd:
-    image: greenbone/gvmd:stable
+    image: docker.io/greenbone/gvmd:stable
     restart: on-failure
     volumes:
       - gvmd_data_vol:/var/lib/gvm
@@ -86,7 +86,7 @@ services:
         condition: service_completed_successfully
 
   gsa:
-    image: greenbone/gsa:stable
+    image: docker.io/greenbone/gsa:stable
     restart: on-failure
     ports:
       - 127.0.0.1:9392:80
@@ -96,7 +96,7 @@ services:
       - gvmd
 
   ospd-openvas:
-    image: greenbone/ospd-openvas:stable
+    image: docker.io/greenbone/ospd-openvas:stable
     restart: on-failure
     hostname: ospd-openvas.local
     cap_add:
@@ -134,7 +134,7 @@ services:
 
   mqtt-broker:
     restart: on-failure
-    image: greenbone/mqtt-broker
+    image: docker.io/greenbone/mqtt-broker
     networks:
       default:
         aliases:
@@ -143,7 +143,7 @@ services:
 
   notus-scanner:
     restart: on-failure
-    image: greenbone/notus-scanner:stable
+    image: docker.io/greenbone/notus-scanner:stable
     volumes:
       - notus_data_vol:/var/lib/notus
       - gpg_data_vol:/etc/openvas/gnupg
@@ -156,7 +156,7 @@ services:
       - vulnerability-tests
 
   gvm-tools:
-    image: greenbone/gvm-tools
+    image: docker.io/greenbone/gvm-tools
     volumes:
       - gvmd_socket_vol:/run/gvmd
       - ospd_openvas_socket_vol:/run/ospd

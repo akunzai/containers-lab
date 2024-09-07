@@ -1,10 +1,10 @@
 services:
   tomcat:
     # https://hub.docker.com/_/tomcat
-    image: tomcat
+    image: docker.io/library/tomcat
     user: www-data
-    init: true
     restart: unless-stopped
+    init: true
     volumes:
       - ./sample.war:/usr/local/tomcat/webapps/ROOT.war
     ports:

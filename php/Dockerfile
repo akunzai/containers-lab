@@ -1,6 +1,6 @@
 ARG PHP_VERSION=8.2
 # https://hub.docker.com/_/php
-FROM php:${PHP_VERSION}-apache-bookworm
+FROM docker.io/library/php:${PHP_VERSION}-apache-bookworm
 
 ARG APT_URL=""
 ENV LANG=C.UTF-8
@@ -27,6 +27,7 @@ RUN set -eux; \
     chmod +x /usr/local/bin/pickle;
 
 # install the PHP extensions we need
+# hadolint ignore=SC2086
 RUN set -eux; \
     savedAptMark="$(apt-mark showmanual)"; \
     apt-get update; \
@@ -36,7 +37,7 @@ RUN set -eux; \
     "${PHP_EXTRA_BUILD_DEPS:-}"; \
     # https://www.php.net/manual/en/image.installation.php
     docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp; \
-    docker-php-ext-install -j"$(nproc)" opcache \
+    docker-php-ext-install -j$(nproc) opcache \
     intl gd mysqli pcntl pdo_mysql soap xsl zip; \
     pickle install --no-interaction apcu; \
     pickle install --no-interaction redis; \
@@ -44,7 +45,7 @@ RUN set -eux; \
     docker-php-ext-enable apcu opcache redis xdebug; \
     # reset apt-mark's "manual" list so that "purge --auto-remove" will remove all build dependencies
     apt-mark auto '.*' > /dev/null; \
-    [ -z "${savedAptMark}" ] || apt-mark manual "${savedAptMark}"; \
+    [ -z "${savedAptMark}" ] || apt-mark manual $savedAptMark; \
     find /usr/local -type f -executable -exec ldd '{}' ';' \
     | awk '/=>/ { so = $(NF-1); if (index(so, "/usr/local/") == 1) { next }; gsub("^/(usr/)?", "", so); print so }' \
     | sort -u \
@@ -57,6 +58,11 @@ RUN set -eux; \
 
 # set up Apache2
 RUN set -eux; \
+    # replace listening ports from 80 to 8080
+    sed -i -E 's/(\s*Listen\s+)80\s*/\18080/' /etc/apache2/ports.conf; \
+    sed -i -E 's/(\s*<VirtualHost\s+\*:\s*)80\s*>/\18080>/' /etc/apache2/sites-available/000-default.conf; \
+    # replace listening ports from 443 to 8443
+    sed -i -E 's/(\s*Listen\s+)443\s*/\18443/g' /etc/apache2/ports.conf; \
     # enable Apache2 modules
     a2enmod rewrite expires include deflate remoteip headers ssl socache_shmcb; \
     { \

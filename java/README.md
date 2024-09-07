@@ -2,48 +2,18 @@
 
 ## 環境需求
 
-- [Docker Engine](https://docs.docker.com/install/)
-- [Docker Compose V2](https://docs.docker.com/compose/cli-command/)
+- [Podman](https://podman.io/)
+- [Podman Compose](https://github.com/containers/podman-compose)
 
-## 使用方式
-
-> `docker compose` 指令必須要在 `compose.yml` 所在的目錄下執行
->
-> 可透過建立 `compose.override.yml` 來擴展 `compose.yml` 組態
->
-> 還可以利用 [COMPOSE_FILE](https://docs.docker.com/compose/reference/envvars/#compose_file) 環境變數指定多個組態來擴展服務配置
+## Getting Started
 
 ```sh
-# 啟動並執行完整應用(若配置有異動會自動重建容器)
-docker compose up
-
 # 在背景啟動並執行完整應用
-docker compose up -d
+podman-compose up -d
 
-# 在背景啟動應用時指定服務的執行個數數量
-docker compose up -d --scale java=2
-
-# 在背景啟動並執行指定服務
-docker compose up -d java
-
-# 顯示記錄
-docker compose logs
-
-# 持續顯示記錄
-docker compose logs -f
-
-# 關閉應用
-docker compose down
-
-# 顯示所有啟動中的容器
-docker ps
+# 開啟網站
+npx open-cli http://localhost:8080
 ```
-
-## 連線埠配置
-
-啟動環境後預設會開始監聽本機的以下連線埠
-
-- 8080: HTTP
 
 ## [啟用 HTTPS 連線](https://docs.spring.io/spring-boot/docs/current/reference/html/howto.html#howto.webserver.configure-ssl)
 
@@ -56,11 +26,14 @@ docker ps
 mkcert -install
 
 # 產生 TLS 憑證
-mkdir -p ../.secrets
-mkcert -cert-file ../.secrets/cert.pem -key-file ../.secrets/key.pem '*.dev.local'
+mkcert -cert-file ./cert.pem -key-file ./key.pem '*.dev.local' localhost
+
+# 產生 Podman secrets
+podman secret exists dev.local.key || podman secret create dev.local.key ./key.pem
+podman secret exists dev.local.crt || podman secret create dev.local.crt ./cert.pem
 
 # 啟用 TLS 加密連線
-COMPOSE_FILE=compose.yml:compose.tls.yml docker compose up -d
+COMPOSE_FILE=compose.yml:compose.tls.yml podman-compose up -d
 
 # 確認已正確啟用
 curl -v 'https://www.dev.local:8443'
@@ -69,35 +42,19 @@ curl -v 'https://www.dev.local:8443'
 ## 利用容器執行指令
 
 ```sh
-# 預設執行身分為 root
-$ docker compose run --rm java whoami
-root
-
-# 指定執行身分為 www-data
-$ docker compose run --rm --user www-data java whoami
+# 預設執行身分為 www-data
+$ podman-compose run --rm java whoami
 www-data
 
-# 執行 Bash Shell
-$ docker compose run --rm java bash
+# 指定執行身分為 root
+$ podman-compose run --rm --user root java whoami
+root
+
+# 進入 Shell 互動環境
+$ podman-compose run --rm java bash
 ```
 
-## [自訂和調整](https://learn.microsoft.com/azure/app-service/configure-language-java?pivots=platform-linux#customization-and-tuning)
-
-### 啟動腳本
-
-在本機開發時可以透過 [command](https://docs.docker.com/compose/compose-file/#command) 屬性設定啟動命令
-
-而在 Azure App Service 則可以在組態頁面的一般設定中設定啟動命令
-
-### [設定 Java 執行階段選項](https://learn.microsoft.com/azure/app-service/configure-language-java?pivots=platform-linux#set-java-runtime-options)
-
-如需設定 Java 執行階段選項, 可透過配置 `JAVA_OPTS` 環境變數達成，例如
-
-```sh
-JAVA_OPTS=-server -Xmx4g
-```
-
-### [Spring Boot 應用程式組態檔配置](https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.external-config)
+## [Spring Boot 應用程式組態檔配置](https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.external-config)
 
 如需自訂 Spring Boot 應用程式組態檔位置
 
@@ -145,26 +102,4 @@ server.forward-headers-strategy=NATIVE
 
 ```ini:application.properties
 server.tomcat.remoteip.trusted-proxies=198\\.19\\.\\d{1,3}\\.\\d{1,3}|35\\.191\\.\\d{1,3}\\.\\d{1,3}
-```
-
-### 以非 root 身分執行應用程式
-
-可利用先前提到的自訂啟動腳本，在容器內透過 [gosu](https://github.com/tianon/gosu) 或 [su-exec](https://github.com/ncopa/su-exec) 等工具以非 root 身分執行應用程式
-
-```sh
-# for Debian/Ubuntu
-apt-get update -qq && apt-get install --no-install-recommends -yqq gosu
-gosu www-data java -noverify -Djava.security.egd=file:/dev/./urandom $JAVA_OPTS -jar $JAR_FILE
-
-# for Alpine
-apk update && apk add su-exec
-su-exec nobody java -noverify -Djava.security.egd=file:/dev/./urandom $JAVA_OPTS -jar $JAR_FILE
-```
-
-某些內嵌 Tomcat 應用程式可能會[指定不同的工作目錄](https://github.com/apereo/cas/blob/6.6.x/webapp/cas-server-webapp-resources/src/main/resources/application.properties#L28)
-當由 root 身分轉換至非 root 身分時，需一併自動建立這些目錄及設定好權限，否則可能會造成應用程式啟動失敗 (Unable to create the directory [/build/tomcat] to use as the base directory)
-
-```sh
-# ensure embedded tomcat working directory exists and fixes permission
-mkdir -p /build/tomcat && chown -R www-data:www-data /build/tomcat
 ```

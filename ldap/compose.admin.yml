@@ -1,7 +1,7 @@
 services:
   ldap-admin:
     # https://github.com/osixia/docker-phpLDAPadmin
-    image: osixia/phpldapadmin
+    image: docker.io/osixia/phpldapadmin
     environment:
       PHPLDAPADMIN_LDAP_HOSTS: ldap
       PHPLDAPADMIN_HTTPS: false

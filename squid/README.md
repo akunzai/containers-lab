@@ -1,20 +1,20 @@
 # [Squid](http://www.squid-cache.org/) 快取代理伺服器
 
-可用來快取、監控或限制 Docker 容器的對外連線
+可用來快取、監控或限制容器的對外連線
 
 ## 環境需求
 
-- [Docker Engine](https://docs.docker.com/install/)
-- [Docker Compose V2](https://docs.docker.com/compose/cli-command/)
+- [Podman](https://podman.io/)
+- [Podman Compose](https://github.com/containers/podman-compose)
 
 ## 使用方式
 
 ```sh
 # 在背景啟動並執行 squid 容器
-docker compose up -d squid
+podman-compose up -d squid
 
 # 持續監看運行中 squid 容器的存取記錄
-docker compose exec squid tail -f /var/log/squid/access.log
+podman-compose exec squid tail -f /var/log/squid/access.log
 ```
 
 ## [使用 squid 容器代理對外連線](https://docs.docker.com/network/proxy/)
@@ -22,7 +22,7 @@ docker compose exec squid tail -f /var/log/squid/access.log
 請參見 `compose.yml` 中的範例
 
 ```sh
-docker compose run curl -vI http://example.com
+podman-compose run curl -vI http://example.com
 ```
 
 ## [調整 squid 容器組態配置](http://www.squid-cache.org/Doc/config/)

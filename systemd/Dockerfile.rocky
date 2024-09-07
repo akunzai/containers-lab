@@ -1,6 +1,6 @@
 # https://hub.docker.com/_/rockylinux
 ARG ROCKY_VERSION=8
-FROM rockylinux:$ROCKY_VERSION
+FROM docker.io/library/rockylinux:$ROCKY_VERSION
 
 ENV container docker
 

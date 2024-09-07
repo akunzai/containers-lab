@@ -1,17 +1,17 @@
 services:
   keycloak:
     environment:
-      KC_HTTPS_PORT: "443"
-      KC_HTTPS_CERTIFICATE_KEY_FILE: /run/secrets/key.pem
-      KC_HTTPS_CERTIFICATE_FILE: /run/secrets/cert.pem
+      KC_HTTPS_PORT: "8443"
+      KC_HTTPS_CERTIFICATE_KEY_FILE: /run/secrets/dev.local.key
+      KC_HTTPS_CERTIFICATE_FILE: /run/secrets/dev.local.key
     ports:
-      - 127.0.0.1:443:443
+      - 127.0.0.1:8443:8443
     secrets:
-      - cert.pem
-      - key.pem
+      - dev.local.key
+      - dev.local.key
 
 secrets:
-  cert.pem:
-    file: ../.secrets/cert.pem
-  key.pem:
-    file: ../.secrets/key.pem
+  dev.local.crt:
+    external: true
+  dev.local.key:
+    external: true

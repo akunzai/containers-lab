@@ -1,7 +1,7 @@
 services:
   rabbitmq:
     # https://hub.docker.com/_/rabbitmq
-    image: rabbitmq:management
+    image: docker.io/library/rabbitmq:management
     user: rabbitmq
     restart: unless-stopped
     volumes:

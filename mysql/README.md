@@ -2,12 +2,12 @@
 
 ## 環境需求
 
-- [Docker Engine](https://docs.docker.com/install/)
-- [Docker Compose V2](https://docs.docker.com/compose/cli-command/)
+- [Podman](https://podman.io/)
+- [Podman Compose](https://github.com/containers/podman-compose)
 
 ## 使用方式
 
-> `docker compose` 指令必須要在 `compose.yml` 所在的目錄下執行
+> `podman-compose` 指令必須要在 `compose.yml` 所在的目錄下執行
 >
 > 可透過建立 `compose.override.yml` 來擴展 `compose.yml` 組態
 >
@@ -15,25 +15,22 @@
 
 ```sh
 # 啟動並執行完整應用
-docker compose up
+podman-compose up
 
 # 在背景啟動並執行完整應用
-docker compose up -d
+podman-compose up -d
 
 # 顯示記錄
-docker compose logs
+podman-compose logs
 
 # 持續顯示記錄
-docker compose logs -f
+podman-compose logs -f
 
 # 關閉應用
-docker compose down
-
-# 顯示所有啟動中的容器
-docker ps
+podman-compose down
 
 # 如果需要使用網頁介面管理資料庫的話
-COMPOSE_FILE=compose.yml:compose.dbgate.yml docker compose up -d
+COMPOSE_FILE=compose.yml:compose.dbgate.yml podman-compose up -d
 ```
 
 ## 連線埠配置
@@ -53,23 +50,26 @@ COMPOSE_FILE=compose.yml:compose.dbgate.yml docker compose up -d
 mkcert -install
 
 # 產生 TLS 憑證
-mkdir -p ../.secrets
-mkcert -cert-file ../.secrets/cert.pem -key-file ../.secrets/key.pem '*.dev.local'
+mkcert -cert-file ./cert.pem -key-file ./key.pem '*.dev.local' localhost
+
+# 產生 Podman secrets
+podman secret exists dev.local.key || podman secret create dev.local.key ./key.pem
+podman secret exists dev.local.crt || podman secret create dev.local.crt ./cert.pem
 ```
 
 > 如果 `mysql` 伺服器支援加密連線的話，用戶端預設會嘗試使用
 
 ```sh
 # 啟用 TLS 加密連線
-COMPOSE_FILE=compose.yml:compose.tls.yml docker compose up -d
+COMPOSE_FILE=compose.yml:compose.tls.yml podman-compose up -d
 
 # 確認已正確啟用
-docker compose exec mysql mysql -p -e 'SHOW VARIABLES LIKE "%ssl%";'
+podman-compose exec mysql mysql -p -e 'SHOW VARIABLES LIKE "%ssl%";'
 
 # 如果要使用者必須使用加密連線登入的話
-docker compose exec mysql mysql -p -e 'ALTER USER "alice"@"%" REQUIRE SSL;'
+podman-compose exec mysql mysql -p -e 'ALTER USER "alice"@"%" REQUIRE SSL;'
 # 也可以反過來取消加密連線的登入限制
-docker compose exec mysql mysql -p -e 'ALTER USER "alice"@"localhost" REQUIRE NONE;'
+podman-compose exec mysql mysql -p -e 'ALTER USER "alice"@"localhost" REQUIRE NONE;'
 
 # 測試用戶端加密連線
 mysql -h db.dev.local -u root -p -e 'SHOW STATUS LIKE "ssl_version";'
@@ -87,7 +87,7 @@ mysql -h db.dev.local -u root -p -e 'SHOW STATUS LIKE "ssl_version";'
 
 ```sh
 # 進入容器的 Bash Shell
-docker compose exec mysql bash
+podman-compose exec mysql bash
 
 # 直接重設 root 帳號密碼
 mysqladmin -u root password 'secret'
@@ -112,7 +112,7 @@ mysql -e "ALTER USER root@'%' IDENTIFIED BY 'secret'; FLUSH PRIVILEGES;"
 
 ```sh
 # 進入容器的 Bash Shell
-docker compose exec mysql bash
+podman-compose exec mysql bash
 
 # 完整備份指定資料庫
 mysqldump --single-transaction --add-drop-database --insert-ignore --databases sample | gzip > backup.sql.gz

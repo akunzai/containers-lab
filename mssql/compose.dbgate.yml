@@ -1,5 +1,5 @@
 services:
   dbgate:
-    image: dbgate/dbgate
+    image: docker.io/dbgate/dbgate
     ports:
       - 127.0.0.1:3000:3000

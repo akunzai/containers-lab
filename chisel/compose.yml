@@ -1,13 +1,15 @@
 services:
   chisel-server:
     # https://hub.docker.com/r/jpillora/chisel
-    image: jpillora/chisel
+    image: docker.io/jpillora/chisel
     restart: unless-stopped
     command: server --reverse
     ports:
       - 127.0.0.1:8080:8080
   chisel-client:
-    image: jpillora/chisel
+    image: docker.io/jpillora/chisel
   whoami:
     # https://hub.docker.com/r/traefik/whoami/
-    image: traefik/whoami
+    image: docker.io/traefik/whoami
+    init: true
+    command: --port 2001

@@ -2,12 +2,12 @@
 
 ## 環境需求
 
-- [Docker Engine](https://docs.docker.com/install/)
-- [Docker Compose V2](https://docs.docker.com/compose/cli-command/)
+- [Podman](https://podman.io/)
+- [Podman Compose](https://github.com/containers/podman-compose)
 
 ## 使用方式
 
-> `docker compose` 指令必須要在 `compose.yml` 所在的目錄下執行
+> `podman-compose` 指令必須要在 `compose.yml` 所在的目錄下執行
 >
 > 可透過建立 `compose.override.yml` 來擴展 `compose.yml` 組態
 >
@@ -15,22 +15,19 @@
 
 ```sh
 # 啟動並執行完整應用
-docker compose up
+podman-compose up
 
 # 在背景啟動並執行完整應用
-docker compose up -d
+podman-compose up -d
 
 # 顯示記錄
-docker compose logs
+podman-compose logs
 
 # 持續顯示記錄
-docker compose logs -f
+podman-compose logs -f
 
 # 關閉應用
-docker compose down
-
-# 顯示所有啟動中的容器
-docker ps
+podman-compose down
 ```
 
 ## 連線埠配置
