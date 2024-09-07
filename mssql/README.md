@@ -2,12 +2,12 @@
 
 ## 環境需求
 
-- [Docker Engine](https://docs.docker.com/install/)
-- [Docker Compose V2](https://docs.docker.com/compose/cli-command/)
+- [Podman](https://podman.io/)
+- [Podman Compose](https://github.com/containers/podman-compose)
 
 ## 使用方式
 
-> `docker compose` 指令必須要在 `compose.yml` 所在的目錄下執行
+> `podman-compose` 指令必須要在 `compose.yml` 所在的目錄下執行
 >
 > 可透過建立 `compose.override.yml` 來擴展 `compose.yml` 組態
 >
@@ -15,25 +15,22 @@
 
 ```sh
 # 啟動並執行完整應用
-docker compose up
+podman-compose up
 
 # 在背景啟動並執行完整應用
-docker compose up -d
+podman-compose up -d
 
 # 顯示記錄
-docker compose logs
+podman-compose logs
 
 # 持續顯示記錄
-docker compose logs -f
+podman-compose logs -f
 
 # 關閉應用
-docker compose down
-
-# 顯示所有啟動中的容器
-docker ps
+podman-compose down
 
 # 如果需要使用網頁介面管理資料庫的話
-COMPOSE_FILE=compose.yml:compose.dbgate.yml docker compose up -d
+COMPOSE_FILE=compose.yml:compose.dbgate.yml podman-compose up -d
 ```
 
 ## 連線埠配置
@@ -53,18 +50,21 @@ COMPOSE_FILE=compose.yml:compose.dbgate.yml docker compose up -d
 mkcert -install
 
 # 產生 TLS 憑證
-mkdir -p ../.secrets
-mkcert -cert-file ../.secrets/cert.pem -key-file ../.secrets/key.pem '*.dev.local'
+mkcert -cert-file ./cert.pem -key-file ./key.pem '*.dev.local' localhost
+
+# 產生 Podman secrets
+podman secret exists dev.local.key || podman secret create dev.local.key ./key.pem
+podman secret exists dev.local.crt || podman secret create dev.local.crt ./cert.pem
 ```
 
 > 如果是使用自簽憑證的話，用戶端可以加上 `TrustServerCertificate=true` 配置以信任該憑證
 
 ```sh
 # 啟用 TLS 加密連線
-COMPOSE_FILE=compose.yml:compose.tls.yml docker compose up -d
+COMPOSE_FILE=compose.yml:compose.tls.yml podman-compose up -d
 
 # 確認已正確啟用
-docker compose exec mssql bash -c '/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P $MSSQL_SA_PASSWORD -N -C -Q "SELECT encrypt_option FROM sys.dm_exec_connections WHERE session_id = @@SPID"'
+podman-compose exec mssql bash -c '/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P $MSSQL_SA_PASSWORD -N -C -Q "SELECT encrypt_option FROM sys.dm_exec_connections WHERE session_id = @@SPID"'
 ```
 
 ## 重設資料庫 sa 帳號密碼
@@ -73,7 +73,7 @@ docker compose exec mssql bash -c '/opt/mssql-tools/bin/sqlcmd -S localhost -U S
 
 ```sh
 # 進入容器的 Bash Shell
-docker compose run --entrypoint=bash mssql
+podman-compose run --entrypoint=bash mssql
 
 # 透過環境變數設定新密碼
 export MSSQL_SA_PASSWORD="P@ssw0rd"
@@ -90,7 +90,7 @@ export MSSQL_SA_PASSWORD="P@ssw0rd"
 
 ```sh
 # 進入容器的 Bash Shell
-docker compose exec mssql bash
+podman-compose exec mssql bash
 
 export DBNAME=test
 export USERNAME=test

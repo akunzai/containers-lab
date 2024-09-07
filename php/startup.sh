@@ -30,9 +30,9 @@ if [[ -n "${CRON}" ]] && [[ "${CRON}" -eq "1" ]]; then
 		service cron start
 	fi
 	cron_sh="${APACHE_DOCUMENT_ROOT}/cron.sh"
-	# only ROOT can write to docker logs
-	# /proc/1/fd/1: STDOUT for Docker
-	# /proc/1/fd/2: STDERR for Docker
+	# only ROOT can write to container logs
+	# /proc/1/fd/1: STDOUT for container
+	# /proc/1/fd/2: STDERR for container
 	if [[ -e "${cron_sh}" ]]; then
 		echo "*/5 * * * * (/usr/sbin/gosu www-data /bin/bash ${cron_sh})>/proc/1/fd/1 2>/proc/1/fd/2" | crontab
 	fi

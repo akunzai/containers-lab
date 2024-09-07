@@ -2,18 +2,18 @@
 
 ## 環境需求
 
-- [Docker Engine](https://docs.docker.com/install/)
-- [Docker Compose V2](https://docs.docker.com/compose/cli-command/)
+- [Podman](https://podman.io/)
+- [Podman Compose](https://github.com/containers/podman-compose)
 
 ## Getting Started
 
 ```sh
 # 下載所需的容器映像檔
-docker compose pull
+podman-compose pull
 
 # 在背景啟動並執行完整應用
-docker compose up -d
+podman-compose up -d
 
 # 開啟管理介面, 預設的帳號與密碼皆為 admin
-open http://localhost:9392
+npx open-cli http://localhost:9392
 ```

@@ -1,7 +1,7 @@
 services:
   ldap:
     # https://github.com/osixia/docker-openldap
-    image: osixia/openldap
+    image: docker.io/osixia/openldap
     restart: unless-stopped
     hostname: ldap
     environment:
@@ -22,7 +22,7 @@ services:
       - 127.0.0.1:10389:389
   ldap-cli:
     # https://github.com/osixia/docker-openldap
-    image: osixia/openldap
+    image: docker.io/osixia/openldap
     volumes:
       - ldap_conf:/etc/ldap/slapd.d
       - ldap_data:/var/lib/ldap
@@ -30,7 +30,7 @@ services:
     entrypoint: /container/tool/run --loglevel warning --skip-env-files --skip-startup-files --skip-process-files --
   ldap2:
     # https://github.com/osixia/docker-openldap
-    image: osixia/openldap
+    image: docker.io/osixia/openldap
     restart: unless-stopped
     hostname: ldap2
     environment:
@@ -51,7 +51,7 @@ services:
       - 127.0.0.1:20389:389
   ldap2-cli:
     # https://github.com/osixia/docker-openldap
-    image: osixia/openldap
+    image: docker.io/osixia/openldap
     volumes:
       - ldap2-conf:/etc/ldap/slapd.d
       - ldap2-data:/var/lib/ldap

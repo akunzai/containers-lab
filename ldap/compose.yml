@@ -1,7 +1,7 @@
 services:
   ldap:
     # https://github.com/osixia/docker-openldap
-    image: osixia/openldap
+    image: docker.io/osixia/openldap
     restart: unless-stopped
     # https://github.com/osixia/docker-openldap/tree/master/image/environment
     environment:
@@ -17,7 +17,7 @@ services:
       - 127.0.0.1:10389:389
   ldap-cli:
     # https://github.com/osixia/docker-openldap
-    image: osixia/openldap
+    image: docker.io/osixia/openldap
     volumes:
       - ldap_conf:/etc/ldap/slapd.d
       - ldap_data:/var/lib/ldap

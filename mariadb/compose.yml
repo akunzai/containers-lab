@@ -1,7 +1,7 @@
 services:
   mariadb:
     # https://hub.docker.com/_/mariadb
-    image: mariadb
+    image: docker.io/library/mariadb
     user: mysql
     restart: unless-stopped
     environment:

@@ -2,20 +2,20 @@
 
 ## 環境需求
 
-- [Docker Engine](https://docs.docker.com/install/)
-- [Docker Compose V2](https://docs.docker.com/compose/cli-command/)
+- [Podman](https://podman.io/)
+- [Podman Compose](https://github.com/containers/podman-compose)
 
 ## Getting Started
 
 ```sh
 # 下載所需的容器映像檔
-docker compose pull
+podman-compose pull
 
 # 在背景啟動並執行完整應用
-docker compose up -d
+podman-compose up -d
 
 # 開啟管理介面, 預設的帳號與密碼皆為 guest
-open http://localhost:15672
+npx open-cli http://localhost:15672
 ```
 
 ## [啟用 TLS 加密連線](https://www.rabbitmq.com/docs/ssl)
@@ -31,16 +31,19 @@ open http://localhost:15672
 mkcert -install
 
 # 產生 TLS 憑證
-mkdir -p ../.secrets
-mkcert -cert-file ../.secrets/cert.pem -key-file ../.secrets/key.pem '*.dev.local'
+mkcert -cert-file ./cert.pem -key-file ./key.pem '*.dev.local' localhost
+
+# 產生 Podman secrets
+podman secret exists dev.local.key || podman secret create dev.local.key ./key.pem
+podman secret exists dev.local.crt || podman secret create dev.local.crt ./cert.pem
 ```
 
 ```sh
 # 啟用 TLS 加密連線
-COMPOSE_FILE=compose.yml:compose.tls.yml docker compose up -d
+COMPOSE_FILE=compose.yml:compose.tls.yml podman-compose up -d
 
 # 確認已正確啟用
-COMPOSE_FILE=compose.yml:compose.tls.yml docker compose exec rabbitmq rabbitmq-diagnostics listeners
+COMPOSE_FILE=compose.yml:compose.tls.yml podman-compose exec rabbitmq rabbitmq-diagnostics listeners
 ```
 
 ## [管理工具](https://www.rabbitmq.com/docs/cli)
@@ -51,7 +54,7 @@ COMPOSE_FILE=compose.yml:compose.tls.yml docker compose exec rabbitmq rabbitmq-d
 
 ```sh
 # 進入容器的 Bash Shell
-docker compose exec rabbitmq bash
+podman-compose exec rabbitmq bash
 
 # 顯示服務狀態
 rabbitmqctl status

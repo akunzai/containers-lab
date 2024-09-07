@@ -1,9 +1,10 @@
 services:
   mysql:
     # https://hub.docker.com/_/mysql
-    image: mysql
+    image: docker.io/library/mysql
     user: mysql
     restart: unless-stopped
+    init: true
     environment:
       # 指定初始化資料庫建立的 root 密碼
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_root.pwd
@@ -14,7 +15,7 @@ services:
       # 如果需要初始化資料庫的話
       # - ./initdb:/docker-entrypoint-initdb.d
     ports:
-      - 127.0.0.1:3306:3306
+      - "127.0.0.1:3306:3306"
     secrets:
       - mysql_root.pwd
 

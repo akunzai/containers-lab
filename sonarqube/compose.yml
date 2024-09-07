@@ -1,6 +1,6 @@
 services:
   sonarqube:
-    image: sonarqube:community
+    image: docker.io/library/sonarqube:community
     hostname: sonarqube
     container_name: sonarqube
     depends_on:
@@ -16,7 +16,7 @@ services:
     ports:
       - "9000:9000"
   db:
-    image: postgres:13
+    image: docker.io/library/postgres:13
     user: postgres
     hostname: postgresql
     container_name: postgresql

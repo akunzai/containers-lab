@@ -2,15 +2,15 @@ services:
   squid:
     build: .
     image: squid:debian
-    init: true
     restart: unless-stopped
+    init: true
     volumes:
       - squid_data:/var/spool/squid
       - ./etc/squid.conf:/etc/squid/conf.d/docker.conf:ro
       # 如果要保留存取記錄的話
       # - ./log:/var/log/squid
   curl:
-    image: curlimages/curl
+    image: docker.io/library/curlimages/curl
     environment:
       http_proxy: http://squid:3128
       https_proxy: http://squid:3128

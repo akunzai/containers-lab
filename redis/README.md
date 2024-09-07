@@ -2,12 +2,12 @@
 
 ## 環境需求
 
-- [Docker Engine](https://docs.docker.com/install/)
-- [Docker Compose V2](https://docs.docker.com/compose/cli-command/)
+- [Podman](https://podman.io/)
+- [Podman Compose](https://github.com/containers/podman-compose)
 
 ## 使用方式
 
-> `docker compose` 指令必須要在 `compose.yml` 所在的目錄下執行
+> `podman-compose` 指令必須要在 `compose.yml` 所在的目錄下執行
 >
 > 可透過建立 `compose.override.yml` 來擴展 `compose.yml` 組態
 >
@@ -15,22 +15,19 @@
 
 ```sh
 # 啟動並執行完整應用
-docker compose up
+podman-compose up
 
 # 在背景啟動並執行完整應用
-docker compose up -d
+podman-compose up -d
 
 # 顯示記錄
-docker compose logs
+podman-compose logs
 
 # 持續顯示記錄
-docker compose logs -f
+podman-compose logs -f
 
 # 關閉應用
-docker compose down
-
-# 顯示所有啟動中的容器
-docker ps
+podman-compose down
 ```
 
 ## 連線埠配置
@@ -43,13 +40,13 @@ docker ps
 
 ```sh
 # 啟動另一個配置好的 redis2 容器以複寫原有容器的資料庫
-docker compose up -d redis2
+podman-compose up -d redis2
 
 # 複寫 redis 容器的資料庫
-docker compose exec redis2 redis-cli replicaof redis 6379
+podman-compose exec redis2 redis-cli replicaof redis 6379
 
 # 等複寫完成後取消資料庫複寫
-docker compose exec redis2 redis-cli replicaof no one
+podman-compose exec redis2 redis-cli replicaof no one
 
 # 最後再將 redis2 更名為 redis 即可
 ```
@@ -67,20 +64,19 @@ docker compose exec redis2 redis-cli replicaof no one
 mkcert -install
 
 # 產生 TLS 憑證
-mkdir -p ../.secrets
-mkcert -cert-file ../.secrets/cert.pem -key-file ../.secrets/key.pem '*.dev.local'
+mkcert -cert-file ./cert.pem -key-file ./key.pem '*.dev.local' localhost
 
-# redis 需要額外指定簽發根憑證
-cp -v "$(mkcert -CAROOT)/rootCA.pem" ../.secrets/ca.pem
-```
+# 產生 Podman secrets
+podman secret exists dev.local.key || podman secret create dev.local.key ./key.pem
+podman secret exists dev.local.crt || podman secret create dev.local.crt ./cert.pem
+podman secret exists dev.CA.crt || podman secret create dev.CA.crt
 
-```sh
 # 啟用 TLS 加密連線
-COMPOSE_FILE=compose.yml:compose.tls.yml docker compose up -d
+COMPOSE_FILE=compose.yml:compose.tls.yml podman-compose up -d
 
 # 確認已正確啟用
-COMPOSE_FILE=compose.yml:compose.tls.yml docker compose exec redis redis-cli -p 6380 --tls \
-    --cert /run/secrets/cert.pem \
-    --key /run/secrets/key.pem \
-    --cacert /run/secrets/ca.pem info
+COMPOSE_FILE=compose.yml:compose.tls.yml podman-compose exec redis redis-cli -p 6380 --tls \
+    --cert /run/secrets/dev.local.crt \
+    --key /run/secrets/dev.local.key \
+    --cacert /run/secrets/dev.CA.crt info
 ```

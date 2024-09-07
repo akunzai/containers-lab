@@ -4,6 +4,7 @@ services:
     build: .
     image: mssql
     restart: unless-stopped
+    init: true
     environment:
       # https://learn.microsoft.com/sql/linux/sql-server-linux-configure-environment-variables
       ACCEPT_EULA: "Y"
@@ -17,7 +18,6 @@ services:
       # - ./mssql.conf:/var/opt/mssql/mssql.conf:ro
     ports:
       - 127.0.0.1:1433:1433
-    init: true
     secrets:
       - mssql_root.pwd
       - mssql_user.pwd

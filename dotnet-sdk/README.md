@@ -2,56 +2,56 @@
 
 ## 環境需求
 
-- [Docker Engine](https://docs.docker.com/install/)
-- [Docker Compose V2](https://docs.docker.com/compose/cli-command/)
+- [Podman](https://podman.io/)
+- [Podman Compose](https://github.com/containers/podman-compose)
 
 ## 建置容器映像
 
 ```sh
 # 建置所有的容器映像
-docker compose build
+podman-compose build
 
 # 建置指定服務的映像檔
-docker compose build mono
+podman-compose build mono
 
 # 建置指定系統架構的映像檔
-DOCKER_DEFAULT_PLATFORM=linux/amd64 docker compose build
+podman-compose build --platform=linux/amd64
 ```
 
 ## 利用容器執行指令
 
 ```sh
 # 執行 dotnet CLI
-$ docker compose run -it --rm mono dotnet --info
+$ podman-compose run --rm mono dotnet --info
 .NET SDK:
- Version:           8.0.100
- Commit:            57efcf1350
- Workload version:  8.0.100-manifests.6c33ef20
+ Version:           8.0.303
+ Commit:            29ab8e3268
+ Workload version:  8.0.300-manifests.c915c39d
+ MSBuild version:   17.10.4+10fbfbf2e
 
 Runtime Environment:
  OS Name:     debian
  OS Version:  12
  OS Platform: Linux
  RID:         linux-arm64
- Base Path:   /usr/share/dotnet/sdk/8.0.100/
+ Base Path:   /usr/share/dotnet/sdk/8.0.303/
 
 .NET workloads installed:
- Workload version: 8.0.100-manifests.6c33ef20
 There are no installed workloads to display.
 
 Host:
-  Version:      8.0.0
+  Version:      8.0.7
   Architecture: arm64
-  Commit:       5535e31a71
+  Commit:       2aade6beb0
 
 .NET SDKs installed:
-  8.0.100 [/usr/share/dotnet/sdk]
+  8.0.303 [/usr/share/dotnet/sdk]
 
 .NET runtimes installed:
-  Microsoft.AspNetCore.App 6.0.25 [/usr/share/dotnet/shared/Microsoft.AspNetCore.App]
-  Microsoft.AspNetCore.App 8.0.0 [/usr/share/dotnet/shared/Microsoft.AspNetCore.App]
-  Microsoft.NETCore.App 6.0.25 [/usr/share/dotnet/shared/Microsoft.NETCore.App]
-  Microsoft.NETCore.App 8.0.0 [/usr/share/dotnet/shared/Microsoft.NETCore.App]
+  Microsoft.AspNetCore.App 6.0.32 [/usr/share/dotnet/shared/Microsoft.AspNetCore.App]
+  Microsoft.AspNetCore.App 8.0.7 [/usr/share/dotnet/shared/Microsoft.AspNetCore.App]
+  Microsoft.NETCore.App 6.0.32 [/usr/share/dotnet/shared/Microsoft.NETCore.App]
+  Microsoft.NETCore.App 8.0.7 [/usr/share/dotnet/shared/Microsoft.NETCore.App]
 
 Other architectures found:
   None
@@ -69,23 +69,19 @@ Download .NET:
   https://aka.ms/dotnet/download
 
 # 執行 msbuild
-$ docker compose run --rm mono msbuild -version
+$ podman-compose run --rm mono msbuild -version
 Microsoft (R) Build Engine version 16.10.1 for Mono
 Copyright (C) Microsoft Corporation. All rights reserved.
 
 16.10.1.31701
 
 # 執行 node
-$ docker compose run --rm node node --version
-v20.9.0
+$ podman-compose run --rm node node --version
+v20.17.0
 
 # 執行 npm
-$ docker compose run --rm node npm --version
-10.1.0
-
-# 執行 yarn
-$ docker compose run --rm node yarn --version
-4.0.2
+$ podman-compose run --rm node npm --version
+10.8.2
 ```
 
 ## 疑難排解
@@ -109,7 +105,7 @@ $ docker compose run --rm node yarn --version
 可透過安裝 [Microsoft.TestPlatform.ObjectModel](https://www.nuget.org/packages/Microsoft.TestPlatform.ObjectModel/) 套件來達成
 
 ```xml
-<PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="17.4.0" Condition="$(TargetFramework.StartsWith('net4')) AND '$(OS)' != 'Windows_NT'" />
+<PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="17.11.1" Condition="$(TargetFramework.StartsWith('net4')) AND '$(OS)' != 'Windows_NT'" />
 ```
 
 ## 參考資料

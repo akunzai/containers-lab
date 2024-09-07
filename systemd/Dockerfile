@@ -1,6 +1,6 @@
 # https://github.com/j8r/dockerfiles/tree/master/systemd/debian
 ARG DEBIAN_VERSION=11
-FROM debian:$DEBIAN_VERSION
+FROM docker.io/library/debian:$DEBIAN_VERSION
 
 ENV container docker
 ENV DEBIAN_FRONTEND noninteractive

@@ -4,15 +4,15 @@ services:
       - ttyd
       - -W
       - --ssl
-      - --ssl-cert=/run/secrets/cert.pem
-      - --ssl-key=/run/secrets/key.pem
+      - --ssl-cert=/run/secrets/dev.local.crt
+      - --ssl-key=/run/secrets/dev.local.key
       - bash
     secrets:
-      - cert.pem
-      - key.pem
+      - dev.local.crt
+      - dev.local.key
 
 secrets:
-  cert.pem:
-    file: ../.secrets/cert.pem
-  key.pem:
-    file: ../.secrets/key.pem
+  dev.local.crt:
+    external: true
+  dev.local.key:
+    external: true
