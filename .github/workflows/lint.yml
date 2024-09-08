@@ -1,6 +1,6 @@
 name: Lint
 
-on: # yamllint disable-line rule:truthy
+on:
   push:
     branches:
       - main
@@ -8,33 +8,18 @@ on: # yamllint disable-line rule:truthy
     branches:
       - main
 
-permissions: {}
-
 jobs:
   build:
     name: Lint
     runs-on: ubuntu-latest
-
-    permissions:
-      contents: read
-      packages: read
-      # To report GitHub Actions status checks
-      statuses: write
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Lint Markdown
+        uses: DavidAnson/markdownlint-cli2-action@v16
         with:
-          # super-linter needs the full git history to get the
-          # list of files that changed across commits
-          fetch-depth: 0
-
-      - name: Super-linter
-        uses: super-linter/super-linter/slim@v7
-        env:
-          # To report GitHub Actions status checks
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VALIDATE_CHECKOV: false
-          VALIDATE_GOOGLE_JAVA_FORMAT: false
-          VALIDATE_JAVA: false
-          VALIDATE_JSCPD: false
+          globs: '**/*.md'
+      - name: Lint Dockerfile
+        uses: reviewdog/action-hadolint@v1
+      - name: Lint shell script
+        uses: reviewdog/action-shellcheck@v1

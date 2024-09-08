@@ -1,6 +1,6 @@
 # Containers Lab
 
-[![Super-Linter](https://github.com/akunzai/containers-lab/actions/workflows/lint.yml/badge.svg)](https://github.com/akunzai/containers-lab/actions/workflows/lint.yml)
+[![Lint](https://github.com/akunzai/containers-lab/actions/workflows/lint.yml/badge.svg)](https://github.com/akunzai/containers-lab/actions/workflows/lint.yml)
 
 收集及整理不同的容器開發及應用情境
 
