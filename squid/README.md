@@ -7,7 +7,7 @@
 - [Podman](https://podman.io/)
 - [Podman Compose](https://github.com/containers/podman-compose)
 
-## 使用方式
+## Getting Started
 
 ```sh
 # 在背景啟動並執行 squid 容器

@@ -5,39 +5,19 @@
 - [Podman](https://podman.io/)
 - [Podman Compose](https://github.com/containers/podman-compose)
 
-## 使用方式
-
-> `podman-compose` 指令必須要在 `compose.yml` 所在的目錄下執行
->
-> 可透過建立 `compose.override.yml` 來擴展 `compose.yml` 組態
->
-> 還可以利用 [COMPOSE_FILE](https://docs.docker.com/compose/reference/envvars/#compose_file) 環境變數指定多個組態來擴展服務配置
+## Getting Started
 
 ```sh
-# 啟動並執行完整應用
-podman-compose up
+# 產生 Podman secrets
+podman secret exists mssql_root.pwd || openssl rand -base64 16 | podman secret create mssql_root.pwd -
+podman secret exists mssql_user.pwd || openssl rand -base64 16 | podman secret create mssql_user.pwd -
 
 # 在背景啟動並執行完整應用
 podman-compose up -d
 
-# 顯示記錄
-podman-compose logs
-
-# 持續顯示記錄
-podman-compose logs -f
-
-# 關閉應用
-podman-compose down
-
 # 如果需要使用網頁介面管理資料庫的話
 COMPOSE_FILE=compose.yml:compose.dbgate.yml podman-compose up -d
 ```
-
-## 連線埠配置
-
-啟動環境後預設會開始監聽本機的以下連線埠
-
-- 1433: SQL Server
 
 ## [啟用 TLS 加密連線](https://learn.microsoft.com/sql/linux/sql-server-linux-encrypted-connections)
 

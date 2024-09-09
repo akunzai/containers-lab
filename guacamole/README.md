@@ -21,7 +21,7 @@ podman-compose up -d
 podman-compose run --rm guacamole /opt/guacamole/bin/initdb.sh --mysql > initdb.sql
 
 # > 在 MySQL 容器執行初始化腳本
-cat initdb.sql | podman exec -i $(podman ps -f 'name=guacamole_mysql' -q) sh -c 'mysql -uguacamole -p$(cat /run/secrets/mysql_user.pwd) guacamole'
+cat initdb.sql | podman exec -i $(podman ps -qf 'name=guacamole_mysql') sh -c 'mysql -uguacamole -p$(cat /run/secrets/mysql_user.pwd) guacamole'
 
 # > 清理初始化腳本
 rm initdb.sql

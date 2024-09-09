@@ -5,38 +5,15 @@
 - [Podman](https://podman.io/)
 - [Podman Compose](https://github.com/containers/podman-compose)
 
-## 使用方式
-
-> `podman-compose` 指令必須要在 `compose.yml` 所在的目錄下執行
-
-可透過建立 `compose.override.yml` 來擴展 `compose.yml` 組態
+## Getting Started
 
 ```sh
-# 啟動並執行完整應用
-podman-compose up
-
 # 在背景啟動並執行完整應用
 podman-compose up -d
 
-# 在背景啟動並執行指定服務
-podman-compose up -d ldap
-
-# 顯示記錄
-podman-compose logs
-
-# 持續顯示記錄
-podman-compose logs -f
-
-# 關閉應用
-podman-compose down
+# 如果需要使用網頁管理介面的話
+COMPOSE_FILE=compose.yml:compose.admin.yml podman-compose up -d
 ```
-
-## 連線埠配置
-
-啟動環境後預設會開始監聽本機的以下連線埠
-
-- 10389: LDAP
-- 8080: LDAP 網頁管理介面
 
 ## [預設存取憑證](https://github.com/osixia/docker-openldap#defaultyaml)
 

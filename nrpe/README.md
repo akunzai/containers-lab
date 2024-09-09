@@ -5,29 +5,14 @@
 - [Podman](https://podman.io/)
 - [Podman Compose](https://github.com/containers/podman-compose)
 
-## 使用方式
-
-> `podman-compose` 指令必須要在 `compose.yml` 所在的目錄下執行
->
-> 可透過建立 `compose.override.yml` 來擴展 `compose.yml` 組態
->
-> 還可以利用 [COMPOSE_FILE](https://docs.docker.com/compose/reference/envvars/#compose_file) 環境變數指定多個組態來擴展服務配置
+## Getting Started
 
 ```sh
-# 啟動並執行完整應用
-podman-compose up
-
 # 在背景啟動並執行完整應用
 podman-compose up -d
 
-# 顯示記錄
-podman-compose logs
-
-# 持續顯示記錄
-podman-compose logs -f
-
-# 關閉應用
-podman-compose down
+# 測試連線
+curl -v http://localhost:5666
 ```
 
 ## 連線埠配置

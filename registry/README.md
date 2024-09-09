@@ -5,34 +5,12 @@
 - [Podman](https://podman.io/)
 - [Podman Compose](https://github.com/containers/podman-compose)
 
-## 使用方式
-
-> `podman-compose` 指令必須要在 `compose.yml` 所在的目錄下執行
-
-可透過建立 `compose.override.yml` 來擴展 `compose.yml` 組態
+## Getting Started
 
 ```sh
-# 啟動並執行完整應用(若配置有異動會自動重建容器)
-podman-compose up
-
 # 在背景啟動並執行完整應用
 podman-compose up -d
-
-# 顯示記錄
-podman-compose logs
-
-# 持續顯示記錄
-podman-compose logs -f
-
-# 關閉應用
-podman-compose down
 ```
-
-## 連線埠配置
-
-啟動環境後預設會開始監聽本機的以下連線埠
-
-- 5000: HTTP
 
 ## [部署](https://distribution.github.io/distribution/about/deploying/)
 
@@ -47,8 +25,11 @@ podman-compose down
 mkcert -install
 
 # 產生 TLS 憑證
-mkdir -p ../.secrets
-mkcert -cert-file ../.secrets/cert.pem -key-file ../.secrets/key.pem '*.dev.local'
+mkcert -cert-file ./cert.pem -key-file ./key.pem '*.dev.local' localhost
+
+# 產生 Podman secrets
+podman secret exists dev.local.key || podman secret create dev.local.key ./key.pem
+podman secret exists dev.local.crt || podman secret create dev.local.crt ./cert.pem
 
 # 啟用 TLS 加密連線
 COMPOSE_FILE=compose.yml:compose.tls.yml podman-compose up -d
@@ -63,9 +44,9 @@ curl -kv 'https://registry.dev.local:8443'
 
 ```sh
 # 產生可登入存取 Registry 的帳號與密碼
-podman run \
-  --entrypoint htpasswd \
-  httpd:2 -Bbn testuser testpassword >> ../.secrets/htpasswd
+podman secret exists registry.auth.htpasswd || \
+  podman run --entrypoint htpasswd httpd:2 -Bbn admin "$(openssl rand -base64 16)" | \
+  podman secret create registry.auth.htpasswd -
 
 # 啟用限制存取
 COMPOSE_FILE=compose.yml:compose.auth.yml podman-compose up -d
