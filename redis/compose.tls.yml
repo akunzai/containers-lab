@@ -1,7 +1,13 @@
 services:
   # https://redis.io/docs/management/security/encryption/
   redis:
-    command: --port 6379 --tls-port 6380 --tls-cert-file /run/secrets/dev.local.crt --tls-key-file /run/secrets/dev.local.key --tls-ca-cert-file /run/secrets/dev.CA.crt --tls-auth-clients no
+    command: 
+     - --port 6379
+     - --tls-port 6380
+     - --tls-cert-file /run/secrets/dev.local.crt
+     - --tls-key-file /run/secrets/dev.local.key
+     - --tls-ca-cert-file /run/secrets/dev.CA.crt
+     - --tls-auth-clients no
     ports:
       - 127.0.0.1:6380:6380
     secrets:
