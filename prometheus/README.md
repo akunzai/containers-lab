@@ -5,42 +5,22 @@
 - [Podman](https://podman.io/)
 - [Podman Compose](https://github.com/containers/podman-compose)
 
-## 使用方式
-
-> `podman-compose` 指令必須要在 `compose.yml` 所在的目錄下執行
->
-> 可透過建立 `compose.override.yml` 來擴展 `compose.yml` 組態
->
-> 還可以利用 [COMPOSE_FILE](https://docs.docker.com/compose/reference/envvars/#compose_file) 環境變數指定多個組態來擴展服務配置
+## Getting Started
 
 ```sh
-# 啟動並執行完整應用
-podman-compose up
-
 # 在背景啟動並執行完整應用
 podman-compose up -d
 
-# 在背景啟動並執行指定服務
-podman-compose up -d prometheus
+# 開啟 Prometheus 管理後台
+npx open-cli http://localhost:9090
 
-# 顯示記錄
-podman-compose logs
+# 開啟 Grafana 管理後台, 預設的帳號與密碼皆為 admin
+# > 如有開放外部存取請記得變更帳密
+npx open-cli http://localhost:3000
 
-# 持續顯示記錄
-podman-compose logs -f
-
-# 關閉應用
-podman-compose down
+# 開啟 Alertmanager 管理後台
+npx open-cli http://localhost:9093
 ```
-
-## 連線埠配置
-
-啟動環境後預設會開始監聽本機的以下連線埠
-
-- 3000: Grafana 管理後台
-- 8080: cAdvisor 管理後台
-- 9090: Prometheus 管理後台
-- 9093: Alertmanager 管理後台
 
 ## [Exporters](https://prometheus.io/docs/instrumenting/exporters/)
 

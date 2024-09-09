@@ -24,9 +24,9 @@ services:
 
 secrets:
   mssql_root.pwd:
-    file: ../.secrets/mssql_root.pwd
+    external: true
   mssql_user.pwd:
-    file: ../.secrets/mssql_user.pwd
+    external: true
 
 volumes:
   mssql_data:

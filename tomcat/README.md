@@ -5,39 +5,15 @@
 - [Podman](https://podman.io/)
 - [Podman Compose](https://github.com/containers/podman-compose)
 
-## 使用方式
-
-> `podman-compose` 指令必須要在 `compose.yml` 所在的目錄下執行
->
-> 可透過建立 `compose.override.yml` 來擴展 `compose.yml` 組態
->
-> 還可以利用 [COMPOSE_FILE](https://docs.docker.com/compose/reference/envvars/#compose_file) 環境變數指定多個組態來擴展服務配置
+## Getting Started
 
 ```sh
-# 啟動並執行完整應用(若配置有異動會自動重建容器)
-podman-compose up
-
 # 在背景啟動並執行完整應用
 podman-compose up -d
 
-# 在背景啟動並執行指定服務
-podman-compose up -d tomcat
-
-# 顯示記錄
-podman-compose logs
-
-# 持續顯示記錄
-podman-compose logs -f
-
-# 關閉應用
-podman-compose down
+# 開啟網站
+npx open-cli http://localhost:8080
 ```
-
-## 連線埠配置
-
-啟動環境後預設會開始監聽本機的以下連線埠
-
-- 8080: HTTP
 
 ## [啟用 HTTPS 連線](https://tomcat.apache.org/tomcat-9.0-doc/ssl-howto.html)
 
