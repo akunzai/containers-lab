@@ -29,6 +29,7 @@
 - [Guacamole 遠端桌面閘道](./guacamole/)
 - [Grafana Loki 日誌收集系統](./loki/)
 - [Nagios NRPE 遠端外掛監控工具](./nrpe/)
+- [Nginx 網頁伺服器](./nginx/)
 - [Prometheus 監控告警系統](./prometheus/)
 - [RabbitMQ 訊息佇列伺服器](./rabbitmq/)
 - [Squid 快取代理伺服器](./squid/)
