@@ -1,0 +1,9 @@
+services:
+  nginx:
+    # https://github.com/nginxinc/docker-nginx-unprivileged
+    image: nginxinc/nginx-unprivileged:alpine-slim
+    restart: unless-stopped
+    # volumes:
+    #   - ./html:/usr/share/nginx/html:ro
+    ports:
+      - "127.0.0.1:8080:8080"

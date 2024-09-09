@@ -1,0 +1,14 @@
+server {
+    listen              ${NGINX_PORT} ssl;
+    http2 on;
+    
+    server_name         ${NGINX_HOST};
+    
+    ssl_certificate     ${NGINX_SSL_CERT};
+    ssl_certificate_key ${NGINX_SSL_KEY};
+
+    location / {
+        root   /usr/share/nginx/html;
+        index  index.html index.htm;
+    }
+}
