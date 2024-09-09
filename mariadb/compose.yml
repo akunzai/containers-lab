@@ -20,7 +20,7 @@ services:
 
 secrets:
   mariadb_root.pwd:
-    file: ../.secrets/mariadb_root.pwd
+    external: true
 
 volumes:
   mariadb_data:

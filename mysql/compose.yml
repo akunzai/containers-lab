@@ -21,7 +21,7 @@ services:
 
 secrets:
   mysql_root.pwd:
-    file: ../.secrets/mysql_root.pwd
+    external: true
 
 volumes:
   mysql_data:
