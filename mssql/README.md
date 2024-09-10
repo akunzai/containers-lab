@@ -44,7 +44,7 @@ podman secret exists dev.local.crt || podman secret create dev.local.crt ./cert.
 COMPOSE_FILE=compose.yml:compose.tls.yml podman-compose up -d
 
 # 確認已正確啟用
-podman-compose exec mssql bash -c '/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P $MSSQL_SA_PASSWORD -N -C -Q "SELECT encrypt_option FROM sys.dm_exec_connections WHERE session_id = @@SPID"'
+podman-compose exec mssql bash -c '/opt/mssql-tools18/bin/sqlcmd -S localhost -U SA -P $(cat /run/secrets/mssql_root.pwd) -N -C -Q "SELECT encrypt_option FROM sys.dm_exec_connections WHERE session_id = @@SPID"'
 ```
 
 ## 重設資料庫 sa 帳號密碼
@@ -76,20 +76,28 @@ export DBNAME=test
 export USERNAME=test
 
 # 查詢所有資料庫的擁有者
-/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P $MSSQL_SA_PASSWORD -Q "SELECT name AS db, SUSER_SNAME(owner_sid) AS owner FROM sys.databases;"
+/opt/mssql-tools18/bin/sqlcmd -S localhost -U SA -P $MSSQL_SA_PASSWORD -Q "SELECT name AS db, SUSER_SNAME(owner_sid) AS owner FROM sys.databases;"
 
 # 變更資料庫的擁有者
-/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P $MSSQL_SA_PASSWORD -Q "ALTER AUTHORIZATION ON DATABASE::[$DBNAME] TO [$USERNAME];"
+/opt/mssql-tools18/bin/sqlcmd -S localhost -U SA -P $MSSQL_SA_PASSWORD -Q "ALTER AUTHORIZATION ON DATABASE::[$DBNAME] TO [$USERNAME];"
 
 # 查詢資料庫層級的角色及成員
-/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P $MSSQL_SA_PASSWORD -Q "Use [$DBNAME]; SELECT r.name role_principal_name, m.name AS member_principal_name FROM sys.database_role_members rm JOIN sys.database_principals r ON rm.role_principal_id = r.principal_id JOIN sys.database_principals m ON rm.member_principal_id = m.principal_id WHERE r.type = 'R';"
+/opt/mssql-tools18/bin/sqlcmd -S localhost -U SA -P $MSSQL_SA_PASSWORD -Q "Use [$DBNAME]; SELECT r.name role_principal_name, m.name AS member_principal_name FROM sys.database_role_members rm JOIN sys.database_principals r ON rm.role_principal_id = r.principal_id JOIN sys.database_principals m ON rm.member_principal_id = m.principal_id WHERE r.type = 'R';"
 
 # 增加資料庫層級的擁有者角色成員
-/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P $MSSQL_SA_PASSWORD -Q "Use [$DBNAME]; CREATE USER [$USERNAME] FROM LOGIN [$USERNAME]; EXEC sp_addrolemember 'db_owner', '$USERNAME'"
+/opt/mssql-tools18/bin/sqlcmd -S localhost -U SA -P $MSSQL_SA_PASSWORD -Q "Use [$DBNAME]; CREATE USER [$USERNAME] FROM LOGIN [$USERNAME]; EXEC sp_addrolemember 'db_owner', '$USERNAME'"
 
 # 備份資料庫
-/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P $MSSQL_SA_PASSWORD -Q "BACKUP DATABASE [$DBNAME] TO DISK = N'/var/backups/$DBNAME.bak' WITH NOFORMAT, NOINIT, NAME = 'sample-full', SKIP, NOREWIND, NOUNLOAD, STATS = 10"
+/opt/mssql-tools18/bin/sqlcmd -S localhost -U SA -P $MSSQL_SA_PASSWORD -Q "BACKUP DATABASE [$DBNAME] TO DISK = N'/var/backups/$DBNAME.bak' WITH NOFORMAT, NOINIT, NAME = 'sample-full', SKIP, NOREWIND, NOUNLOAD, STATS = 10"
 
 # 還原資料庫
-/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P $MSSQL_SA_PASSWORD -Q "RESTORE DATABASE [$DBNAME] FROM DISK = N'/var/backups/$DBNAME.bak' WITH FILE = 1, NOUNLOAD, REPLACE, NORECOVERY, STATS = 5"
+/opt/mssql-tools18/bin/sqlcmd -S localhost -U SA -P $MSSQL_SA_PASSWORD -Q "RESTORE DATABASE [$DBNAME] FROM DISK = N'/var/backups/$DBNAME.bak' WITH FILE = 1, NOUNLOAD, REPLACE, NORECOVERY, STATS = 5"
+```
+
+## 疑難排解
+
+### Configuration file (/var/opt/mssql/mssql.conf) exists but could not be opened or parsed. File: LinuxFile.cpp:418 [Status: 0xC0000022 Access Denied errno = 0xD(13) Permission denied]
+
+```sh
+podman-compose run --rm --user root mssql rm /var/opt/mssql/mssql.conf
 ```

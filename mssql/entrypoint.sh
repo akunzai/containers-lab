@@ -2,6 +2,14 @@
 
 set -e
 
+# sqlcmd location changed since SQL Server 2022 (16.x) CU 14
+# https://learn.microsoft.com/sql/linux/quickstart-install-connect-docker
+if [[ -d "/opt/mssql-tools18/bin" ]]; then
+	export PATH="/opt/mssql-tools18/bin:${PATH}"
+elif [[ -d "/opt/mssql-tools/bin" ]]; then
+	export PATH="/opt/mssql-tools/bin:${PATH}"
+fi
+
 # usage: file_env VAR [DEFAULT]
 #    ie: file_env 'XYZ_DB_PASSWORD' 'example'
 # (will allow for "$XYZ_DB_PASSWORD_FILE" to fill in the value of
@@ -41,7 +49,7 @@ wait_for_sql_server() {
 
 	while [[ ${dbstatus} -ne 0 ]] && [[ ${i} -lt ${timeout} ]] && [[ ${errcode} -ne 0 ]]; do
 		i=$((i + 1))
-		dbstatus="$(/opt/mssql-tools/bin/sqlcmd -h -1 -t 1 -U sa -P "${MSSQL_SA_PASSWORD}" -Q "SET NOCOUNT ON; SELECT SUM(state) FROM sys.databases")"
+		dbstatus="$(sqlcmd -h -1 -t 1 -U sa -P "${MSSQL_SA_PASSWORD}" -Q "SET NOCOUNT ON; SELECT SUM(state) FROM sys.databases")"
 		if [[ -n "${dbstatus}" ]]; then
 			dbstatus="$(echo "${dbstatus}" | tr -d '[:space:]')"
 		fi
@@ -60,14 +68,14 @@ create_db_and_user() {
 		return
 	fi
 	echo "> Creating database ${MSSQL_DATABASE} ..."
-	/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "${MSSQL_SA_PASSWORD}" -Q "CREATE DATABASE ${MSSQL_DATABASE}"
+	sqlcmd -S localhost -U sa -P "${MSSQL_SA_PASSWORD}" -Q "CREATE DATABASE ${MSSQL_DATABASE}"
 	if [[ -z "${MSSQL_USER}" ]] || [[ -z "${MSSQL_PASSWORD}" ]]; then
 		return
 	fi
 	echo "> Creating user ${MSSQL_USER} ..."
-	/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "${MSSQL_SA_PASSWORD}" -Q "CREATE LOGIN ${MSSQL_USER} WITH PASSWORD = '${MSSQL_PASSWORD}'"
+	sqlcmd -S localhost -U sa -P "${MSSQL_SA_PASSWORD}" -Q "CREATE LOGIN ${MSSQL_USER} WITH PASSWORD = '${MSSQL_PASSWORD}'"
 	echo "> Granting user [${MSSQL_USER}] as db [${MSSQL_DATABASE}] owner ..."
-	/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "${MSSQL_SA_PASSWORD}" -Q "Use [${MSSQL_DATABASE}]; CREATE USER [${MSSQL_USER}] FROM LOGIN [${MSSQL_USER}]; EXEC sp_addrolemember 'db_owner', '${MSSQL_USER}'"
+	sqlcmd -S localhost -U sa -P "${MSSQL_SA_PASSWORD}" -Q "Use [${MSSQL_DATABASE}]; CREATE USER [${MSSQL_USER}] FROM LOGIN [${MSSQL_USER}]; EXEC sp_addrolemember 'db_owner', '${MSSQL_USER}'"
 }
 
 import_sql_file() {
@@ -75,7 +83,7 @@ import_sql_file() {
 		return
 	fi
 	echo "Initializing database with ${MSSQL_INIT_SCRIPT} ..."
-	/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "${MSSQL_SA_PASSWORD}" -i "${MSSQL_INIT_SCRIPT}"
+	sqlcmd -S localhost -U sa -P "${MSSQL_SA_PASSWORD}" -i "${MSSQL_INIT_SCRIPT}"
 }
 
 file_env 'MSSQL_SA_PASSWORD'
