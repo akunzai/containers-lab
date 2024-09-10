@@ -37,9 +37,9 @@ DBSTATUS=1
 ERRCODE=1
 
 if [[ -n "${MSSQL_DATABASE}" ]] && [[ -n "${MSSQL_SA_PASSWORD}" ]]; then
-	DBSTATUS=$(sqlcmd -h -1 -t 1 -U sa -P "${MSSQL_SA_PASSWORD}" -Q "SET NOCOUNT ON; SELECT state FROM sys.databases WHERE name = N'${MSSQL_DATABASE}'")
+	DBSTATUS=$(sqlcmd -C -h -1 -t 1 -U sa -P "${MSSQL_SA_PASSWORD}" -Q "SET NOCOUNT ON; SELECT state FROM sys.databases WHERE name = N'${MSSQL_DATABASE}'")
 else
-	DBSTATUS=$(sqlcmd -h -1 -t 1 -U sa -P "${MSSQL_SA_PASSWORD}" -Q "SET NOCOUNT ON; SELECT SUM(state) FROM sys.databases")
+	DBSTATUS=$(sqlcmd -C -h -1 -t 1 -U sa -P "${MSSQL_SA_PASSWORD}" -Q "SET NOCOUNT ON; SELECT SUM(state) FROM sys.databases")
 fi
 
 if [[ -n "${DBSTATUS}" ]]; then
