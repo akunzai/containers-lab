@@ -2,6 +2,14 @@
 
 set -e
 
+# sqlcmd location changed since SQL Server 2022 (16.x) CU 14
+# https://learn.microsoft.com/sql/linux/quickstart-install-connect-docker
+if [[ -d "/opt/mssql-tools18/bin" ]]; then
+	PATH="/opt/mssql-tools18/bin:${PATH}"
+elif [[ -d "/opt/mssql-tools/bin" ]]; then
+	PATH="/opt/mssql-tools/bin:${PATH}"
+fi
+
 # usage: file_env VAR [DEFAULT]
 #    ie: file_env 'XYZ_DB_PASSWORD' 'example'
 # (will allow for "$XYZ_DB_PASSWORD_FILE" to fill in the value of
@@ -29,9 +37,9 @@ DBSTATUS=1
 ERRCODE=1
 
 if [[ -n "${MSSQL_DATABASE}" ]] && [[ -n "${MSSQL_SA_PASSWORD}" ]]; then
-	DBSTATUS=$(/opt/mssql-tools/bin/sqlcmd -h -1 -t 1 -U sa -P "${MSSQL_SA_PASSWORD}" -Q "SET NOCOUNT ON; SELECT state FROM sys.databases WHERE name = N'${MSSQL_DATABASE}'")
+	DBSTATUS=$(sqlcmd -h -1 -t 1 -U sa -P "${MSSQL_SA_PASSWORD}" -Q "SET NOCOUNT ON; SELECT state FROM sys.databases WHERE name = N'${MSSQL_DATABASE}'")
 else
-	DBSTATUS=$(/opt/mssql-tools/bin/sqlcmd -h -1 -t 1 -U sa -P "${MSSQL_SA_PASSWORD}" -Q "SET NOCOUNT ON; SELECT SUM(state) FROM sys.databases")
+	DBSTATUS=$(sqlcmd -h -1 -t 1 -U sa -P "${MSSQL_SA_PASSWORD}" -Q "SET NOCOUNT ON; SELECT SUM(state) FROM sys.databases")
 fi
 
 if [[ -n "${DBSTATUS}" ]]; then
