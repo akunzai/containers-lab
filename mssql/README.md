@@ -15,36 +15,12 @@ podman secret exists mssql_user.pwd || openssl rand -base64 16 | podman secret c
 # 在背景啟動並執行完整應用
 podman-compose up -d
 
+# 以互動方式使用 sqlcmd
+# https://learn.microsoft.com/sql/tools/sqlcmd/sqlcmd-use-utility
+podman-compose exec mssql bash -c '/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U SA -P $(cat /run/secrets/mssql_root.pwd)'
+
 # 如果需要使用網頁介面管理資料庫的話
 COMPOSE_FILE=compose.yml:compose.dbgate.yml podman-compose up -d
-```
-
-## [啟用 TLS 加密連線](https://learn.microsoft.com/sql/linux/sql-server-linux-encrypted-connections)
-
-可透過 [mkcert](https://github.com/FiloSottile/mkcert) 建立本機開發用的 TLS 憑證
-
-以網域名稱 `*.dev.local` 為例
-
-```sh
-# 安裝本機開發用的憑證簽發證書
-mkcert -install
-
-# 產生 TLS 憑證
-mkcert -cert-file ./cert.pem -key-file ./key.pem '*.dev.local' localhost
-
-# 產生 Podman secrets
-podman secret exists dev.local.key || podman secret create dev.local.key ./key.pem
-podman secret exists dev.local.crt || podman secret create dev.local.crt ./cert.pem
-```
-
-> 如果是使用自簽憑證的話，用戶端可以加上 `TrustServerCertificate=true` 配置以信任該憑證
-
-```sh
-# 啟用 TLS 加密連線
-COMPOSE_FILE=compose.yml:compose.tls.yml podman-compose up -d
-
-# 確認已正確啟用
-podman-compose exec mssql bash -c '/opt/mssql-tools18/bin/sqlcmd -S localhost -U SA -P $(cat /run/secrets/mssql_root.pwd) -N -C -Q "SELECT encrypt_option FROM sys.dm_exec_connections WHERE session_id = @@SPID"'
 ```
 
 ## 重設資料庫 sa 帳號密碼
@@ -76,25 +52,31 @@ export DBNAME=test
 export USERNAME=test
 
 # 查詢所有資料庫的擁有者
-/opt/mssql-tools18/bin/sqlcmd -S localhost -U SA -P $MSSQL_SA_PASSWORD -Q "SELECT name AS db, SUSER_SNAME(owner_sid) AS owner FROM sys.databases;"
+/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U SA -P $MSSQL_SA_PASSWORD -Q "SELECT name AS db, SUSER_SNAME(owner_sid) AS owner FROM sys.databases;"
 
 # 變更資料庫的擁有者
-/opt/mssql-tools18/bin/sqlcmd -S localhost -U SA -P $MSSQL_SA_PASSWORD -Q "ALTER AUTHORIZATION ON DATABASE::[$DBNAME] TO [$USERNAME];"
+/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U SA -P $MSSQL_SA_PASSWORD -Q "ALTER AUTHORIZATION ON DATABASE::[$DBNAME] TO [$USERNAME];"
 
 # 查詢資料庫層級的角色及成員
-/opt/mssql-tools18/bin/sqlcmd -S localhost -U SA -P $MSSQL_SA_PASSWORD -Q "Use [$DBNAME]; SELECT r.name role_principal_name, m.name AS member_principal_name FROM sys.database_role_members rm JOIN sys.database_principals r ON rm.role_principal_id = r.principal_id JOIN sys.database_principals m ON rm.member_principal_id = m.principal_id WHERE r.type = 'R';"
+/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U SA -P $MSSQL_SA_PASSWORD -Q "Use [$DBNAME]; SELECT r.name role_principal_name, m.name AS member_principal_name FROM sys.database_role_members rm JOIN sys.database_principals r ON rm.role_principal_id = r.principal_id JOIN sys.database_principals m ON rm.member_principal_id = m.principal_id WHERE r.type = 'R';"
 
 # 增加資料庫層級的擁有者角色成員
-/opt/mssql-tools18/bin/sqlcmd -S localhost -U SA -P $MSSQL_SA_PASSWORD -Q "Use [$DBNAME]; CREATE USER [$USERNAME] FROM LOGIN [$USERNAME]; EXEC sp_addrolemember 'db_owner', '$USERNAME'"
+/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U SA -P $MSSQL_SA_PASSWORD -Q "Use [$DBNAME]; CREATE USER [$USERNAME] FROM LOGIN [$USERNAME]; EXEC sp_addrolemember 'db_owner', '$USERNAME'"
 
 # 備份資料庫
-/opt/mssql-tools18/bin/sqlcmd -S localhost -U SA -P $MSSQL_SA_PASSWORD -Q "BACKUP DATABASE [$DBNAME] TO DISK = N'/var/backups/$DBNAME.bak' WITH NOFORMAT, NOINIT, NAME = 'sample-full', SKIP, NOREWIND, NOUNLOAD, STATS = 10"
+/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U SA -P $MSSQL_SA_PASSWORD -Q "BACKUP DATABASE [$DBNAME] TO DISK = N'/var/backups/$DBNAME.bak' WITH NOFORMAT, NOINIT, NAME = 'sample-full', SKIP, NOREWIND, NOUNLOAD, STATS = 10"
 
 # 還原資料庫
-/opt/mssql-tools18/bin/sqlcmd -S localhost -U SA -P $MSSQL_SA_PASSWORD -Q "RESTORE DATABASE [$DBNAME] FROM DISK = N'/var/backups/$DBNAME.bak' WITH FILE = 1, NOUNLOAD, REPLACE, NORECOVERY, STATS = 5"
+/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U SA -P $MSSQL_SA_PASSWORD -Q "RESTORE DATABASE [$DBNAME] FROM DISK = N'/var/backups/$DBNAME.bak' WITH FILE = 1, NOUNLOAD, REPLACE, NORECOVERY, STATS = 5"
 ```
 
 ## 疑難排解
+
+### Sqlcmd: Error: Microsoft ODBC Driver 18 for SQL Server : SSL Provider: [error:0A000086:SSL routines::certificate verify failed:self-signed certificate]
+
+自 [Microsoft ODBC Driver 18 for SQL Server](https://techcommunity.microsoft.com/t5/sql-server-blog/odbc-driver-18-0-for-sql-server-released/ba-p/3169228) 開始，加密連線及憑證檢查是必要的，請在用戶端連線字串加上 `TrustServerCertificate=true` 配置以信任伺服器憑證
+
+sqlcmd 可加上 `-C` 選項以信任伺服器憑證或 `-No` 選項指定加密連線是選擇性的，而不是強制性的
 
 ### Configuration file (/var/opt/mssql/mssql.conf) exists but could not be opened or parsed. File: LinuxFile.cpp:418 [Status: 0xC0000022 Access Denied errno = 0xD(13) Permission denied]
 

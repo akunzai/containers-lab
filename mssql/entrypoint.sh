@@ -49,7 +49,7 @@ wait_for_sql_server() {
 
 	while [[ ${dbstatus} -ne 0 ]] && [[ ${i} -lt ${timeout} ]] && [[ ${errcode} -ne 0 ]]; do
 		i=$((i + 1))
-		dbstatus="$(sqlcmd -h -1 -t 1 -U sa -P "${MSSQL_SA_PASSWORD}" -Q "SET NOCOUNT ON; SELECT SUM(state) FROM sys.databases")"
+		dbstatus="$(sqlcmd -C -h -1 -t 1 -U sa -P "${MSSQL_SA_PASSWORD}" -Q "SET NOCOUNT ON; SELECT SUM(state) FROM sys.databases")"
 		if [[ -n "${dbstatus}" ]]; then
 			dbstatus="$(echo "${dbstatus}" | tr -d '[:space:]')"
 		fi
@@ -68,14 +68,14 @@ create_db_and_user() {
 		return
 	fi
 	echo "> Creating database ${MSSQL_DATABASE} ..."
-	sqlcmd -S localhost -U sa -P "${MSSQL_SA_PASSWORD}" -Q "CREATE DATABASE ${MSSQL_DATABASE}"
+	sqlcmd -C -S localhost -U sa -P "${MSSQL_SA_PASSWORD}" -Q "CREATE DATABASE ${MSSQL_DATABASE}"
 	if [[ -z "${MSSQL_USER}" ]] || [[ -z "${MSSQL_PASSWORD}" ]]; then
 		return
 	fi
 	echo "> Creating user ${MSSQL_USER} ..."
-	sqlcmd -S localhost -U sa -P "${MSSQL_SA_PASSWORD}" -Q "CREATE LOGIN ${MSSQL_USER} WITH PASSWORD = '${MSSQL_PASSWORD}'"
+	sqlcmd -C -S localhost -U sa -P "${MSSQL_SA_PASSWORD}" -Q "CREATE LOGIN ${MSSQL_USER} WITH PASSWORD = '${MSSQL_PASSWORD}'"
 	echo "> Granting user [${MSSQL_USER}] as db [${MSSQL_DATABASE}] owner ..."
-	sqlcmd -S localhost -U sa -P "${MSSQL_SA_PASSWORD}" -Q "Use [${MSSQL_DATABASE}]; CREATE USER [${MSSQL_USER}] FROM LOGIN [${MSSQL_USER}]; EXEC sp_addrolemember 'db_owner', '${MSSQL_USER}'"
+	sqlcmd -C -S localhost -U sa -P "${MSSQL_SA_PASSWORD}" -Q "Use [${MSSQL_DATABASE}]; CREATE USER [${MSSQL_USER}] FROM LOGIN [${MSSQL_USER}]; EXEC sp_addrolemember 'db_owner', '${MSSQL_USER}'"
 }
 
 import_sql_file() {
@@ -83,7 +83,7 @@ import_sql_file() {
 		return
 	fi
 	echo "Initializing database with ${MSSQL_INIT_SCRIPT} ..."
-	sqlcmd -S localhost -U sa -P "${MSSQL_SA_PASSWORD}" -i "${MSSQL_INIT_SCRIPT}"
+	sqlcmd -C -S localhost -U sa -P "${MSSQL_SA_PASSWORD}" -i "${MSSQL_INIT_SCRIPT}"
 }
 
 file_env 'MSSQL_SA_PASSWORD'
