@@ -58,11 +58,11 @@ RUN set -eux; \
 
 # set up Apache2
 RUN set -eux; \
-    # replace listening ports from 80 to 8080
-    sed -i -E 's/(\s*Listen\s+)80\s*/\18080/' /etc/apache2/ports.conf; \
-    sed -i -E 's/(\s*<VirtualHost\s+\*:\s*)80\s*>/\18080>/' /etc/apache2/sites-available/000-default.conf; \
-    # replace listening ports from 443 to 8443
-    sed -i -E 's/(\s*Listen\s+)443\s*/\18443/g' /etc/apache2/ports.conf; \
+    # change listening port from 80 to 8080
+    sed -i 's/Listen 80/Listen 8080/' /etc/apache2/ports.conf; \
+    sed -i 's/*:80/*:8080/' /etc/apache2/sites-available/000-default.conf; \
+    # change listening port from 443 to 8443
+    sed -i 's/Listen 443/Listen 8443/' /etc/apache2/ports.conf; \
     # enable Apache2 modules
     a2enmod rewrite expires include deflate remoteip headers ssl socache_shmcb; \
     { \
