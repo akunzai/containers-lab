@@ -1,0 +1,10 @@
+---
+tls:
+  options:
+    default:
+      minVersion: VersionTLS12
+  stores:
+    default:
+      defaultCertificate:
+        certFile: /run/secrets/dev.local.crt
+        keyFile: /run/secrets/dev.local.key
