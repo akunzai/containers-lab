@@ -1,0 +1,26 @@
+services:
+  traefik:
+    # https://hub.docker.com/_/traefik
+    image: traefik
+    restart: unless-stopped
+    security_opt:
+      - label=type:container_runtime_t
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    command:
+      - --api.insecure=true
+      - --api.dashboard=true
+      - --entrypoints.web.address=:80
+      - --providers.docker=true
+      - --providers.docker.exposedByDefault=false
+    ports:
+      - "127.0.0.1:8080:80"
+      - "127.0.0.1:8888:8080"
+  whoami:
+    # https://hub.docker.com/r/traefik/whoami/
+    image: traefik/whoami
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.whoami.entrypoints=web"
+      - "traefik.http.routers.whoami.rule=Host(`www.dev.local`)"

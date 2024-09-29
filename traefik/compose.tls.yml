@@ -1,0 +1,30 @@
+services:
+  traefik:
+    volumes:
+      - ./dynamic_conf.yml:/etc/traefik/dynamic_conf.yml:ro
+    command:
+      - --api.insecure=true
+      - --api.dashboard=true
+      - --entrypoints.web.address=:80
+      - --entrypoints.web.http.redirections.entryPoint.to=websecure
+      - --entrypoints.web.http.redirections.entryPoint.scheme=https
+      - --entrypoints.websecure.address=:443
+      - --entrypoints.websecure.http.tls=true
+      - --providers.docker=true
+      - --providers.docker.exposedByDefault=false
+      - --providers.file.filename=/etc/traefik/dynamic_conf.yml
+      - --providers.file.watch=true
+    ports:
+      - "127.0.0.1:8443:443"
+    secrets:
+      - dev.local.crt
+      - dev.local.key
+  whoami:
+    labels:
+      - "traefik.http.routers.whoami.entrypoints=websecure"
+
+secrets:
+  dev.local.crt:
+    external: true
+  dev.local.key:
+    external: true
