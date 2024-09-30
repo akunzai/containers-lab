@@ -1,17 +1,9 @@
 services:
   dotnet:
-    # https://hub.docker.com/_/microsoft-dotnet-aspnet/
-    image: mcr.microsoft.com/dotnet/samples:aspnetapp
-    user: app
+    build: ./demo
+    image: dotnet:demo
     restart: unless-stopped
     environment:
-      LANG: "C.UTF-8"
-      # https://learn.microsoft.com/aspnet/core/fundamentals/configuration/#environment-variables
-      # Bash 不支援 `:` 做為階層式索引鍵分隔符號, 必須改用 `__`
-      ASPNETCORE_ENVIRONMENT: Development
-      ASPNETCORE_FORWARDEDHEADERS_ENABLED: "true"
       ASPNETCORE_HTTP_PORTS: 8080
-    # 如果需要自訂啟動腳本的話
-    # command: sh -c "cd /home/site/wwwroot && dotnet WebApp.dll"
     ports:
       - "127.0.0.1:8080:8080"
