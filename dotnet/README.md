@@ -41,17 +41,15 @@ COMPOSE_FILE=compose.yml:compose.tls.yml podman-compose up -d
 curl -v 'https://www.dev.local:8443'
 ```
 
-## 利用容器執行指令
+## 疑難排解
+
+### [建置不同系統架構的 Docker 映像](https://developers.redhat.com/articles/2023/11/03/how-build-multi-architecture-container-images#podman)
 
 ```sh
-# 預設執行身分為 app
-$ podman-compose run --rm --entrypoint='whoami' dotnet
-app
+# 透過 podman-compose 建置指定系統架構的映像
+podman-compose --podman-build-args='--platform=linux/amd64' build
 
-# 指定執行身分為 root
-$ podman-compose run --rm --entrypoint='whoami' --user root dotnet
-root
-
-# 進入 Shell 互動環境
-$ podman-compose run --rm --entrypoint='sh' dotnet
+# 透過 podman 建置多系統架構的映像
+podman manifest create -a dotnet:demo
+podman build --platform=linux/amd64,linux/arm64 --manifest dotnet:demo ./demo
 ```

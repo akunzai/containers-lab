@@ -2,6 +2,8 @@ services:
   dotnet:
     environment:
       ASPNETCORE_HTTPS_PORTS: 8443
+      # https://learn.microsoft.com/aspnet/core/fundamentals/configuration/#environment-variables
+      # Bash 不支援 `:` 做為階層式索引鍵分隔符號, 必須改用 `__`
       Kestrel__Certificates__Default__Path: /run/secrets/dev.local.crt
       Kestrel__Certificates__Default__KeyPath: /run/secrets/dev.local.key
       # 如果憑證需要密碼的話
