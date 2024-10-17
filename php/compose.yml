@@ -4,8 +4,8 @@ services:
       context: .
       args:
         APT_URL: http://free.nchc.org.tw
-        PHP_VERSION: 8.2
-    image: php:8.2-apache-ext
+        PHP_VERSION: 8.3
+    image: php:8.3-apache-ext
     user: www-data
     restart: unless-stopped
     volumes:
