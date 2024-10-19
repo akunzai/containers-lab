@@ -19,9 +19,8 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine AS runtime
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false \
 	LC_ALL=en_US.UTF-8 \
 	LANG=en_US.UTF-8
-RUN apk add --no-cache \
-	icu-data-full \
-	icu-libs;
+RUN --mount=type=cache,target=/var/cache/apk,sharing=locked \
+	apk add icu-data-full icu-libs;
 EXPOSE 8080
 WORKDIR /app
 COPY --chown=app:app --from=build /app .
