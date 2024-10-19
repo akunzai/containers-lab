@@ -3,6 +3,13 @@
 !.vscode/extensions.json
 .history/*
 
+# IDE - JetBrains
+.idea/*
+
+# .NET
+**/bin/**
+**/obj/**
+
 # dotENV
 .env
 .env.*
