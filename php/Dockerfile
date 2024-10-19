@@ -14,21 +14,13 @@ RUN ([ -n "$APT_URL" ] && \
     [ -e "/etc/apt/sources.list.d/debian.sources" ] && \
     sed -i -E "s,URIs: http?://[^\/]+,URIs: $APT_URL,g" /etc/apt/sources.list.d/debian.sources) || true;
 
-# install MySQL client
-RUN set -eux; \
-    apt-get update && \
-    apt-get install -y --no-install-recommends default-mysql-client && \
-    apt-get clean -y && rm -rf /var/lib/apt/lists/*
-
-# install pickle
-# https://github.com/FriendsOfPHP/pickle
-RUN set -eux; \
-    curl -Lo /usr/local/bin/pickle https://github.com/FriendsOfPHP/pickle/releases/latest/download/pickle.phar && \
-    chmod +x /usr/local/bin/pickle;
-
 # install the PHP extensions we need
 # hadolint ignore=SC2086
-RUN set -eux; \
+RUN --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
+    --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    set -eux; \
+    curl -Lo /usr/local/bin/pickle https://github.com/FriendsOfPHP/pickle/releases/latest/download/pickle.phar && \
+    chmod +x /usr/local/bin/pickle; \
     savedAptMark="$(apt-mark showmanual)"; \
     apt-get update; \
     apt-get install -y --no-install-recommends \
@@ -54,7 +46,7 @@ RUN set -eux; \
     | sort -u \
     | xargs -r apt-mark manual; \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
-    rm -rf /var/lib/apt/lists/* /tmp/*;
+    rm -rf /tmp/*;
 
 # set up Apache2
 RUN set -eux; \

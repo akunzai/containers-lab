@@ -5,11 +5,13 @@ FROM docker.io/library/debian:$DEBIAN_VERSION
 ENV container docker
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN apt-get update; \
+RUN --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
+    --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    apt-get update; \
     apt-get install -y --no-install-recommends \
     systemd systemd-sysv; \
     apt-get clean; \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*; \
+    rm -rf /tmp/* /var/tmp/*; \
     rm -f /lib/systemd/system/multi-user.target.wants/* \
     /etc/systemd/system/*.wants/* \
     /lib/systemd/system/local-fs.target.wants/* \
