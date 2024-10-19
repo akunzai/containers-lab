@@ -14,12 +14,6 @@ RUN ([ -n "$APT_URL" ] && \
     [ -e "/etc/apt/sources.list.d/debian.sources" ] && \
     sed -i -E "s,URIs: http?://[^\/]+,URIs: $APT_URL,g" /etc/apt/sources.list.d/debian.sources) || true;
 
-# install MySQL client
-RUN set -eux; \
-    apt-get update && \
-    apt-get install -y --no-install-recommends default-mysql-client && \
-    apt-get clean -y && rm -rf /var/lib/apt/lists/*
-
 # install pickle
 # https://github.com/FriendsOfPHP/pickle
 RUN set -eux; \
