@@ -20,6 +20,7 @@ ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false \
 	LC_ALL=en_US.UTF-8 \
 	LANG=en_US.UTF-8
 RUN --mount=type=cache,target=/var/cache/apk,sharing=locked \
+	apk update && apk upgrade; \
 	apk add icu-data-full icu-libs;
 EXPOSE 8080
 WORKDIR /app

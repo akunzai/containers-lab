@@ -22,7 +22,7 @@ RUN --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
     curl -Lo /usr/local/bin/pickle https://github.com/FriendsOfPHP/pickle/releases/latest/download/pickle.phar && \
     chmod +x /usr/local/bin/pickle; \
     savedAptMark="$(apt-mark showmanual)"; \
-    apt-get update; \
+    apt-get update && apt-get upgrade; \
     apt-get install -y --no-install-recommends \
     libfreetype6-dev libicu-dev libjpeg62-turbo-dev \
     libpng-dev libxml2-dev libxslt1-dev libzip-dev libwebp-dev \
