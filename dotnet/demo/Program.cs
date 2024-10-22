@@ -1,29 +1,63 @@
-
 using System.Collections;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
+using System.Runtime.InteropServices;
 using Microsoft.AspNetCore.Http.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var app = builder.Build();
 
-app.Map("/", async (HttpRequest request, HttpResponse response) =>
+app.MapFallback(async (HttpRequest request, HttpResponse response) =>
 {
     await response.WriteAsync($"Hostname: {Environment.MachineName}\r\n");
-    await response.WriteAsync($"Scheme: {request.Scheme}\r\n");
+    await response.WriteAsync($"DateTime: {DateTimeOffset.Now:O}\r\n");
+    await response.WriteAsync($"Process Architecture: {RuntimeInformation.ProcessArchitecture}\r\n");
+    await response.WriteAsync($"OS Version: {Environment.OSVersion}\r\n");
+    await response.WriteAsync($"Runtime Version: {Environment.Version}\r\n");
     foreach (var ip in GetIpAddress())
     {
-        await response.WriteAsync($"IP: {ip}\r\n");
+        await response.WriteAsync($"Server IP: {ip}\r\n");
     }
-    await response.WriteAsync($"RemoteAddr: {request.HttpContext.Connection.RemoteIpAddress}\r\n");
-    await response.WriteAsync($"{request.Method} {request.GetEncodedPathAndQuery()} {request.Protocol}\r\n");
-    foreach (var header in request.Headers)
+
+    await response.WriteAsync($"Client IP: {request.HttpContext.Connection.RemoteIpAddress}\r\n");
+    await response.WriteAsync($"Protocol: {request.Protocol}\r\n");
+    await response.WriteAsync($"Scheme: {request.Scheme}\r\n");
+    await response.WriteAsync($"Host: {request.Host}\r\n");
+    await response.WriteAsync($"Path: {request.Path}\r\n");
+    if (request.QueryString.HasValue)
     {
-        await response.WriteAsync($"{header.Key}: {header.Value}\r\n");
+        await response.WriteAsync($"Query: {request.QueryString.Value}\r\n");
+    }
+
+    await response.WriteAsync($"Method: {request.Method}\r\n");
+    await response.WriteAsync("Headers:\r\n");
+    foreach (var header in request.Headers.OrderBy(h => h.Key))
+    {
+        await response.WriteAsync($"- {header.Key}: {header.Value}\r\n");
     }
 });
-app.Map("/env", async (HttpRequest request, HttpResponse response) =>
+app.Map("/api", async (HttpRequest request, HttpResponse response) =>
+{
+    await response.WriteAsJsonAsync(new
+    {
+        Hostname = Environment.MachineName,
+        DateTime = DateTimeOffset.Now,
+        RuntimeVersion = Environment.Version,
+        ProcessArchitecture = RuntimeInformation.ProcessArchitecture.ToString(),
+        OSVersion = Environment.OSVersion.ToString(),
+        ServerIP = GetIpAddress(),
+        ClientIP = request.HttpContext.Connection.RemoteIpAddress?.ToString(),
+        request.Protocol,
+        request.Scheme,
+        Host = request.Host.Value,
+        request.Method,
+        RequestedPath = request.Path.Value,
+        QueryString = request.QueryString.HasValue ? request.QueryString.Value : null,
+        Headers = request.Headers.ToDictionary(x => x.Key, x => x.Value.ToString()),
+    });
+});
+app.Map("/env", async (HttpRequest _, HttpResponse response) =>
 {
     foreach (var env in Environment.GetEnvironmentVariables()
                  .Cast<DictionaryEntry>()
@@ -32,19 +66,8 @@ app.Map("/env", async (HttpRequest request, HttpResponse response) =>
         await response.WriteAsync($"{env.Key}={env.Value}\r\n");
     }
 });
-app.Map("/api", async (HttpRequest request, HttpResponse response) =>
-{
-    await response.WriteAsJsonAsync(new
-    {
-        Hostname = Environment.MachineName,
-        IP = GetIpAddress(),
-        request.Method,
-        Headers = request.Headers.ToDictionary(x => x.Key, x => x.Value.ToString()),
-        Host = request.Host.Value,
-        URL = request.GetEncodedPathAndQuery()
-    });
-});
 app.Run();
+return;
 
 IEnumerable<string> GetIpAddress()
 {
