@@ -15,8 +15,8 @@ services:
       JAVA_OPTS_APPEND: -Djava.net.preferIPv4Stack=true
       # https://www.keycloak.org/server/configuration
       # 管理者帳號密碼, 應避免在正式環境中使用預設值
-      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:-admin}
-      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin}
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KC_BOOTSTRAP_ADMIN_USERNAME:-admin}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KC_BOOTSTRAP_ADMIN_PASSWORD:-admin}
       # https://www.keycloak.org/server/all-config
       # 如果前端有使用反向代理的話
       # KC_PROXY_HEADERS: xforwarded
