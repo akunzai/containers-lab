@@ -3,6 +3,7 @@ ARG PHP_VERSION=8.2
 FROM docker.io/library/php:${PHP_VERSION}-apache-bookworm
 
 ARG APT_URL=""
+ENV DEBIAN_FRONTEND noninteractive
 ENV LANG=C.UTF-8
 
 # preferred mirror site
@@ -19,10 +20,8 @@ RUN ([ -n "$APT_URL" ] && \
 RUN --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
     --mount=type=cache,target=/var/cache/apt,sharing=locked \
     set -eux; \
-    curl -Lo /usr/local/bin/pickle https://github.com/FriendsOfPHP/pickle/releases/latest/download/pickle.phar && \
-    chmod +x /usr/local/bin/pickle; \
     savedAptMark="$(apt-mark showmanual)"; \
-    apt-get update && apt-get upgrade; \
+    apt-get update && apt-get upgrade -y; \
     apt-get install -y --no-install-recommends \
     libfreetype6-dev libicu-dev libjpeg62-turbo-dev \
     libpng-dev libxml2-dev libxslt1-dev libzip-dev libwebp-dev \
@@ -31,6 +30,8 @@ RUN --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
     docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp; \
     docker-php-ext-install -j$(nproc) opcache \
     intl gd mysqli pcntl pdo_mysql soap xsl zip; \
+    curl -Lo /usr/local/bin/pickle https://github.com/FriendsOfPHP/pickle/releases/latest/download/pickle.phar && \
+    chmod +x /usr/local/bin/pickle; \
     pickle install --no-interaction apcu-stable; \
     pickle install --no-interaction redis-stable; \
     pickle install --no-interaction xdebug-stable; \

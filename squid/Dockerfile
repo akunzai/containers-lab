@@ -5,7 +5,7 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
     --mount=type=cache,target=/var/cache/apt,sharing=locked \
     set -eux; \
-    apt-get update && apt-get upgrade; \
+    apt-get update && apt-get upgrade -y; \
     apt-get install -y --no-install-recommends squid procps; \
     sed -i -E 's/^#(http_access allow localnet)/\1/' /etc/squid/conf.d/debian.conf; \
     # ensure log directory exists and fixes permission
