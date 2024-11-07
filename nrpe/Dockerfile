@@ -5,7 +5,7 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
     --mount=type=cache,target=/var/cache/apt,sharing=locked \
     set -eux; \
-    apt-get update && apt-get upgrade; \
+    apt-get update && apt-get upgrade -y; \
     apt-get install -y --no-install-recommends procps net-tools \
         nagios-nrpe-server nagios-nrpe-plugin monitoring-plugins-basic; \
     sed -i -E 's|^#(log_file=/var/log/nrpe.log)|\1|' /etc/nagios/nrpe.cfg; \
