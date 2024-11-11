@@ -3,7 +3,7 @@ services:
     build: .
     image: nrpe:debian
     user: nagios
-    restart: unless-stopped
+    restart: always
     init: true
     volumes:
       - ./etc/nrpe.cfg:/etc/nagios/nrpe_local.cfg:ro

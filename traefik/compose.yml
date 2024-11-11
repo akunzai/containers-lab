@@ -2,7 +2,7 @@ services:
   traefik:
     # https://hub.docker.com/_/traefik
     image: traefik
-    restart: unless-stopped
+    restart: always
     security_opt:
       - label=type:container_runtime_t
     volumes:
@@ -19,7 +19,7 @@ services:
   whoami:
     # https://hub.docker.com/r/traefik/whoami/
     image: traefik/whoami
-    restart: unless-stopped
+    restart: always
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.whoami.entrypoints=web"

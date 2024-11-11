@@ -3,7 +3,7 @@ services:
     # https://mcr.microsoft.com/product/mssql/server/about
     build: .
     image: mssql
-    restart: unless-stopped
+    restart: always
     init: true
     environment:
       # https://learn.microsoft.com/sql/linux/sql-server-linux-configure-environment-variables

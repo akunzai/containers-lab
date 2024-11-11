@@ -2,7 +2,7 @@ services:
   chisel-server:
     # https://hub.docker.com/r/jpillora/chisel
     image: docker.io/jpillora/chisel
-    restart: unless-stopped
+    restart: always
     command: server --reverse
     ports:
       - 127.0.0.1:8080:8080

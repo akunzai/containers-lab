@@ -2,7 +2,7 @@ services:
   registry:
     # https://hub.docker.com/_/registry
     image: docker.io/library/registry:2
-    restart: unless-stopped
+    restart: always
     volumes:
       - registry_data:/var/lib/registry
     ports:
