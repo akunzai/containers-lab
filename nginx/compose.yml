@@ -2,7 +2,7 @@ services:
   nginx:
     # https://github.com/nginxinc/docker-nginx-unprivileged
     image: nginxinc/nginx-unprivileged:alpine-slim
-    restart: unless-stopped
+    restart: always
     # volumes:
     #   - ./html:/usr/share/nginx/html:ro
     ports:

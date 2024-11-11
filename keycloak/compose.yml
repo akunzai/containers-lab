@@ -4,7 +4,7 @@ services:
     # 如果要優化容器節省啟動時間的話, 需以建置選項自訂建置映像檔
     # https://www.keycloak.org/server/containers
     image: quay.io/keycloak/keycloak
-    restart: unless-stopped
+    restart: always
     volumes:
       - keycloak_data:/opt/keycloak/data
       # 如果要匯入與匯出的話

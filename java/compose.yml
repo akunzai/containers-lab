@@ -2,7 +2,7 @@ services:
   java:
     build: ./demo
     image: spring-boot:demo
-    restart: unless-stopped
+    restart: always
     init: true
     environment:
       LANG: "C.UTF-8"

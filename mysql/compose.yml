@@ -3,7 +3,7 @@ services:
     # https://hub.docker.com/_/mysql
     image: docker.io/library/mysql
     user: mysql
-    restart: unless-stopped
+    restart: always
     init: true
     environment:
       # 指定初始化資料庫建立的 root 密碼

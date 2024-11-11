@@ -3,7 +3,7 @@ services:
     # https://hub.docker.com/_/mariadb
     image: docker.io/library/mariadb
     user: mysql
-    restart: unless-stopped
+    restart: always
     environment:
       # 指定初始化資料庫建立的 root 密碼
       MARIADB_ROOT_PASSWORD_FILE: /run/secrets/mariadb_root.pwd

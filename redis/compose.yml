@@ -2,7 +2,7 @@ services:
   redis:
     # https://hub.docker.com/_/redis
     image: docker.io/library/redis
-    restart: unless-stopped
+    restart: always
     volumes:
       - redis_data:/data
       # 如果需要自訂組態的話

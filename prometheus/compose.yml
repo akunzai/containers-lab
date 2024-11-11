@@ -2,7 +2,7 @@ services:
   prometheus:
     # https://github.com/prometheus/prometheus
     image: docker.io/prom/prometheus
-    restart: unless-stopped
+    restart: always
     volumes:
       - prometheus_data:/prometheus
       - ./prometheus:/etc/prometheus:ro
@@ -22,7 +22,7 @@ services:
   alertmanager:
     # https://github.com/prometheus/alertmanager
     image: docker.io/prom/alertmanager
-    restart: unless-stopped
+    restart: always
     volumes:
       - alertmanager_data:/alertmanager
       - ./alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
@@ -32,14 +32,14 @@ services:
     # https://github.com/blakey22/line-notify-gateway
     image: docker.io/blakey22/line-notify-gateway:v0.0.1
     user: nobody
-    restart: unless-stopped
+    restart: always
     environment:
       TOKEN: "CHANGEME"
       LOCALE: zh_TW
   grafana:
     # https://grafana.com/docs/grafana/latest/setup-grafana/installation/docker/
     image: docker.io/grafana/grafana-enterprise
-    restart: unless-stopped
+    restart: always
     # environment:
     # https://grafana.com/docs/grafana/latest/administration/configuration/
     # GF_SERVER_ROOT_URL: 'http://monitor.dev.local'
@@ -59,7 +59,7 @@ services:
   node_exporter:
     # https://github.com/prometheus/node_exporter
     image: docker.io/prom/node-exporter
-    restart: unless-stopped
+    restart: always
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
@@ -72,13 +72,13 @@ services:
   blackbox_exporter:
     # https://github.com/prometheus/blackbox_exporter
     image: docker.io/prom/blackbox-exporter
-    restart: unless-stopped
+    restart: always
     volumes:
       - ./blackbox.yml:/etc/blackbox_exporter/config.yml:ro
   sql_exporter:
     # https://github.com/burningalchemist/sql_exporter
     image: docker.io/burningalchemist/sql_exporter
-    restart: unless-stopped
+    restart: always
     volumes:
       - ./sql_exporter:/etc/sql_exporter:ro
     entrypoint:
@@ -89,7 +89,7 @@ services:
   cadvisor:
     # https://github.com/google/cadvisor
     image: gcr.io/cadvisor/cadvisor
-    restart: unless-stopped
+    restart: always
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:rw

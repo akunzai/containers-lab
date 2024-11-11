@@ -4,7 +4,7 @@ services:
     image: docker.io/library/mysql
     user: mysql
     container_name: guacamole_mysql
-    restart: unless-stopped
+    restart: always
     init: true
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_root.pwd
@@ -19,11 +19,11 @@ services:
   guacd:
     # https://hub.docker.com/r/guacamole/guacd
     image: docker.io/guacamole/guacd
-    restart: unless-stopped
+    restart: always
   guacamole:
     # https://hub.docker.com/r/guacamole/guacamole
     image: docker.io/guacamole/guacamole
-    restart: unless-stopped
+    restart: always
     depends_on:
       - guacd
       - mysql

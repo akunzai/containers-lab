@@ -3,7 +3,7 @@ services:
     # https://hub.docker.com/_/tomcat
     image: docker.io/library/tomcat
     user: www-data
-    restart: unless-stopped
+    restart: always
     init: true
     volumes:
       - ./sample.war:/usr/local/tomcat/webapps/ROOT.war

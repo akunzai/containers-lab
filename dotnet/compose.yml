@@ -2,7 +2,7 @@ services:
   dotnet:
     build: ./demo
     image: dotnet:demo
-    restart: unless-stopped
+    restart: always
     environment:
       ASPNETCORE_HTTP_PORTS: 8080
     ports:

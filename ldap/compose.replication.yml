@@ -2,7 +2,7 @@ services:
   ldap:
     # https://github.com/osixia/docker-openldap
     image: docker.io/osixia/openldap
-    restart: unless-stopped
+    restart: always
     hostname: ldap
     environment:
       # https://github.com/osixia/docker-openldap/issues/462
@@ -31,7 +31,7 @@ services:
   ldap2:
     # https://github.com/osixia/docker-openldap
     image: docker.io/osixia/openldap
-    restart: unless-stopped
+    restart: always
     hostname: ldap2
     environment:
       # https://github.com/osixia/docker-openldap/issues/462

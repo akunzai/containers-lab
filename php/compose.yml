@@ -7,7 +7,7 @@ services:
         PHP_VERSION: 8.3
     image: php:8.3-apache-ext
     user: www-data
-    restart: unless-stopped
+    restart: always
     volumes:
       - ./index.php:/var/www/html/index.php:ro
       - ./php.ini:/usr/local/etc/php/php.ini:ro
