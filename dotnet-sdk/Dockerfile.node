@@ -3,10 +3,10 @@ ARG NODE_VERSION=lts
 FROM docker.io/library/node:${NODE_VERSION}-slim AS node
 
 # https://hub.docker.com/_/microsoft-dotnet-sdk/
-FROM mcr.microsoft.com/dotnet/sdk:8.0
+FROM mcr.microsoft.com/dotnet/sdk:9.0
 
-# install ASP.NET Core 6.0 Runtime
-COPY --from=mcr.microsoft.com/dotnet/aspnet:6.0-bookworm-slim /usr/share/dotnet /usr/share/dotnet
+# install ASP.NET Core 8.0 Runtime
+COPY --from=mcr.microsoft.com/dotnet/aspnet:8.0-bookworm-slim /usr/share/dotnet /usr/share/dotnet
 
 # install the Node.js
 COPY --from=node /usr/local/bin/node /usr/local/bin/node

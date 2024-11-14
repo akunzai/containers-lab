@@ -24,34 +24,35 @@ podman-compose build --platform=linux/amd64
 # 執行 dotnet CLI
 $ podman-compose run --rm mono dotnet --info
 .NET SDK:
- Version:           8.0.303
- Commit:            29ab8e3268
- Workload version:  8.0.300-manifests.c915c39d
- MSBuild version:   17.10.4+10fbfbf2e
+ Version:           9.0.100
+ Commit:            59db016f11
+ Workload version:  9.0.100-manifests.3068a692
+ MSBuild version:   17.12.7+5b8665660
 
 Runtime Environment:
  OS Name:     debian
  OS Version:  12
  OS Platform: Linux
  RID:         linux-arm64
- Base Path:   /usr/share/dotnet/sdk/8.0.303/
+ Base Path:   /usr/share/dotnet/sdk/9.0.100/
 
 .NET workloads installed:
 There are no installed workloads to display.
+Configured to use loose manifests when installing new manifests.
 
 Host:
-  Version:      8.0.7
+  Version:      9.0.0
   Architecture: arm64
-  Commit:       2aade6beb0
+  Commit:       9d5a6a9aa4
 
 .NET SDKs installed:
-  8.0.303 [/usr/share/dotnet/sdk]
+  9.0.100 [/usr/share/dotnet/sdk]
 
 .NET runtimes installed:
-  Microsoft.AspNetCore.App 6.0.32 [/usr/share/dotnet/shared/Microsoft.AspNetCore.App]
-  Microsoft.AspNetCore.App 8.0.7 [/usr/share/dotnet/shared/Microsoft.AspNetCore.App]
-  Microsoft.NETCore.App 6.0.32 [/usr/share/dotnet/shared/Microsoft.NETCore.App]
-  Microsoft.NETCore.App 8.0.7 [/usr/share/dotnet/shared/Microsoft.NETCore.App]
+  Microsoft.AspNetCore.App 8.0.11 [/usr/share/dotnet/shared/Microsoft.AspNetCore.App]
+  Microsoft.AspNetCore.App 9.0.0 [/usr/share/dotnet/shared/Microsoft.AspNetCore.App]
+  Microsoft.NETCore.App 8.0.11 [/usr/share/dotnet/shared/Microsoft.NETCore.App]
+  Microsoft.NETCore.App 9.0.0 [/usr/share/dotnet/shared/Microsoft.NETCore.App]
 
 Other architectures found:
   None
@@ -77,11 +78,11 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 # 執行 node
 $ podman-compose run --rm node node --version
-v20.17.0
+v22.11.0
 
 # 執行 npm
 $ podman-compose run --rm node npm --version
-10.8.2
+10.9.0
 ```
 
 ## 疑難排解
