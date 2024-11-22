@@ -24,11 +24,13 @@ npx open-cli http://localhost:3000
 
 > 可使用 [LogQL](https://grafana.com/docs/loki/latest/logql/) 查詢語法
 
-## [用戶端](https://grafana.com/docs/loki/latest/clients/)
+## [記錄檔收集](https://grafana.com/docs/loki/latest/send-data/)
 
-Grafana Loki 支援許多用戶端應用程式來收集記錄檔
+Grafana Loki 支援透過許多不用的用戶端來收集記錄檔
 
 - [Promtail](https://grafana.com/docs/loki/latest/clients/promtail/)
+- [Grafana Alloy](https://grafana.com/docs/loki/latest/send-data/alloy/)
+- [OpenTelemetry](https://grafana.com/docs/loki/latest/send-data/otel/)
 - [Docker driver](https://grafana.com/docs/loki/latest/clients/docker-driver/)
 - [Fluentbit](https://grafana.com/docs/loki/latest/clients/fluentbit/)
 - [Fluentd](https://grafana.com/docs/loki/latest/clients/fluentd/)
