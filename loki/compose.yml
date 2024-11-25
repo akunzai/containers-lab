@@ -8,7 +8,6 @@ services:
       - ./loki-config.yml:/etc/loki/loki-config.yml:ro
     command:
       # https://grafana.com/docs/loki/latest/configure/
-      - -config.expand-env=true
       - -config.file=/etc/loki/loki-config.yml
       # disable anonymous usage reporting
       - -reporting.enabled=false
