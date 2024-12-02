@@ -26,11 +26,18 @@ services:
     restart: always
     volumes:
       - ./promtail-config.yml:/etc/promtail/promtail-config.yml:ro
+      - ./log:/var/log:ro
     environment:
       LOKI_URL: "http://loki:3100/loki/api/v1/push"
     command:
       - -config.expand-env=true
       - -config.file=/etc/promtail/promtail-config.yml
+
+  flog:
+    image: docker.io/mingrammer/flog
+    command: -t log -f json -d 1s -l -w -o /var/log/generated.log
+    volumes:
+      - ./log:/var/log:rw
 
   grafana:
     # https://grafana.com/docs/grafana/latest/setup-grafana/installation/docker/

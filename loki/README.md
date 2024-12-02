@@ -50,34 +50,3 @@ Grafana Loki 支援透過許多不用的用戶端來收集記錄檔
 # 透過 podman-compose
 podman-compose kill -s SIGHUP loki
 ```
-
-### [自動整理 log 檔案](https://stackoverflow.com/q/49450422)
-
-> [traefik 在接收到 USR1 訊號時會關閉重新開啟記錄檔](https://doc.traefik.io/traefik/observability/logs/#log-rotation)
-
-```sh
-sudo tee /etc/logrotate.d/traefik <<'EOF'
-/var/log/traefik/*.log {
-    daily
-    rotate 180
-    missingok
-    notifempty
-    compress
-    dateext
-    dateformat .%Y-%m-%d
-    create 0644 root adm
-    postrotate
-      podman kill -s USR1 $(podman ps -qf name=traefik) >/dev/null 2>&1
-    endscript
-}
-EOF
-
-# 預設 logrotate 的安全性設計並不允許處理目錄權限不為 root:root 的檔案
-sudo chown root:root /var/log/traefik/
-
-# 測試執行
-logrotate -d /etc/logrotate.d/traefik
-
-# 實際執行
-sudo logrotate -v /etc/logrotate.d/traefik
-```
