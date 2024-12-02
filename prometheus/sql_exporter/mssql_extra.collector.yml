@@ -1,3 +1,4 @@
+---
 collector_name: mssql_extra
 
 metrics:
