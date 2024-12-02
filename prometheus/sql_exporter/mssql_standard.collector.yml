@@ -1,3 +1,4 @@
+---
 # A collector defining standard metrics for Microsoft SQL Server.
 #
 # It is required that the SQL Server user has the following permissions:
@@ -8,7 +9,7 @@
 collector_name: mssql_standard
 
 # Similar to global.min_interval, but applies to the queries defined by this collector only.
-#min_interval: 0s
+# min_interval: 0s
 
 metrics:
   - metric_name: mssql_local_time_seconds

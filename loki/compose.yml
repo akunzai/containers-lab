@@ -5,10 +5,10 @@ services:
     restart: always
     volumes:
       - loki_data:/loki
-      - ./loki-config.yml:/etc/loki/loki-config.yml:ro
+      - ./loki.yml:/etc/loki/loki.yml:ro
     command:
       # https://grafana.com/docs/loki/latest/configure/
-      - -config.file=/etc/loki/loki-config.yml
+      - -config.file=/etc/loki/loki.yml
       # disable anonymous usage reporting
       - -reporting.enabled=false
       # https://grafana.com/docs/loki/latest/operations/storage/table-manager/#retention
@@ -25,12 +25,19 @@ services:
     image: docker.io/grafana/promtail
     restart: always
     volumes:
-      - ./promtail-config.yml:/etc/promtail/promtail-config.yml:ro
+      - ./promtail.yml:/etc/promtail/promtail.yml:ro
+      - ./log:/var/log:ro
     environment:
       LOKI_URL: "http://loki:3100/loki/api/v1/push"
     command:
       - -config.expand-env=true
-      - -config.file=/etc/promtail/promtail-config.yml
+      - -config.file=/etc/promtail/promtail.yml
+
+  flog:
+    image: docker.io/mingrammer/flog
+    command: -t log -f json -d 1s -l -w -o /var/log/generated.log
+    volumes:
+      - ./log:/var/log:rw
 
   grafana:
     # https://grafana.com/docs/grafana/latest/setup-grafana/installation/docker/

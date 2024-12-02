@@ -1,7 +1,8 @@
+---
 # https://prometheus.io/docs/prometheus/latest/configuration/configuration/
 global:
-  scrape_interval: 15s # default: 1m
-  scrape_timeout: 5s # default: 10s
+  scrape_interval: 15s  # default: 1m
+  scrape_timeout: 5s  # default: 10s
   # The labels to add to any time series or alerts when communicating with
   # external systems (federation, remote storage, Alertmanager).
   # external_labels:
@@ -10,12 +11,12 @@ global:
 # Rule files specifies a list of globs. Rules and alerts are read from
 # all matching files.
 rule_files:
-  # https://github.com/samber/awesome-prometheus-alerts
-  # - rules/prometheus.alert.yml
-  # - rules/container.alert.yml
-  # - rules/host.alert.yml
-  # - rules/blackbox.alert.yml
-  # - rules/windows.alert.yml
+# https://github.com/samber/awesome-prometheus-alerts
+# - rules/prometheus.alert.yml
+# - rules/container.alert.yml
+# - rules/host.alert.yml
+# - rules/blackbox.alert.yml
+# - rules/windows.alert.yml
 
 # Alerting specifies settings related to the Alertmanager.
 alerting:
@@ -129,9 +130,9 @@ scrape_configs:
         labels:
           env: prod
           app: demo
-  # SQL Server
-  # - job_name: 'mssql'
-  #   scrape_interval: 1m
-  #   static_configs:
-  #     - targets:
-  #       - localhost:9399
+# SQL Server
+# - job_name: 'mssql'
+#   scrape_interval: 1m
+#   static_configs:
+#     - targets:
+#       - localhost:9399
