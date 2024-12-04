@@ -18,7 +18,7 @@
 - [MariaDB 關連式資料庫](./mariadb/)
 - [MySQL 關連式資料庫](./mysql/)
 - [SQL Server 關連式資料庫](./mssql/)
-- [PostgreSQL 關連式資料庫](./postgresql/)
+- [PostgreSQL 關連式資料庫](./pgsql/)
 - [Redis 鍵值資料庫](./redis/)
 - [容器映像儲存庫](./registry/)
 
