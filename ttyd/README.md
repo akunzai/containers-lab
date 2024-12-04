@@ -4,8 +4,8 @@
 
 ## 環境需求
 
-- [Podman](https://podman.io/)
-- [Podman Compose](https://github.com/containers/podman-compose)
+- [Podman](https://podman.io/) >= 4.8.0
+- [Podman Compose](https://github.com/containers/podman-compose) >= 1.2.0
 
 ## Getting Started
 
