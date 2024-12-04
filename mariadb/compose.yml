@@ -14,7 +14,7 @@ services:
       # 如果需要自訂組態的話
       # - mariadb-conf:/etc/mysql/conf.d:ro
       # 如果需要初始化資料庫的話
-      # - ./initdb:/docker-entrypoint-initdb.d
+      # - ./initdb.d:/docker-entrypoint-initdb.d
     ports:
       - 127.0.0.1:3306:3306
 

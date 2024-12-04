@@ -2,15 +2,15 @@
 
 ## 環境需求
 
-- [Podman](https://podman.io/)
-- [Podman Compose](https://github.com/containers/podman-compose)
+- [Podman](https://podman.io/) >= 4.8.0
+- [Podman Compose](https://github.com/containers/podman-compose) >= 1.2.0
 
 ## Getting Started
 
 ```sh
 # 產生 Podman secrets
-podman secret exists mssql_root.pwd || openssl rand -base64 16 | podman secret create mssql_root.pwd -
-podman secret exists mssql_user.pwd || openssl rand -base64 16 | podman secret create mssql_user.pwd -
+openssl rand -base64 16 | podman secret create --replace mssql_root.pwd -
+openssl rand -base64 16 | podman secret create --replace mssql_user.pwd -
 
 # 在背景啟動並執行完整應用
 podman-compose up -d

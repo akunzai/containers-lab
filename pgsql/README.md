@@ -2,14 +2,14 @@
 
 ## 環境需求
 
-- [Podman](https://podman.io/)
-- [Podman Compose](https://github.com/containers/podman-compose)
+- [Podman](https://podman.io/) >= 4.8.0
+- [Podman Compose](https://github.com/containers/podman-compose) >= 1.2.0
 
 ## Getting Started
 
 ```sh
 # 產生 Podman secrets
-podman secret exists postgres.pwd || openssl rand -base64 16 | podman secret create postgres.pwd -
+openssl rand -base64 16 | podman secret create --replace postgres.pwd -
 
 # 在背景啟動並執行完整應用
 podman-compose up -d
@@ -34,8 +34,8 @@ mkcert -install
 mkcert -cert-file ./cert.pem -key-file ./key.pem '*.dev.local' localhost
 
 # 產生 Podman secrets
-podman secret exists dev.local.key || podman secret create dev.local.key ./key.pem
-podman secret exists dev.local.crt || podman secret create dev.local.crt ./cert.pem
+podman secret create --replace dev.local.key ./key.pem
+podman secret create --replace dev.local.crt ./cert.pem
 ```
 
 > 如果 `postgres` 伺服器支援而且不是使用 unix socket 方式連線的話，用戶端[預設會偏好使用 TLS 加密連線](https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-CONNECT-SSLMODE)

@@ -2,8 +2,8 @@
 
 ## 環境需求
 
-- [Podman](https://podman.io/)
-- [Podman Compose](https://github.com/containers/podman-compose)
+- [Podman](https://podman.io/) >= 4.8.0
+- [Podman Compose](https://github.com/containers/podman-compose) >= 1.2.0
 
 ## Getting Started
 
@@ -28,8 +28,8 @@ mkcert -install
 mkcert -cert-file ./cert.pem -key-file ./key.pem '*.dev.local' localhost
 
 # 產生 Podman secrets
-podman secret exists dev.local.key || podman secret create dev.local.key ./key.pem
-podman secret exists dev.local.crt || podman secret create dev.local.crt ./cert.pem
+podman secret create --replace dev.local.key ./key.pem
+podman secret create --replace dev.local.crt ./cert.pem
 
 # 啟用 TLS 加密連線
 COMPOSE_FILE=compose.yml:compose.tls.yml podman-compose up -d
@@ -44,9 +44,7 @@ curl -kv 'https://registry.dev.local:8443'
 
 ```sh
 # 產生可登入存取 Registry 的帳號與密碼
-podman secret exists registry.auth.htpasswd || \
-  podman run --entrypoint htpasswd httpd:2 -Bbn admin "$(openssl rand -base64 16)" | \
-  podman secret create registry.auth.htpasswd -
+podman run --entrypoint htpasswd httpd:2 -Bbn admin "$(openssl rand -base64 16)" | podman secret create --replace registry.auth.htpasswd -
 
 # 啟用限制存取
 COMPOSE_FILE=compose.yml:compose.auth.yml podman-compose up -d

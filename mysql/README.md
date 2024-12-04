@@ -2,14 +2,14 @@
 
 ## 環境需求
 
-- [Podman](https://podman.io/)
-- [Podman Compose](https://github.com/containers/podman-compose)
+- [Podman](https://podman.io/) >= 4.8.0
+- [Podman Compose](https://github.com/containers/podman-compose) >= 1.2.0
 
 ## Getting Started
 
 ```sh
 # 產生 Podman secrets
-podman secret exists mysql_root.pwd || openssl rand -base64 16 | podman secret create mysql_root.pwd -
+openssl rand -base64 16 | podman secret create --replace mysql_root.pwd -
 
 # 在背景啟動並執行完整應用
 podman-compose up -d
@@ -32,8 +32,8 @@ mkcert -install
 mkcert -cert-file ./cert.pem -key-file ./key.pem '*.dev.local' localhost
 
 # 產生 Podman secrets
-podman secret exists dev.local.key || podman secret create dev.local.key ./key.pem
-podman secret exists dev.local.crt || podman secret create dev.local.crt ./cert.pem
+podman secret create --replace dev.local.key ./key.pem
+podman secret create --replace dev.local.crt ./cert.pem
 ```
 
 > 如果 `mysql` 伺服器支援加密連線的話，用戶端預設會嘗試使用
