@@ -34,8 +34,8 @@ mkcert -install
 mkcert -cert-file ./cert.pem -key-file ./key.pem '*.dev.local' localhost
 
 # 產生 Podman secrets
-podman secret exists dev.local.key || podman secret create dev.local.key ./key.pem
-podman secret exists dev.local.crt || podman secret create dev.local.crt ./cert.pem
+podman secret create --replace dev.local.key ./key.pem
+podman secret create --replace dev.local.crt ./cert.pem
 ```
 
 ```sh

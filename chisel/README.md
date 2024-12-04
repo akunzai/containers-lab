@@ -38,10 +38,10 @@ mkcert -cert-file ./cert.pem -key-file ./key.pem '*.dev.local' localhost
 mkcert -client -cert-file ./client-cert.pem -key-file ./client-key.pem 'client'
 
 # 產生 Podman secrets
-podman secret exists dev.local.key || podman secret create dev.local.key ./key.pem
-podman secret exists dev.local.crt || podman secret create dev.local.crt ./cert.pem
-podman secret exists client.key || podman secret create client.key ./client-key.pem
-podman secret exists client.crt || podman secret create client.crt ./client-cert.pem
+podman secret create --replace dev.local.key ./key.pem
+podman secret create --replace dev.local.crt ./cert.pem
+podman secret create --replace client.key ./client-key.pem
+podman secret create --replace client.crt ./client-cert.pem
 
 # 啟用 TLS 加密連線
 COMPOSE_FILE=compose.yml:compose.tls.yml podman-compose up -d

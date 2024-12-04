@@ -9,7 +9,7 @@
 
 ```sh
 # 產生 Podman secrets
-podman secret exists mariadb_root.pwd || openssl rand -base64 16 | podman secret create mariadb_root.pwd -
+openssl rand -base64 16 | podman secret --replace create mariadb_root.pwd -
 
 # 在背景啟動並執行完整應用
 podman-compose up -d
@@ -32,8 +32,8 @@ mkcert -install
 mkcert -cert-file ./cert.pem -key-file ./key.pem '*.dev.local' localhost
 
 # 產生 Podman secrets
-podman secret exists dev.local.key || podman secret create dev.local.key ./key.pem
-podman secret exists dev.local.crt || podman secret create dev.local.crt ./cert.pem
+podman secret create --replace dev.local.key ./key.pem
+podman secret create --replace dev.local.crt ./cert.pem
 ```
 
 > 如果 `mariadb` 伺服器支援加密連線的話，用戶端預設會嘗試使用

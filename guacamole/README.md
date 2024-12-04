@@ -9,8 +9,8 @@
 
 ```sh
 # 產生 Podman secrets
-podman secret exists mysql_root.pwd || openssl rand -base64 16 | podman secret create mysql_root.pwd -
-podman secret exists mysql_user.pwd || openssl rand -base64 16 | podman secret create mysql_user.pwd -
+openssl rand -base64 16 | podman secret create --replace mysql_root.pwd -
+openssl rand -base64 16 | podman secret create --replace mysql_user.pwd -
 
 # 在背景啟動並執行完整應用
 podman-compose up -d

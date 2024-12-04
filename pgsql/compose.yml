@@ -8,13 +8,13 @@ services:
       # 指定初始化資料庫建立的帳號及密碼
       POSTGRES_PASSWORD_FILE: /run/secrets/postgres.pwd
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
-      POSTGRES_DB: ${POSTGRES_DB:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-demo}
     secrets:
       - postgres.pwd
     volumes:
       - postgres_data:/var/lib/postgresql/data
       # 如果需要初始化資料庫的話
-      # - ./initdb:/docker-entrypoint-initdb.d
+      # - ./initdb.d:/docker-entrypoint-initdb.d
     ports:
       - 127.0.0.1:5432:5432
 secrets:
