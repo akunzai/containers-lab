@@ -45,11 +45,18 @@ services:
     restart: always
     environment:
       # https://grafana.com/docs/grafana/latest/administration/configuration/
-      GF_SERVER_ROOT_URL: "http://www.dev.local"
+      # GF_SERVER_ROOT_URL: "http://www.dev.local"
       # 管理者帳號密碼, 應避免在正式環境中使用預設值
       # GF_SECURITY_ADMIN_USER: 'admin'
       # GF_SECURITY_ADMIN_PASSWORD: 'admin'
       # GF_SECURITY_ADMIN_PASSWORD__FILE: /run/secrets/grafana_admin.pwd
+      GF_SECURITY_DISABLE_GRAVATAR: "true"
+      GF_ANALYTICS_ENABLED: "false"
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      GF_ANALYTICS_CHECK_FOR_UPDATES: "false"
+      GF_ANALYTICS_CHECK_FOR_PLUGIN_UPDATES: "false"
+      GF_ANALYTICS_FEEDBACK_LINKS_ENABLED: "false"
+      GF_NEWS_NEWS_FEED_ENABLED: "false"
     volumes:
       - grafana_data:/var/lib/grafana
       # https://grafana.com/tutorials/provision-dashboards-and-data-sources/#introduction
