@@ -32,10 +32,6 @@ npx open-cli http://localhost:9093
 - [Redis exporter](https://github.com/oliver006/redis_exporter)
 - [Windows exporter](https://github.com/prometheus-community/windows_exporter)
 
-## [Alertmanager webhook receiver](https://prometheus.io/docs/operating/integrations/#alertmanager-webhook-receiver)
-
-- [LINE Notify Gateway](https://github.com/blakey22/line-notify-gateway)
-
 ## [Dashboards](https://grafana.com/grafana/dashboards)
 
 請透過 Grafana 管理介面的 Dashboards -> New -> Import 功能進行匯入

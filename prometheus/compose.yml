@@ -28,14 +28,6 @@ services:
       - ./alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
     ports:
       - 127.0.0.1:9093:9093
-  line-notify-gateway:
-    # https://github.com/blakey22/line-notify-gateway
-    image: docker.io/blakey22/line-notify-gateway:v0.0.1
-    user: nobody
-    restart: always
-    environment:
-      TOKEN: "CHANGEME"
-      LOCALE: zh_TW
   grafana:
     # https://grafana.com/docs/grafana/latest/setup-grafana/installation/docker/
     image: docker.io/grafana/grafana-enterprise
