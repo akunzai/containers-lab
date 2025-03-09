@@ -19,6 +19,11 @@ services:
     #   - "somehost:127.0.0.2"
     ports:
       - 127.0.0.1:9090:9090
+    healthcheck:
+      test: wget -qO- --spider 'http://localhost:9090/-/healthy'
+      interval: 30s
+      timeout: 10s
+      retries: 3
   alertmanager:
     # https://github.com/prometheus/alertmanager
     image: docker.io/prom/alertmanager
@@ -28,6 +33,11 @@ services:
       - ./alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
     ports:
       - 127.0.0.1:9093:9093
+    healthcheck:
+      test: wget -qO- --spider 'http://localhost:9093/-/healthy'
+      interval: 30s
+      timeout: 10s
+      retries: 3
   grafana:
     # https://grafana.com/docs/grafana/latest/setup-grafana/installation/docker/
     image: docker.io/grafana/grafana-enterprise
@@ -55,12 +65,22 @@ services:
       # - ./grafana/dashboards.yml:/etc/grafana/provisioning/datasources/dashboards.yml:ro
     ports:
       - 127.0.0.1:3000:3000
+    healthcheck:
+      test: wget -qO- --spider 'http://localhost:3000/api/health'
+      interval: 30s
+      timeout: 10s
+      retries: 3
   blackbox_exporter:
     # https://github.com/prometheus/blackbox_exporter
     image: docker.io/prom/blackbox-exporter
     restart: always
     volumes:
       - ./blackbox.yml:/etc/blackbox_exporter/config.yml:ro
+    healthcheck:
+      test: wget -qO- --spider 'http://localhost:9115/-/healthy'
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
 volumes:
   alertmanager_data:
