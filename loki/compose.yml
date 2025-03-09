@@ -19,6 +19,11 @@ services:
       - -querier.max-outstanding-requests-per-tenant=4096
       - -querier.split-queries-by-interval=15m
       - -query-scheduler.max-outstanding-requests-per-tenant=4096
+    healthcheck:
+      test: wget -qO- --spider 'http://localhost:3100/ready'
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   promtail:
     # https://grafana.com/docs/loki/latest/clients/promtail/installation/
@@ -60,12 +65,17 @@ services:
     volumes:
       - grafana_data:/var/lib/grafana
       # https://grafana.com/tutorials/provision-dashboards-and-data-sources/#introduction
-      - ./grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml:ro
+      - ./grafana/datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml:ro
       # 如果要自動匯入 dashboard 的話
       # - ./grafana/dashboards:/var/lib/grafana/dashboards
       # - ./grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml:ro
     ports:
       - 127.0.0.1:3000:3000
+    healthcheck:
+      test: wget -qO- --spider 'http://localhost:3000/api/health'
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
 volumes:
   grafana_data:
