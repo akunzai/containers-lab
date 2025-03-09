@@ -60,7 +60,7 @@ services:
     volumes:
       - grafana_data:/var/lib/grafana
       # https://grafana.com/tutorials/provision-dashboards-and-data-sources/#introduction
-      - ./grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml:ro
+      - ./grafana/datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml:ro
       # 如果要自動匯入 dashboard 的話
       # - ./grafana/dashboards:/var/lib/grafana/dashboards
       # - ./grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml:ro

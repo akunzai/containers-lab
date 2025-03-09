@@ -1,0 +1,12 @@
+services:
+  sql_exporter:
+    # https://github.com/burningalchemist/sql_exporter
+    image: docker.io/burningalchemist/sql_exporter
+    restart: always
+    volumes:
+      - ./sql_exporter:/etc/sql_exporter:ro
+    entrypoint:
+      - "/bin/sql_exporter"
+      - "--config.file=/etc/sql_exporter/sql_exporter.yml"
+    ports:
+      - 127.0.0.1:9399:9399

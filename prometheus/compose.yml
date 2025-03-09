@@ -49,58 +49,18 @@ services:
     volumes:
       - grafana_data:/var/lib/grafana
       # https://grafana.com/tutorials/provision-dashboards-and-data-sources/#introduction
-      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
+      - ./grafana/datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml:ro
       # 如果要自動匯入 dashboard 的話
       # - ./grafana/dashboards:/var/lib/grafana/dashboards
-      # - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
+      # - ./grafana/dashboards.yml:/etc/grafana/provisioning/datasources/dashboards.yml:ro
     ports:
       - 127.0.0.1:3000:3000
-  node_exporter:
-    # https://github.com/prometheus/node_exporter
-    image: docker.io/prom/node-exporter
-    restart: always
-    volumes:
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-      - /:/rootfs:ro
-    command:
-      - "--path.procfs=/host/proc"
-      - "--path.rootfs=/rootfs"
-      - "--path.sysfs=/host/sys"
-      - "--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)"
   blackbox_exporter:
     # https://github.com/prometheus/blackbox_exporter
     image: docker.io/prom/blackbox-exporter
     restart: always
     volumes:
       - ./blackbox.yml:/etc/blackbox_exporter/config.yml:ro
-  sql_exporter:
-    # https://github.com/burningalchemist/sql_exporter
-    image: docker.io/burningalchemist/sql_exporter
-    restart: always
-    volumes:
-      - ./sql_exporter:/etc/sql_exporter:ro
-    entrypoint:
-      - "/bin/sql_exporter"
-      - "--config.file=/etc/sql_exporter/sql_exporter.yml"
-    ports:
-      - 127.0.0.1:9399:9399
-  cadvisor:
-    # https://github.com/google/cadvisor
-    image: gcr.io/cadvisor/cadvisor
-    restart: always
-    volumes:
-      - /:/rootfs:ro
-      - /var/run:/var/run:rw
-      - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
-      # - /dev/disk:/dev/disk:ro # Linux only
-    # Linux only
-    # devices:
-    #   - /dev/kmsg:/dev/kmsg
-    # privileged: true
-    ports:
-      - 127.0.0.1:8080:8080
 
 volumes:
   alertmanager_data:
