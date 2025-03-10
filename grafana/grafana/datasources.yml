@@ -8,6 +8,10 @@ datasources:
     access: proxy
     url: http://prometheus:9090
     isDefault: true
+  - name: Loki
+    type: loki
+    access: proxy
+    url: http://loki:3100
   - name: Alertmanager
     type: alertmanager
     url: http://alertmanager:9093

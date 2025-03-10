@@ -1,4 +1,4 @@
-# [Prometheus](https://prometheus.io/) 監控告警系統
+# [](https://grafana.com/) 監控告警系統
 
 ## 環境需求
 
@@ -22,16 +22,6 @@ npx open-cli http://localhost:3000
 npx open-cli http://localhost:9093
 ```
 
-## [Exporters](https://prometheus.io/docs/instrumenting/exporters/)
-
-- [Blackbox exporter](https://github.com/prometheus/blackbox_exporter)
-- [cAdvisor](https://github.com/google/cadvisor)
-- [SNMP exporter](https://github.com/prometheus/snmp_exporter)
-- [SQL exporter](https://github.com/burningalchemist/sql_exporter)
-- [Node exporter](https://github.com/prometheus/node_exporter)
-- [Redis exporter](https://github.com/oliver006/redis_exporter)
-- [Windows exporter](https://github.com/prometheus-community/windows_exporter)
-
 ## [Dashboards](https://grafana.com/grafana/dashboards)
 
 請透過 Grafana 管理介面的 Dashboards -> New -> Import 功能進行匯入
@@ -41,14 +31,49 @@ npx open-cli http://localhost:9093
 - [Node exporter](https://grafana.com/grafana/dashboards/10180-kds-linux-hosts/)
 - [Prometheus](https://grafana.com/grafana/dashboards/12054-prometheus-benchmark-2-17-x/)
 - [Windows exporter](https://grafana.com/grafana/dashboards/6593-windows-node/)
+- [Logs / App](https://grafana.com/grafana/dashboards/13639-logs-app/)
+- [Nginx access logs](https://grafana.com/grafana/dashboards/16101-grafana-loki-dashboard-for-nginx-service-mesh/)
+
+## [Prometheus](https://prometheus.io/) 監控時序資料庫
+
+### [Prometheus 監控數據匯出](https://prometheus.io/docs/instrumenting/exporters/)
+
+- [Blackbox exporter](https://github.com/prometheus/blackbox_exporter)
+- [cAdvisor](https://github.com/google/cadvisor)
+- [SNMP exporter](https://github.com/prometheus/snmp_exporter)
+- [SQL exporter](https://github.com/burningalchemist/sql_exporter)
+- [Node exporter](https://github.com/prometheus/node_exporter)
+- [Redis exporter](https://github.com/oliver006/redis_exporter)
+- [Windows exporter](https://github.com/prometheus-community/windows_exporter)
+
+## [Loki](https://github.com/grafana/loki) 日誌資料庫
+
+### [查詢記錄檔](https://grafana.com/docs/loki/latest/getting-started/grafana/)
+
+請透過 Grafana 管理介面側邊列的 Explore, 選擇 Loki 資料來源
+
+再選取記錄檔串流查詢記錄
+
+> 可使用 [LogQL](https://grafana.com/docs/loki/latest/logql/) 查詢語法
+
+### [記錄檔收集](https://grafana.com/docs/loki/latest/send-data/)
+
+Grafana Loki 支援透過許多不用的用戶端來收集記錄檔
+
+- [Promtail](https://grafana.com/docs/loki/latest/clients/promtail/)
+- [Grafana Alloy](https://grafana.com/docs/loki/latest/send-data/alloy/)
+- [OpenTelemetry](https://grafana.com/docs/loki/latest/send-data/otel/)
+- [Docker driver](https://grafana.com/docs/loki/latest/clients/docker-driver/)
+- [Fluentbit](https://grafana.com/docs/loki/latest/clients/fluentbit/)
+- [Fluentd](https://grafana.com/docs/loki/latest/clients/fluentd/)
 
 ## 疑難排解
 
-### [重新載入 Prometheus 配置](https://prometheus.io/docs/prometheus/latest/management_api/)
+### 重載組態配置
 
 ```sh
 # 透過 podman-compose
-podman-compose kill -s SIGHUP prometheus
+podman-compose kill -s SIGHUP prometheus loki
 
 # 透過 CURL
 curl -X POST http://prometheus.dev.local/-/reload
