@@ -1,6 +1,5 @@
 ---
 # https://github.com/grafana/loki/blob/main/cmd/loki/loki-docker-config.yaml
-
 auth_enabled: false
 
 server:
