@@ -36,10 +36,15 @@ file_env 'MSSQL_SA_PASSWORD'
 DBSTATUS=1
 ERRCODE=1
 
-if [[ -n "${MSSQL_DATABASE}" ]] && [[ -n "${MSSQL_SA_PASSWORD}" ]]; then
-	DBSTATUS=$(sqlcmd -C -h -1 -t 1 -U sa -P "${MSSQL_SA_PASSWORD}" -Q "SET NOCOUNT ON; SELECT state FROM sys.databases WHERE name = N'${MSSQL_DATABASE}'")
-else
+if [[ -z "${MSSQL_SA_PASSWORD:-}" ]]; then
+	echo "ERROR: MSSQL_SA_PASSWORD is not set. Exiting..." >&2
+	exit 1
+fi
+
+if [[ -z "${MSSQL_DATABASE:-}" ]] || [[ "${MSSQL_DATABASE}" == *'$'* ]]; then
 	DBSTATUS=$(sqlcmd -C -h -1 -t 1 -U sa -P "${MSSQL_SA_PASSWORD}" -Q "SET NOCOUNT ON; SELECT SUM(state) FROM sys.databases")
+else
+	DBSTATUS=$(sqlcmd -C -h -1 -t 1 -U sa -P "${MSSQL_SA_PASSWORD}" -Q "SET NOCOUNT ON; SELECT state FROM sys.databases WHERE name = N'${MSSQL_DATABASE}'")
 fi
 
 if [[ -n "${DBSTATUS}" ]]; then
@@ -48,9 +53,18 @@ fi
 
 ERRCODE=$?
 
-echo "db: ${MSSQL_DATABASE}, status: ${DBSTATUS}, error: ${ERRCODE}"
-
 if [[ ${DBSTATUS} -ne 0 ]] || [[ ${ERRCODE} -ne 0 ]]; then
-	echo "SQL Server database not ready"
+	if [[ -z "${MSSQL_DATABASE:-}" ]] || [[ "${MSSQL_DATABASE}" == *'$'* ]]; then
+		echo "ERROR: All databases are not ready (status:${DBSTATUS}, errcode:${ERRCODE})" >&2
+	else
+		echo "ERROR: ${MSSQL_DATABASE} database is not ready (status:${DBSTATUS}, errcode:${ERRCODE})" >&2
+	fi
 	exit 1
+else
+	if [[ -z "${MSSQL_DATABASE:-}" ]] || [[ "${MSSQL_DATABASE}" == *'$'* ]]; then
+		echo "INFO: All databases are ready" >&2
+	else
+		echo "INFO: ${MSSQL_DATABASE} database is ready" >&2
+	fi
+	exit 0
 fi
