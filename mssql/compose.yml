@@ -7,17 +7,25 @@ services:
     init: true
     environment:
       # https://learn.microsoft.com/sql/linux/sql-server-linux-configure-environment-variables
-      ACCEPT_EULA: "Y"
+      ACCEPT_EULA: 'Y'
       MSSQL_SA_PASSWORD_FILE: /run/secrets/mssql_root.pwd
       MSSQL_DATABASE: ${MSSQL_DATABASE:-}
       MSSQL_USER: ${MSSQL_USER:-}
       MSSQL_PASSWORD_FILE: /run/secrets/mssql_user.pwd
+      # MSSQL_STARTUP_TIMEOUT: 60
+      # MSSQL_STARTUP_DELAY: 1
     volumes:
       - mssql_data:/var/opt/mssql
       # 如果需要自訂組態的話
       # - ./mssql.conf:/var/opt/mssql/mssql.conf:ro
     ports:
       - 127.0.0.1:1433:1433
+    healthcheck:
+      test: [CMD, '/healthcheck.sh']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
     secrets:
       - mssql_root.pwd
       - mssql_user.pwd
