@@ -1,7 +1,7 @@
 services:
   traefik:
     # https://hub.docker.com/_/traefik
-    image: traefik
+    image: docker.io/library/traefik
     restart: always
     security_opt:
       - label=type:container_runtime_t
@@ -18,7 +18,7 @@ services:
       - "127.0.0.1:8888:8080"
   whoami:
     # https://hub.docker.com/r/traefik/whoami/
-    image: traefik/whoami
+    image: docker.io/traefik/whoami
     restart: always
     labels:
       - "traefik.enable=true"
