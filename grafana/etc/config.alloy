@@ -1,0 +1,42 @@
+// https://grafana.com/docs/alloy/latest/collect/opentelemetry-to-lgtm-stack/
+otelcol.receiver.otlp "default" {
+	grpc { 
+		endpoint = "0.0.0.0:4317"
+	}
+	http { 
+		endpoint = "0.0.0.0:4318"
+	}
+	output {
+		metrics = [otelcol.processor.batch.default.input]
+		logs    = [otelcol.processor.batch.default.input]
+		traces  = [otelcol.processor.batch.default.input]
+	}
+}
+
+otelcol.processor.batch "default" {
+  output {
+    metrics = [otelcol.exporter.prometheus.default.input]
+    logs    = [otelcol.exporter.loki.default.input]
+    traces  = []
+  }
+}
+
+otelcol.exporter.prometheus "default" {
+	forward_to = [prometheus.remote_write.default.receiver]
+}
+
+otelcol.exporter.loki "default" {
+	forward_to = [loki.write.default.receiver]
+}
+
+prometheus.remote_write "default" {
+	endpoint {
+		url = "http://prometheus:9090/api/v1/write"
+	}
+}
+
+loki.write "default" {
+	endpoint {
+		url = "http://loki:3100/loki/api/v1/push"
+	}
+}
