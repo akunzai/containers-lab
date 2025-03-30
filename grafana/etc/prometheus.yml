@@ -1,9 +1,4 @@
 ---
-# https://prometheus.io/docs/prometheus/latest/configuration/configuration/
-global:
-  scrape_interval: 15s  # default: 1m
-  scrape_timeout: 5s  # default: 10s
-
 # https://prometheus.io/docs/guides/opentelemetry/
 storage:
   tsdb:
