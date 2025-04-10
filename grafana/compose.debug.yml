@@ -1,3 +1,18 @@
 services:
   otelgen:
     image: ghcr.io/krzko/otelgen
+  smtp4dev:
+    image: rnwood/smtp4dev
+    ports:
+      - "8080:80"
+      - "2525:25"
+    volumes:
+      - smtp4dev-data:/smtp4dev
+  grafana:
+    environment:
+      # https://grafana.com/docs/grafana/latest/alerting/configure-notifications/manage-contact-points/integrations/configure-email/
+      GF_SMTP_ENABLED: "true"
+      GF_SMTP_HOST: "smtp4dev:25"
+
+volumes:
+  smtp4dev-data:
