@@ -2,7 +2,7 @@ services:
   otelgen:
     image: ghcr.io/krzko/otelgen
   smtp4dev:
-    image: rnwood/smtp4dev
+    image: docker.io/rnwood/smtp4dev
     ports:
       - "8080:80"
       - "2525:25"
