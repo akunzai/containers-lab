@@ -20,9 +20,9 @@ fi
 
 if [[ -n "${CRON}" ]] && [[ "${CRON}" -eq "1" ]]; then
 	# install tools
-	if ! hash gosu >/dev/null 2>&1; then
+	if ! hash cron >/dev/null 2>&1; then
 		apt-get update -qq >/dev/null
-		apt-get install --no-install-recommends -yqq cron gosu >/dev/null
+		apt-get install --no-install-recommends -yqq cron >/dev/null
 	fi
 	# fix: Permission denied error caused by empty `which php` in cron jobs
 	[[ -e /usr/bin/php ]] || ln -s /usr/local/bin/php /usr/bin/php
@@ -34,7 +34,7 @@ if [[ -n "${CRON}" ]] && [[ "${CRON}" -eq "1" ]]; then
 	# /proc/1/fd/1: STDOUT for container
 	# /proc/1/fd/2: STDERR for container
 	if [[ -e "${cron_sh}" ]]; then
-		echo "*/5 * * * * (/usr/sbin/gosu www-data /bin/bash ${cron_sh})>/proc/1/fd/1 2>/proc/1/fd/2" | crontab
+		echo "*/5 * * * * (/usr/bin/setpriv --reuid www-data --regid www-data --clear-groups /bin/bash ${cron_sh})>/proc/1/fd/1 2>/proc/1/fd/2" | crontab
 	fi
 fi
 
