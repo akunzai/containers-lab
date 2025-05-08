@@ -15,7 +15,7 @@ podman-compose up -d
 npx open-cli http://localhost:8080
 ```
 
-## [啟用 HTTPS 連線](https://docs.spring.io/spring-boot/docs/current/reference/html/howto.html#howto.webserver.configure-ssl)
+## [啟用 HTTPS 連線](https://docs.spring.io/spring-boot/how-to/webserver.html#howto.webserver.configure-ssl)
 
 可透過 [mkcert](https://github.com/FiloSottile/mkcert) 建立本機開發用的 TLS 憑證
 
@@ -54,7 +54,7 @@ root
 $ podman-compose run --rm java bash
 ```
 
-## [Spring Boot 應用程式組態檔配置](https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.external-config)
+## [Spring Boot 應用程式組態檔配置](https://docs.spring.io/spring-boot/reference/features/external-config.html)
 
 如需自訂 Spring Boot 應用程式組態檔位置
 
@@ -87,7 +87,7 @@ SPRING_CONFIG_LOCATION=classpath:/,file:/home/config/
 
 ### 如果啟用 HTTPS 後, 如果應用程式無法正確判定 HTTPS 安全連線的話
 
-可以試著在 Spring Boot JAR 應用程式組態檔加入以下配置以支援 [反向代理的 HTTPS 卸載](https://docs.spring.io/spring-boot/docs/current/reference/html/howto.html#howto-use-behind-a-proxy-server)
+可以試著在 Spring Boot JAR 應用程式組態檔加入以下配置以支援 [反向代理的 HTTPS 卸載](https://docs.spring.io/spring-boot/how-to/webserver.html#howto.webserver.use-behind-a-proxy-server)
 
 ```ini:application.properties
 # before spring-boot 2.2
