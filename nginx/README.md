@@ -32,6 +32,9 @@ mkcert -cert-file ./cert.pem -key-file ./key.pem '*.dev.local' localhost
 podman secret create --replace dev.local.key ./key.pem
 podman secret create --replace dev.local.crt ./cert.pem
 
+# 產生用於 Diffie–Hellman 演算法的密鑰
+openssl dhparam -out ./dhparam.pem 2048
+
 # 啟用 TLS 加密連線
 podman-compose -f compose.yml -f compose.tls.yml up -d
 

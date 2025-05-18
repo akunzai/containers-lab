@@ -3,7 +3,8 @@ services:
     # https://github.com/nginxinc/docker-nginx-unprivileged
     image: docker.io/nginxinc/nginx-unprivileged:alpine-slim
     restart: always
-    # volumes:
+    volumes:
+      - ./dhparam.pem:/etc/nginx/dhparam.pem:ro
     #   - ./html:/usr/share/nginx/html:ro
     ports:
       - "127.0.0.1:8080:8080"
