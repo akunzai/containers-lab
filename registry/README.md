@@ -32,7 +32,7 @@ podman secret create --replace dev.local.key ./key.pem
 podman secret create --replace dev.local.crt ./cert.pem
 
 # 啟用 TLS 加密連線
-COMPOSE_FILE=compose.yml:compose.tls.yml podman-compose up -d
+podman-compose podman-compose -f compose.yml -f compose.tls.yml up -d
 
 # 確認已正確啟用
 curl -kv 'https://registry.dev.local:8443'
@@ -47,7 +47,7 @@ curl -kv 'https://registry.dev.local:8443'
 podman run --entrypoint htpasswd httpd:2 -Bbn admin "$(openssl rand -base64 16)" | podman secret create --replace registry.auth.htpasswd -
 
 # 啟用限制存取
-COMPOSE_FILE=compose.yml:compose.auth.yml podman-compose up -d
+podman-compose -f compose.yml -f compose.auth.yml up -d
 
 # 登入自建的 Registry
 podman login localhost:5000

@@ -40,10 +40,10 @@ podman secret create --replace dev.local.crt ./cert.pem
 
 ```sh
 # 啟用 TLS 加密連線
-COMPOSE_FILE=compose.yml:compose.tls.yml podman-compose up -d
+podman-compose -f compose.yml -f compose.tls.yml up -d
 
 # 確認已正確啟用
-COMPOSE_FILE=compose.yml:compose.tls.yml podman-compose exec rabbitmq rabbitmq-diagnostics listeners
+podman-compose -f compose.yml -f compose.tls.yml exec rabbitmq rabbitmq-diagnostics listeners
 ```
 
 ## [管理工具](https://www.rabbitmq.com/docs/cli)

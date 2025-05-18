@@ -44,11 +44,10 @@ podman secret create --replace client.key ./client-key.pem
 podman secret create --replace client.crt ./client-cert.pem
 
 # 啟用 TLS 加密連線
-COMPOSE_FILE=compose.yml:compose.tls.yml podman-compose up -d
+podman-compose -f compose.yml -f compose.tls.yml up -d
 
 # 測試加密連線
-COMPOSE_FILE=compose.yml:compose.tls.yml \
-  podman-compose run --rm chisel-client client \
+podman-compose -f compose.yml -f compose.tls.yml run --rm chisel-client client \
   --tls-key=/run/secrets/client.key \
   --tls-cert=/run/secrets/client.crt \
   https://tunnel.dev.local:8443 3000:whoami:2001

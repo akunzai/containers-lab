@@ -51,10 +51,10 @@ podman secret create --replace dev.local.crt ./cert.pem
 podman secret create --replace dev.CA.crt "$(mkcert -CAROOT)/rootCA.pem"
 
 # 啟用 TLS 加密連線
-COMPOSE_FILE=compose.yml:compose.tls.yml podman-compose up -d
+podman-compose -f compose.yml -f compose.tls.yml up -d
 
 # 確認已正確啟用
-COMPOSE_FILE=compose.yml:compose.tls.yml podman-compose exec redis redis-cli -p 6380 --tls \
+podman-compose -f compose.yml -f compose.tls.yml exec redis redis-cli -p 6380 --tls \
     --cert /run/secrets/dev.local.crt \
     --key /run/secrets/dev.local.key \
     --cacert /run/secrets/dev.CA.crt info

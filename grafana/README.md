@@ -8,11 +8,11 @@
 ## Getting Started
 
 ```sh
-# 啟用偵錯模式
-export COMPOSE_FILE=compose.yml:compose.debug.yml
-
 # 在背景啟動並執行完整應用
 podman-compose up -d
+
+# 以偵錯模式在背景啟動並執行完整應用
+podman-compose -f compose.yml -f compose.debug.yml up -d
 
 # 開啟 Grafana 管理後台
 npx open-cli http://localhost:3000

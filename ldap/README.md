@@ -12,7 +12,7 @@
 podman-compose up -d
 
 # 如果需要使用網頁管理介面的話
-COMPOSE_FILE=compose.yml:compose.admin.yml podman-compose up -d
+podman-compose -f compose.yml -f compose.admin.yml up -d
 ```
 
 ## [預設存取憑證](https://github.com/osixia/docker-openldap#defaultyaml)
@@ -46,7 +46,7 @@ podman secret create --replace dev.local.crt ./cert.pem
 podman secret create --replace dev.CA.crt "$(mkcert -CAROOT)/rootCA.pem"
 
 # 啟用 TLS 加密連線
-COMPOSE_FILE=compose.yml:compose.tls.yml podman-compose up -d
+podman-compose -f compose.yml -f compose.tls.yml up -d
 
 # 確認已正確啟用
 curl -kvu 'cn=admin,dc=example,dc=org:admin' 'ldaps://ldap.dev.local/ou=users,dc=example,dc=org??sub'

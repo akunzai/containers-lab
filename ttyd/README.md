@@ -40,7 +40,7 @@ podman secret create --replace dev.local.key ./key.pem
 podman secret create --replace dev.local.crt ./cert.pem
 
 # 啟用 TLS 加密連線
-COMPOSE_FILE=compose.yml:compose.tls.yml podman-compose up -d
+podman-compose -f compose.yml -f compose.tls.yml up -d
 
 # 確認已正確啟用
 curl -v 'https://tty.dev.local:7681'

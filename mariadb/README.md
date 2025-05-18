@@ -15,7 +15,7 @@ openssl rand -base64 16 | podman secret --replace create mariadb_root.pwd -
 podman-compose up -d
 
 # 如果需要使用網頁介面管理資料庫的話
-COMPOSE_FILE=compose.yml:compose.dbgate.yml podman-compose up -d
+podman-compose -f compose.yml -f compose.dbgate.yml up -d
 ```
 
 ## [啟用 TLS 加密連線](https://mariadb.com/kb/en/securing-connections-for-client-and-server/)
@@ -40,7 +40,7 @@ podman secret create --replace dev.local.crt ./cert.pem
 
 ```sh
 # 啟用 TLS 加密連線
-COMPOSE_FILE=compose.yml:compose.tls.yml podman-compose up -d
+podman-compose -f compose.yml -f compose.tls.yml up -d
 
 # 確認已正確啟用
 podman-compose exec mariadb mariadb -p -e 'SHOW VARIABLES LIKE "%ssl%";'

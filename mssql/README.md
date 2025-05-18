@@ -20,7 +20,7 @@ podman-compose up -d
 podman-compose exec mssql bash -c '/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U SA -P $(cat /run/secrets/mssql_root.pwd)'
 
 # 如果需要使用網頁介面管理資料庫的話
-COMPOSE_FILE=compose.yml:compose.dbgate.yml podman-compose up -d
+podman-compose -f compose.yml -f compose.dbgate.yml up -d
 ```
 
 ## 重設資料庫 sa 帳號密碼
