@@ -11,13 +11,16 @@ server_tokens off;
 ssl_protocols TLSv1.2 TLSv1.3;
 
 # Use strong ciphers only
-ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-CHACHA20-POLY1305;
+ssl_ecdh_curve X25519:prime256v1:secp384r1;
+# https://ciphersuite.info/cs/?security=recommended
+ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-CHACHA20-POLY1305:TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384;
+
 ssl_prefer_server_ciphers off;
 
 ## Use strong Key Exchange
-# sudo openssl dhparam -out /etc/nginx/dhparam.pem 4096
-# curl https://ssl-config.mozilla.org/ffdhe2048.txt > /etc/nginx/dhparam.pem
-# ssl_dhparam /etc/nginx/dhparam.pem;
+# openssl dhparam -out ./dhparam.pem 2048
+# curl https://ssl-config.mozilla.org/ffdhe2048.txt > ./dhparam.pem
+ssl_dhparam /etc/nginx/dhparam.pem;
 
 # Maintaining SSL Sessions
 ssl_session_cache shared:SSL:10m;

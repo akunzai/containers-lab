@@ -15,7 +15,7 @@ openssl rand -base64 16 | podman secret create --replace postgres.pwd -
 podman-compose up -d
 
 # 如果需要使用網頁介面管理資料庫的話
-COMPOSE_FILE=compose.yml:compose.dbgate.yml podman-compose up -d
+podman-compose -f compose.yml -f compose.dbgate.yml up -d
 ```
 
 ## [啟用 TLS 加密連線](https://www.postgresql.org/docs/current/ssl-tcp.html)
@@ -42,7 +42,7 @@ podman secret create --replace dev.local.crt ./cert.pem
 
 ```sh
 # 啟用 TLS 加密連線
-COMPOSE_FILE=compose.yml:compose.tls.yml podman-compose up -d
+podman-compose -f compose.yml -f compose.tls.yml up -d
 
 # 確認 TLS 加密連線
 podman-compose exec postgres bash -c 'psql -h localhost -U $POSTGRES_USER -c "SELECT * FROM pg_stat_ssl;"'
