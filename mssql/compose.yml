@@ -12,6 +12,7 @@ services:
       MSSQL_DATABASE: ${MSSQL_DATABASE:-}
       MSSQL_USER: ${MSSQL_USER:-}
       MSSQL_PASSWORD_FILE: /run/secrets/mssql_user.pwd
+      MSSQL_COLLATION: Latin1_General_100_CI_AS_SC_UTF8
       # MSSQL_STARTUP_TIMEOUT: 60
       # MSSQL_STARTUP_DELAY: 1
     volumes:
