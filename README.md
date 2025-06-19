@@ -25,6 +25,7 @@
 ## 應用情境
 
 - [Chisel HTTP 隧道伺服器](./chisel/)
+- [Dnsmasq 輕量級 DNS 伺服器](./dnsmasq/)
 - [TTYd 終端機網頁伺服器](./ttyd/)
 - [Guacamole 遠端桌面閘道](./guacamole/)
 - [Nagios NRPE 遠端外掛監控工具](./nrpe/)
