@@ -1,0 +1,10 @@
+services:
+  httpd:
+    # https://hub.docker.com/_/httpd
+    image: docker.io/library/httpd:alpine
+    restart: always
+    volumes:
+      - ./etc/httpd.conf:/usr/local/apache2/conf/httpd.conf:ro
+      - ./conf.d:/usr/local/apache2/conf.d:ro
+    ports:
+      - "127.0.0.1:8080:8080"
