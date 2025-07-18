@@ -1,8 +1,58 @@
+// https://grafana.com/docs/alloy/latest/reference/components/local/local.file_match/
+local.file_match "log" {
+	path_targets = [{"__path__" = "/tmp/logs/**/*.log"}]
+}
+// jq -c 'sort_by(.timestamp | tonumber) | .[]' *.json > output.jsonl
+local.file_match "jsonl" {
+	path_targets = [{"__path__" = "/tmp/logs/**/*.jsonl"}]
+}
+
+loki.source.file "log" {
+	targets    = local.file_match.log.targets
+	forward_to = [loki.write.default.receiver]
+}
+
+loki.source.file "jsonl" {
+	targets    = local.file_match.jsonl.targets
+	forward_to = [loki.process.jsonl.receiver]
+}
+
+loki.process "jsonl" {
+	forward_to = [loki.write.default.receiver]
+
+	stage.json {
+		expressions = {
+			timestamp    = "timestamp",
+			severity     = "fields.severity",
+			service_name = "fields.service_name",
+			job          = "fields.job",
+		}
+	}
+
+	stage.labels {
+		values = {
+			severity     = "severity",
+			service_name = "service_name",
+			job          = "job",
+		}
+	}
+
+	stage.timestamp {
+		source = "timestamp"
+		format = "UnixNs"
+	}
+
+	stage.output {
+		source = "line"
+	}
+}
+
 // https://grafana.com/docs/alloy/latest/collect/opentelemetry-to-lgtm-stack/
 otelcol.receiver.otlp "default" {
-	grpc { 
+	grpc {
 		endpoint = "0.0.0.0:4317"
 	}
+
 	output {
 		metrics = [otelcol.processor.batch.default.input]
 		logs    = [otelcol.processor.batch.default.input]
@@ -11,11 +61,11 @@ otelcol.receiver.otlp "default" {
 }
 
 otelcol.processor.batch "default" {
-  output {
-    metrics = [otelcol.exporter.prometheus.default.input]
-    logs    = [otelcol.exporter.loki.default.input]
-    traces  = []
-  }
+	output {
+		metrics = [otelcol.exporter.prometheus.default.input]
+		logs    = [otelcol.exporter.loki.default.input]
+		traces  = []
+	}
 }
 
 otelcol.exporter.prometheus "default" {
