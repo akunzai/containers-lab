@@ -12,6 +12,7 @@
 
 # dotENV
 .env
+.envrc
 .env.*
 
 # secrets
@@ -24,3 +25,7 @@
 # System Files
 .DS_Store
 Thumbs.db
+
+# Logs
+log
+logs
