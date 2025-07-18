@@ -32,7 +32,7 @@ services:
       # - ./etc/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml:ro
       # - ./dashboards:/var/lib/grafana/dashboards
     healthcheck:
-      test: wget -qO- --spider 'http://localhost:3000/api/health'
+      test: wget -qO- --spider 'http://localhost:3000/api/health' || exit 1
       interval: 30s
       timeout: 10s
       retries: 3
@@ -58,7 +58,7 @@ services:
     # extra_hosts:
     #   - "somehost:127.0.0.2"
     healthcheck:
-      test: wget -qO- --spider 'http://localhost:9090/-/healthy'
+      test: wget -qO- --spider 'http://localhost:9090/-/healthy' || exit 1
       interval: 30s
       timeout: 10s
       retries: 3
@@ -76,16 +76,19 @@ services:
       - -config.file=/etc/loki/loki.yml
       # disable anonymous usage reporting
       - -reporting.enabled=false
+      - -log.level=${LOKI_LOG_LEVEL:-info}
       # https://grafana.com/docs/loki/latest/operations/storage/table-manager/#retention
       - -table-manager.retention-period=${LOKI_RETENTION_PERIOD:-90d}
       - -table-manager.retention-deletes-enabled=true
-      # mitigating: too many outstanding requests
-      # https://github.com/grafana/loki/issues/5123#issuecomment-1167018445
-      - -querier.max-outstanding-requests-per-tenant=4096
-      - -querier.split-queries-by-interval=15m
-      - -query-scheduler.max-outstanding-requests-per-tenant=4096
+      # https://grafana.com/blog/2024/01/04/the-concise-guide-to-loki-how-to-work-with-out-of-order-and-older-logs/
+      - -validation.reject-old-samples=${LOKI_REJECT_OLD_SAMPLES:-true}
+      - -validation.reject-old-samples.max-age=${LOKI_REJECT_OLD_SAMPLES_MAX_AGE:-1w}
+      - --querier.query-ingesters-within=${LOKI_QUERY_INGESTERS_WITHIN:-3h}
+      # https://grafana.com/docs/loki/latest/configure/#limits_config
+      - -distributor.ingestion-rate-limit-mb=${LOKI_INGESTION_RATE_LIMIT_MB:-1000}
+      - -distributor.ingestion-burst-size-mb=${LOKI_INGESTION_BURST_SIZE_MB:-1000}
     healthcheck:
-      test: wget -qO- --spider 'http://localhost:3100/ready'
+      test: wget -qO- --spider 'http://localhost:3100/ready' || exit 1
       interval: 30s
       timeout: 10s
       retries: 3
@@ -99,6 +102,7 @@ services:
     volumes:
       - alloy_data:/var/lib/alloy/data
       - ./etc/config.alloy:/etc/alloy/config.alloy:ro
+      - ./logs:/tmp/logs
     command:
       # https://grafana.com/docs/alloy/latest/reference/cli/run/
       - run

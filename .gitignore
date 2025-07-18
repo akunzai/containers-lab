@@ -12,6 +12,7 @@
 
 # dotENV
 .env
+.envrc
 .env.*
 
 # secrets
@@ -28,3 +29,7 @@ Thumbs.db
 # .NET
 bin/
 obj/
+
+# Logs
+log
+logs
