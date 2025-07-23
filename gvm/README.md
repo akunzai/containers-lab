@@ -17,3 +17,7 @@ podman-compose up -d
 # 開啟管理介面, 預設的帳號與密碼皆為 admin
 npx open-cli http://localhost:9392
 ```
+
+## 參考資料
+
+- [Greenbone Community Containers](https://greenbone.github.io/docs/latest/22.4/container/index.html)
