@@ -1,0 +1,35 @@
+services:
+  demo:
+    build: ./demo
+    image: dotnet:diag-demo
+    volumes:
+      - diag_data:/diag
+    environment:
+      ASPNETCORE_HTTP_PORTS: 8080
+      # https://learn.microsoft.com/dotnet/core/diagnostics/diagnostic-port
+      DOTNET_DiagnosticPorts: /diag/dotnet-monitor.sock,nosuspend
+    ports:
+      - "127.0.0.1:8080:8080"
+    
+  monitor:
+    # https://github.com/dotnet/dotnet-monitor/
+    image: mcr.microsoft.com/dotnet/monitor:8
+    volumes:
+      - diag_data:/diag
+    user: root
+    command: 
+      - collect
+      - --no-auth
+    ports:
+      - "127.0.0.1:52323:52323"
+    environment:
+      # https://github.com/dotnet/dotnet-monitor/blob/main/documentation/configuration/diagnostic-port-configuration.md
+      DotnetMonitor_DiagnosticPort__ConnectionMode: Listen
+      DotnetMonitor_Storage__DefaultSharedPath: /diag
+      DotnetMonitor_Urls: http://+:52323
+      # https://github.com/dotnet/dotnet-monitor/blob/main/documentation/configuration/in-process-features-configuration.md
+      DotnetMonitor_InProcessFeatures__Enabled: true
+      Logging__Console__FormatterName: simple
+
+volumes:
+  diag_data:

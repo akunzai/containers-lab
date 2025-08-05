@@ -1,0 +1,9 @@
+# directories
+**/bin/
+**/obj/
+**/out/
+**/.idea/
+
+# files
+Dockerfile*
+**/*.md
