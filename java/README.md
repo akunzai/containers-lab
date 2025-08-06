@@ -72,8 +72,8 @@ SPRING_CONFIG_LOCATION=classpath:/,file:/home/config/
 | --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
 | spring.config.name                | 組態檔主檔名(用於切換組態, 會嘗試 `.properties` 及 `.yml`,`.yaml` 等副檔案, 預設值: `application`)                                  |
 | spring.config.location            | 組態檔搜尋路徑(用於切換組態, 路徑必須以 `/` 結尾, 預設值: `classpath:/,classpath:/config/,file:./,file:./config/*/,file:./config/`) |
-| spring.config.additional-location | 額外組態檔的搜尋路徑(用於覆寫組態, 自 2.0 開始支援)                                                                                 |
-| spring.config.import              | 額外組態檔的匯入位址(用於覆寫組態, 自 2.4 開始支援)                                                                                 |
+| spring.config.additional-location | 額外組態檔的搜尋路徑(只支援檔案組態, 自 2.0 開始支援)                                                                                 |
+| spring.config.import              | 匯入額外組態來源(彈性最高，支援動態載入不同型式組態, 例如: `configtree`, 自 2.4 開始支援)                                                                                 |
 
 ## 疑難排解
 
@@ -103,3 +103,18 @@ server.forward-headers-strategy=NATIVE
 ```ini:application.properties
 server.tomcat.remoteip.trusted-proxies=198\\.19\\.\\d{1,3}\\.\\d{1,3}|35\\.191\\.\\d{1,3}\\.\\d{1,3}
 ```
+
+### [如何透過環境變數覆寫組態](https://docs.spring.io/spring-boot/reference/features/external-config.html#features.external-config.typesafe-configuration-properties.relaxed-binding.environment-variables)
+
+可透過以下規則將組態屬性名稱轉換為環境變數來覆寫組態
+
+> 環境變數只支援英數字及底線 `0-9a-zA-Z_` 的字元集
+
+- 替換所有的點 `.` 為底線 `_`
+- 移除所有非英數字或底線的字元
+- 轉換所有英文字元為大寫
+
+參見以下範例
+
+- `spring.main.log-startup-info` 屬性可透過環境變數 `SPRING_MAIN_LOGSTARTUPINFO` 來覆寫
+- `my.service[0].other` 屬性可透過環境變數 `MY_SERVICE_0_OTHER` 來覆寫

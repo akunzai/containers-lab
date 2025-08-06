@@ -7,5 +7,6 @@ services:
     environment:
       LANG: "C.UTF-8"
       JAVA_TOOL_OPTIONS: "-Djava.net.preferIPv4Stack=true"
+      SPRING_CONFIG_IMPORT: "optional:configtree:/run/secrets/"
     ports:
       - "127.0.0.1:8080:8080"
