@@ -49,13 +49,7 @@ curl -s http://localhost:8080/taskasyncwait
 
 ```sh
 # 取得監控工具版本及監控模式資訊
-$ curl -s http://localhost:52323/info | jq
-{
-  "version": "9.0.3-servicing.25257.4+da975d6cb396be656758e4bee6d5745e400d3571",
-  "runtimeVersion": "9.0.7",
-  "diagnosticPortMode": "Listen",
-  "diagnosticPortName": "/diag/dotnet-monitor.sock"
-}
+curl -s http://localhost:52323/info | jq
 
 # 列出可存取的 .NET 處理序清單
 curl -s http://localhost:52323/processes | jq
@@ -71,10 +65,10 @@ curl -s 'http://localhost:52323/stacks?pid=1'
 
 # 匯出指定 .NET 處理序的堆疊資訊為 Speedscope 檔案格式
 # > 匯出的檔案可透過 https://www.speedscope.app/ 進行分析
-curl -so ./dotnet.speedscope 'http://localhost:52323/stacks?pid=1' -H 'Accept: application/speedscope+json'
+curl -so ./demo.speedscope 'http://localhost:52323/stacks?pid=1' -H 'Accept: application/speedscope+json'
 
 # 收集指定 .NET 處理序的效能分析追蹤資料
-curl -so ./dotnet.nettrace 'http://localhost:52323/trace?pid=1'
+curl -so ./demo.nettrace 'http://localhost:52323/trace?pid=1'
 
 # 取得指定 .NET 處理序的例外資訊
 curl -s 'http://localhost:52323/exceptions?pid=1'
@@ -83,10 +77,10 @@ curl -s 'http://localhost:52323/exceptions?pid=1'
 curl -s 'http://localhost:52323/logs?pid=1'
 
 # 收集指定 .NET 處理序的記憶體傾印資料
-curl -so ./dotnet.dump 'http://localhost:52323/dump?pid=1'
+curl -so ./demo.dump 'http://localhost:52323/dump?pid=1'
 
 # 收集指定 .NET 處理序的記憶體回收(GC)傾印資料
-curl -so ./dotnet-gc.dump 'http://localhost:52323/gcdump?pid=1'
+curl -so ./demo.gcdump 'http://localhost:52323/gcdump?pid=1'
 
 # 取得 Prometheus 格式的監控指標
 curl -s http://localhost:52323/metrics
