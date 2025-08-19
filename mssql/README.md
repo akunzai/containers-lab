@@ -23,6 +23,24 @@ podman-compose exec mssql bash -c '/opt/mssql-tools18/bin/sqlcmd -C -S localhost
 podman-compose -f compose.yml -f compose.dbgate.yml up -d
 ```
 
+## 高可用 (HA) 範例 – Read-Scale Availability Group
+
+提供以 Podman Compose 建立兩節點的 Read-Scale AG（無叢集管理，手動切換）的範例配置，並附可選的 HAProxy 前端：
+
+```sh
+cd mssql/ha
+# 啟動兩個節點
+podman-compose -f compose.ha.yml up -d mssql1 mssql2
+
+# 初始化 AG（建立憑證/端點、建立並加入 AG、加入示範資料庫）
+podman-compose -f compose.ha.yml up --no-deps ag-setup
+
+# （可選）啟動 HAProxy，統一以 localhost:1433 連線
+podman-compose -f compose.ha.yml up -d haproxy
+```
+
+詳細說明請參考 `mssql/ha/README.md`。
+
 ## 重設資料庫 sa 帳號密碼
 
 > 以下指令執行前請先關閉資料庫服務
