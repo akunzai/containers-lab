@@ -1,0 +1,101 @@
+services:
+  mssql1:
+    build: ..
+    image: mssql
+    hostname: mssql1
+    container_name: mssql1
+    restart: always
+    init: true
+    environment:
+      ACCEPT_EULA: 'Y'
+      MSSQL_PID: Developer
+      MSSQL_ENABLE_HADR: '1'
+      MSSQL_SA_PASSWORD_FILE: /run/secrets/mssql_root.pwd
+      MSSQL_COLLATION: Latin1_General_100_CI_AS_SC_UTF8
+    volumes:
+      - mssql1_data:/var/opt/mssql
+      - ag_certs:/certs
+    ports:
+      - 127.0.0.1:14331:1433
+    healthcheck:
+      test: ["CMD", "/healthcheck.sh"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    secrets:
+      - mssql_root.pwd
+
+  mssql2:
+    build: ..
+    image: mssql
+    hostname: mssql2
+    container_name: mssql2
+    restart: always
+    init: true
+    environment:
+      ACCEPT_EULA: 'Y'
+      MSSQL_PID: Developer
+      MSSQL_ENABLE_HADR: '1'
+      MSSQL_SA_PASSWORD_FILE: /run/secrets/mssql_root.pwd
+      MSSQL_COLLATION: Latin1_General_100_CI_AS_SC_UTF8
+    volumes:
+      - mssql2_data:/var/opt/mssql
+      - ag_certs:/certs
+    ports:
+      - 127.0.0.1:14332:1433
+    healthcheck:
+      test: ["CMD", "/healthcheck.sh"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    secrets:
+      - mssql_root.pwd
+
+  # One-shot initializer to set up AG (certs, endpoints, join)
+  ag-setup:
+    build: ..
+    image: mssql
+    container_name: ag-setup
+    depends_on:
+      - mssql1
+      - mssql2
+    init: true
+    environment:
+      ACCEPT_EULA: 'Y'
+      # Optional overrides
+      AG_NAME: ag1
+      AG_ENDPOINT: Hadr_endpoint
+      PRIMARY: mssql1
+      SECONDARY: mssql2
+      MASTER_KEY_PWD: changeit!123
+      DB_NAME: ha_sample
+    volumes:
+      - ag_certs:/certs
+      - ./scripts:/ha:ro
+    secrets:
+      - mssql_root.pwd
+    entrypoint: ["/bin/bash", "/ha/ag-init.sh"]
+
+  # Optional TCP frontend to route traffic to current primary
+  haproxy:
+    image: docker.io/library/haproxy:2.9-alpine
+    container_name: mssql-ha-proxy
+    ports:
+      - 127.0.0.1:1433:1433
+    volumes:
+      - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+    depends_on:
+      - mssql1
+      - mssql2
+
+secrets:
+  mssql_root.pwd:
+    external: true
+
+volumes:
+  mssql1_data:
+  mssql2_data:
+  ag_certs:
+
