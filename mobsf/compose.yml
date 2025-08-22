@@ -1,0 +1,5 @@
+services:
+  mobsf:
+    image: opensecurity/mobile-security-framework-mobsf
+    ports:
+      - "8000:8000"
