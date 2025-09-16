@@ -35,15 +35,14 @@ server {
     server_name         ${NGINX_HOST};
     ssl_certificate     ${NGINX_SSL_CERT};
     ssl_certificate_key ${NGINX_SSL_KEY};
-
-    include snippets/csp.conf;
-    include snippets/security.conf;
-    include snippets/server.conf;
-    include snippets/tls.conf;
     root   /usr/share/nginx/html;
     error_page 502 503 504 /50x.html;
+    include snippets/security_headers.conf;
+    include snippets/server.conf;
+    include snippets/tls.conf;
 
     location / {
+        include snippets/csp.conf;
         include snippets/proxy.conf;
         proxy_set_header Host www.example.com;
         proxy_pass http://www.example.com;
