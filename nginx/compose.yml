@@ -1,10 +1,9 @@
 services:
   nginx:
+    # https://hub.docker.com/_/nginx
+    # image: docker.io/library/nginx:alpine
     # https://github.com/nginxinc/docker-nginx-unprivileged
-    image: docker.io/nginxinc/nginx-unprivileged:alpine-slim
+    image: docker.io/nginxinc/nginx-unprivileged:alpine
     restart: always
-    volumes:
-      - ./dhparam.pem:/etc/nginx/dhparam.pem:ro
-    #   - ./html:/usr/share/nginx/html:ro
     ports:
       - "127.0.0.1:8080:8080"
