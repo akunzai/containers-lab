@@ -1,14 +1,21 @@
 services:
   nginx:
     volumes:
+      - ./dhparam.pem:/etc/nginx/dhparam.pem:ro
       - ./templates:/etc/nginx/templates:ro
+      - ./snippets:/etc/nginx/snippets:ro
     environment:
       NGINX_HOST: www.dev.local
-      NGINX_PORT: 8443
       NGINX_SSL_CERT: /run/secrets/dev.local.crt
       NGINX_SSL_KEY: /run/secrets/dev.local.key
     ports:
       - "127.0.0.1:8443:8443"
+    healthcheck:
+      test: ["CMD", "curl", "-sqf", "http://localhost:8080/healthz"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
     secrets:
       - dev.local.crt
       - dev.local.key
