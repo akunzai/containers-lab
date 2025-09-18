@@ -1,0 +1,8 @@
+services:
+  zap:
+    # https://www.zaproxy.org/docs/docker/webswing/
+    image: docker.io/zaproxy/zap-stable
+    ports:
+      - "8080:8080"
+      - "8090:8090"
+    command: ["zap-webswing.sh"]
