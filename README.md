@@ -39,5 +39,6 @@
 - [GVM 弱點檢測管理平台](./gvm/)
 - [MobSF 行動裝置弱點檢測平台](./mobsf/)
 - [SonarQube 程式碼品質檢測平台](./sonarqube/)
+- [ZAP 網站弱點動態掃瞄工具](./zap/)
 - [Traefik 容器閘道伺服器](./traefik/)
 - [Whoami 網路請求診斷工具](./whoami/)
