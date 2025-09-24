@@ -2,10 +2,9 @@ services:
   tomcat:
     # https://hub.docker.com/_/tomcat
     image: docker.io/library/tomcat
-    user: www-data
     restart: always
     init: true
     volumes:
-      - ./sample.war:/usr/local/tomcat/webapps/ROOT.war
+      - ./sample.war:/usr/local/tomcat/webapps/ROOT.war:ro
     ports:
       - "127.0.0.1:8080:8080"
