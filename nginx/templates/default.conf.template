@@ -41,10 +41,17 @@ server {
     include snippets/server.conf;
     include snippets/tls.conf;
 
+    resolver 1.1.1.1 8.8.8.8 valid=300s;
+    resolver_timeout 5s;
+    
+    if ($bad_path)  { return 400; }
+    if ($bad_encoded) { return 400; }
+    if ($bad_ctl)     { return 400; }
+
     location / {
         include snippets/csp.conf;
         include snippets/proxy.conf;
         proxy_set_header Host www.example.com;
-        proxy_pass http://www.example.com;
+        proxy_pass http://www.example.com$uri$is_args$args;
     }
 }
