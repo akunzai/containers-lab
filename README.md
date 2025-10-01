@@ -21,6 +21,7 @@
 - [PostgreSQL 關連式資料庫](./pgsql/)
 - [Redis 鍵值資料庫](./redis/)
 - [容器映像儲存庫](./registry/)
+- [Vault 私鑰與加密管理系統](./vault/)
 
 ## 應用情境
 
