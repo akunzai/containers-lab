@@ -1,0 +1,16 @@
+services:
+  postgres:
+    # https://hub.docker.com/_/postgres
+    image: docker.io/library/postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: app
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres.pwd
+    volumes:
+      - secrets_data:/run/secrets:ro
+    ports:
+      - "5432:5432"
+    depends_on:
+      vault-agent:
+        condition: service_healthy
