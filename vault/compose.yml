@@ -1,0 +1,53 @@
+services:
+  vault:
+    # https://hub.docker.com/r/hashicorp/vault
+    image: docker.io/hashicorp/vault
+    restart: always
+    ports:
+      - "8200:8200"
+    volumes:
+      - vault_data:/vault/file
+      - vault_logs:/vault/logs
+      - approle_data:/vault/approle
+      - ./config/vault.hcl:/vault/config/vault.hcl:ro
+      - ./scripts:/vault/scripts:ro
+    environment:
+      VAULT_ADDR: http://0.0.0.0:8200
+    command: sh /vault/scripts/start-vault.sh
+    cap_add:
+      - IPC_LOCK
+    healthcheck:
+      test: ["CMD", "sh", "-c", "vault status 2>&1 | grep -q 'Sealed.*false'"]
+      interval: 3s
+      timeout: 2s
+      retries: 10
+      start_period: 10s
+  vault-agent:
+    # https://hub.docker.com/r/hashicorp/vault
+    image: docker.io/hashicorp/vault
+    restart: always
+    environment:
+      VAULT_ADDR: http://vault:8200
+      VAULT_KV_PREFIX: secret
+      VAULT_APP_PATH: app
+    command: sh /vault/scripts/start-agent.sh
+    cap_add:
+      - IPC_LOCK
+    volumes:
+      - ./config:/vault/config:ro
+      - ./scripts:/vault/scripts:ro
+      - approle_data:/vault/approle:ro
+      - secrets_data:/secrets:rw
+    depends_on:
+      vault:
+        condition: service_healthy
+  app:
+    image: alpine
+    volumes:
+      - secrets_data:/run/secrets:ro
+
+volumes:
+  vault_data:
+  vault_logs:
+  approle_data:
+  secrets_data:
