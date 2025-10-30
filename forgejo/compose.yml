@@ -1,0 +1,18 @@
+services:
+  server:
+    image: codeberg.org/forgejo/forgejo:13-rootless
+    restart: always
+    environment:
+      TZ: "Asia/Taipei"
+    volumes:
+      - forgejo-conf:/etc/gitea
+      - forgejo-data:/var/lib/gitea
+    ports:
+      - "3000:3000"
+      - "2222:2222"
+
+volumes:
+  forgejo-conf:
+    driver: local
+  forgejo-data:
+    driver: local
