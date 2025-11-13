@@ -67,6 +67,9 @@ services:
   gvmd:
     image: registry.community.greenbone.net/community/gvmd:stable
     restart: on-failure
+    environment:
+      USER: admin
+      PASSWORD: admin
     volumes:
       - gvmd_data_vol:/var/lib/gvm
       - scap_data_vol:/var/lib/gvm/scap-data/
