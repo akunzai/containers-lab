@@ -1,0 +1,13 @@
+deployment:
+  role: traditional
+  role_traditional:
+    config_provider: etcd
+  admin:
+    allow_admin:
+      - 0.0.0.0/0  # Please set it to the subnet address you obtained.
+      # If not set, by default all IP access is allowed.
+  etcd:
+    host:
+      - "http://etcd:2379"
+    prefix: "/apisix"
+    timeout: 30
