@@ -1,0 +1,32 @@
+services:
+  apisix:
+    # https://hub.docker.com/r/apache/apisix
+    image: docker.io/library/apache-apisix
+    restart: always
+    volumes:
+      - ./conf/config.yaml:/usr/local/apisix/conf/config.yaml:ro
+    ports:
+      - "9180:9180/tcp"
+      - "9080:9080/tcp"
+      - "9091:9091/tcp"
+      - "9443:9443/tcp"
+    depends_on:
+      - etcd
+
+  etcd:
+    # https://hub.docker.com/r/bitnami/etcd
+    image: docker.io/bitnami/etcd:latest
+    restart: always
+    volumes:
+      - etcd_data:/etcd_data
+    environment:
+      ALLOW_NONE_AUTHENTICATION: "yes"
+      ETCD_DATA_DIR: /etcd_data
+      ETCD_ENABLE_V2: "true"
+      ETCD_ADVERTISE_CLIENT_URLS: http://etcd:2379
+      ETCD_LISTEN_CLIENT_URLS: http://0.0.0.0:2379
+    ports:
+      - "2379:2379/tcp"
+
+volumes:
+  etcd_data:
