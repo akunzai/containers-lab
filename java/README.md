@@ -68,12 +68,12 @@ SPRING_CONFIG_LOCATION=classpath:/,file:/home/config/
 
 常用的 Spring Boot 應用程式組態檔配置如下表所示
 
-| 名稱                              | 說明                                                                                                                                |
-| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| spring.config.name                | 組態檔主檔名(用於切換組態, 會嘗試 `.properties` 及 `.yml`,`.yaml` 等副檔案, 預設值: `application`)                                  |
-| spring.config.location            | 組態檔搜尋路徑(用於切換組態, 路徑必須以 `/` 結尾, 預設值: `classpath:/,classpath:/config/,file:./,file:./config/*/,file:./config/`) |
-| spring.config.additional-location | 額外組態檔的搜尋路徑(只支援檔案組態, 自 2.0 開始支援)                                                                                 |
-| spring.config.import              | 匯入額外組態來源(彈性最高，支援動態載入不同型式組態, 例如: `configtree`, 自 2.4 開始支援)                                                                                 |
+| 名稱 | 說明 |
+| ----------------------------- | ---------------- |
+| spring.config.name | 組態檔主檔名 |
+| spring.config.location | 組態檔搜尋路徑 |
+| spring.config.additional-location | 額外組態檔的搜尋路徑 |
+| spring.config.import | 匯入額外組態來源 |
 
 ## 疑難排解
 
