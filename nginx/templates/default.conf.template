@@ -44,8 +44,6 @@ server {
     resolver 1.1.1.1 8.8.8.8 valid=300s;
     resolver_timeout 5s;
     
-    if ($bad_path)  { return 400; }
-    if ($bad_encoded) { return 400; }
     if ($bad_ctl)     { return 400; }
 
     location / {
