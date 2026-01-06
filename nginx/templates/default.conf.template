@@ -36,6 +36,8 @@ server {
     ssl_certificate     ${NGINX_SSL_CERT};
     ssl_certificate_key ${NGINX_SSL_KEY};
     root   /usr/share/nginx/html;
+    # handling misdirected HTTP to HTTPS requests
+    error_page 497 https://$host:8443$request_uri;
     error_page 502 503 504 /50x.html;
     include snippets/security_headers.conf;
     include snippets/server.conf;
