@@ -42,6 +42,7 @@ server {
     include snippets/security_headers.conf;
     include snippets/server.conf;
     include snippets/tls.conf;
+    include snippets/csp.conf;
 
     resolver 1.1.1.1 8.8.8.8 valid=300s;
     resolver_timeout 5s;
@@ -49,7 +50,6 @@ server {
     if ($bad_ctl)     { return 400; }
 
     location / {
-        include snippets/csp.conf;
         include snippets/proxy.conf;
         proxy_set_header Host www.example.com;
         proxy_pass http://www.example.com$uri$is_args$args;
