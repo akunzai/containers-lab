@@ -3,12 +3,14 @@ services:
     # https://hub.docker.com/_/redis
     image: docker.io/library/redis
     restart: always
+    healthcheck:
+      test: redis-cli -h localhost -p 6379 ping
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
     volumes:
       - redis_data:/data
-      # 如果需要自訂組態的話
-      # - ./etc:/usr/local/etc/redis:ro
-    # 如果需要自訂組態的話
-    # command: /usr/local/etc/redis/redis.conf
     ports:
       - 127.0.0.1:6379:6379
 

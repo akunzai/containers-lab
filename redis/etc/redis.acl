@@ -1,0 +1,2 @@
+user default on nopass -@all +ping
+user admin on >changeit ~* &* +@all
