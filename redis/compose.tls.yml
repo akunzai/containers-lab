@@ -1,24 +1,24 @@
 services:
-  # https://redis.io/docs/management/security/encryption/
+  # https://redis.io/docs/latest/operate/oss_and_stack/management/security/encryption/
   redis:
-    command: 
-     - --port 6379
-     - --tls-port 6380
-     - --tls-cert-file /run/secrets/dev.local.crt
-     - --tls-key-file /run/secrets/dev.local.key
-     - --tls-ca-cert-file /run/secrets/dev.CA.crt
-     - --tls-auth-clients no
+    volumes:
+      - redis_data:/data
+      - ./etc:/usr/local/etc/redis:ro
+    command: /usr/local/etc/redis/redis.conf
+    healthcheck:
+      test: redis-cli -h localhost -p 6380 --tls --insecure ping
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
     ports:
       - 127.0.0.1:6380:6380
     secrets:
-      - dev.CA.crt
-      - dev.local.crt
-      - dev.local.key
+      - server.crt
+      - server.key
 
 secrets:
-  dev.CA.crt:
+  server.crt:
     external: true
-  dev.local.crt:
-    external: true
-  dev.local.key:
+  server.key:
     external: true

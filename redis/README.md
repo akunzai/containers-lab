@@ -46,16 +46,16 @@ mkcert -install
 mkcert -cert-file ./cert.pem -key-file ./key.pem '*.dev.local' localhost
 
 # 產生 Podman secrets
-podman secret create --replace dev.local.key ./key.pem
-podman secret create --replace dev.local.crt ./cert.pem
-podman secret create --replace dev.CA.crt "$(mkcert -CAROOT)/rootCA.pem"
+podman secret create --replace server.key ./key.pem
+podman secret create --replace server.crt ./cert.pem
 
 # 啟用 TLS 加密連線
 podman-compose -f compose.yml -f compose.tls.yml up -d
 
 # 確認已正確啟用
-podman-compose -f compose.yml -f compose.tls.yml exec redis redis-cli -p 6380 --tls \
-    --cert /run/secrets/dev.local.crt \
-    --key /run/secrets/dev.local.key \
-    --cacert /run/secrets/dev.CA.crt info
+podman run --rm \
+  --network redis_default \
+  -v "$(mkcert -CAROOT)/rootCA.pem:/tmp/ca.crt:ro" \
+  docker.io/library/redis \
+  redis-cli -h redis -p 6380 --tls --cacert /tmp/ca.crt ping
 ```
