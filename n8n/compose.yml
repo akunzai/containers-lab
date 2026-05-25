@@ -1,0 +1,25 @@
+services:
+  n8n:
+    # https://hub.docker.com/r/n8nio/n8n
+    image: docker.io/n8nio/n8n
+    restart: always
+    ports:
+      - 127.0.0.1:5678:5678
+    environment:
+      # https://docs.n8n.io/hosting/configuration/environment-variables/
+      GENERIC_TIMEZONE: ${GENERIC_TIMEZONE:-Asia/Taipei}
+      TZ: ${TZ:-Asia/Taipei}
+      # 加密金鑰, 用於保護已儲存的認證資訊, 遺失後將無法存取已儲存的憑證
+      N8N_ENCRYPTION_KEY: ${N8N_ENCRYPTION_KEY:-changeme}
+      # 停用使用情況統計
+      N8N_DIAGNOSTICS_ENABLED: "false"
+    volumes:
+      - n8n_data:/home/node/.n8n
+    healthcheck:
+      test: wget -qO- --spider 'http://localhost:5678/healthz'
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  n8n_data:
