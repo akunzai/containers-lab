@@ -7,7 +7,9 @@ holds only what an agent needs.
 ## Starting the environment
 
 This repo is a set of independent labs, each with its own `compose.yml`.
-There is no repo-wide stack. For the lab you changed:
+There is no repo-wide stack.
+
+By default, labs run with Podman:
 
 ```sh
 cd <lab> && podman-compose up -d
@@ -17,13 +19,19 @@ cd <lab> && podman-compose up -d
 <!-- drift:entrypoint-cmd podman-compose up -d -->
 <!-- drift:file mise.toml -->
 
+If a lab's `README.md` explicitly specifies Docker or requires a Docker daemon/socket (such as k3d or Docker-in-Docker), run with Docker Compose instead:
+
+```sh
+cd <lab> && docker compose up -d
+```
+
 It never prompts. A step needing a human aborts non-zero naming the
 prerequisite — see Human prerequisites below.
 
-**Proof it ran**: `podman-compose ps` lists every service as running, and
+**Proof it ran**: `podman-compose ps` (or `docker compose ps`) lists every service as running, and
 the lab's own check from its `README.md` answers (for example, the URL it
 opens, or the service's health check). A running container is not
-evidence. Run `podman-compose down` afterwards.
+evidence. Run `podman-compose down` (or `docker compose down`) afterwards.
 
 Entry point: each lab's `README.md` names its URL and credentials; labs
 publish fixed host ports (many use `127.0.0.1:8080`).
@@ -42,14 +50,14 @@ Tools are pinned in `mise.toml`; run `mise install` once. The tasks mirror CI
 Run once, by a person. The start command fails until they are done.
 
 - [ ] Install [mise](https://mise.jdx.dev/) and run `mise install` (provides `podman-compose`, `mkcert` and the lint tools)
-- [ ] Install Podman (versions in each lab's `README.md`); mise does not manage it here
+- [ ] Install Podman (default runtime) or Docker / OrbStack (for labs that explicitly specify Docker or require a Docker daemon/socket); mise does not manage these container engines here
 - [ ] Run `mkcert -install` and generate certificates, for labs that serve TLS (see the lab's `README.md`)
 
 ## Ports
 
 Labs publish fixed host ports and many share `8080`, so **only one lab
 runs at a time per machine**; stop the previous one with
-`podman-compose down` first. Labs reached by hostname or TLS cannot have
+`podman-compose down` (or `docker compose down`) first. Labs reached by hostname or TLS cannot have
 their ports offset.
 
 <!-- drift:port 8080 -->
@@ -77,7 +85,7 @@ evidence that an integration is wired up.
 
 ## Not verified
 
-- Any lab whose `README.md` lists a licence, credential or external service this machine lacks: record the lab and the missing item here, and verify syntax with `podman-compose config` only.
+- Any lab whose `README.md` lists a licence, credential or external service this machine lacks: record the lab and the missing item here, and verify syntax with `podman-compose config` (or `docker compose config` for Docker-based labs) only.
 
 A gap you could have closed is not a gap. Run the check whose dependency
 you have already seen running, and report a check you skipped as untried,
