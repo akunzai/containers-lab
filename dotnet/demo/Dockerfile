@@ -25,5 +25,6 @@ RUN --mount=type=cache,target=/var/cache/apk,sharing=locked \
 EXPOSE 8080
 WORKDIR /app
 COPY --chown=app:app --from=build /app .
+# uid of the `app` user in the base image (hadolint DL3066 wants a numeric id)
 USER 1654
 CMD ["./demo"]
