@@ -12,5 +12,5 @@ WORKDIR /app
 COPY --from=builder /src/target/*.jar ./app.jar
 EXPOSE 8080
 ENV JAVA_OPTS=""
-USER nobody
+USER 65534
 CMD ["sh","-c","exec java $JAVA_OPTS -jar /app/app.jar"]

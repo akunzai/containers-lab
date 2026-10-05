@@ -40,7 +40,8 @@ wait_for_startup() {
 	local delay="${2:-1}"
 	local dbstatus=1
 	local errcode=1
-	local start_time=$(date +%s)
+	local start_time
+	start_time=$(date +%s)
 	local end_time=$((start_time + timeout))
 
 	if [[ -z "${MSSQL_SA_PASSWORD:-}" ]]; then

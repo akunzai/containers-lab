@@ -25,5 +25,5 @@ RUN --mount=type=cache,target=/var/cache/apk,sharing=locked \
 EXPOSE 8080
 WORKDIR /app
 COPY --chown=app:app --from=build /app .
-USER app
+USER 1654
 CMD ["./demo"]

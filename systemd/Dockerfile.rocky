@@ -4,8 +4,7 @@ FROM docker.io/library/rockylinux:$ROCKY_VERSION
 
 ENV container docker
 
-RUN cd /lib/systemd/system/sysinit.target.wants/; \
-    for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done; \
+RUN for i in /lib/systemd/system/sysinit.target.wants/*; do [ "$(basename "$i")" = systemd-tmpfiles-setup.service ] || rm -f "$i"; done; \
     rm -f /lib/systemd/system/multi-user.target.wants/* \
     /etc/systemd/system/*.wants/* \
     /lib/systemd/system/local-fs.target.wants/* \
