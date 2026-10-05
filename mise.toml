@@ -1,0 +1,15 @@
+[tools]
+node = "lts"
+hadolint = "latest"
+shellcheck = "latest"
+markdownlint-cli2 = "latest"
+mkcert = "latest"
+"pipx:podman-compose" = "latest"
+
+[tasks.lint]
+description = "Run the same checks as CI"
+run = [
+  "markdownlint-cli2 '**/*.md'",
+  "git ls-files '*Dockerfile*' | xargs hadolint",
+  "git ls-files '*.sh' | xargs shellcheck",
+]
