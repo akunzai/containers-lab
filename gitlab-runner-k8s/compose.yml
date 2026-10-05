@@ -1,0 +1,48 @@
+name: gitlab-runner-k8s
+
+services:
+  gitlab:
+    # https://hub.docker.com/r/gitlab/gitlab-ce
+    image: docker.io/gitlab/gitlab-ce:19.4.1-ce.0
+    hostname: gitlab
+    restart: always
+    shm_size: 256m
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://localhost:8929'
+        gitlab_rails['initial_root_password'] = File.read('/run/secrets/gitlab_root.pwd').strip
+        prometheus_monitoring['enable'] = false
+    ports:
+      - "127.0.0.1:8929:8929"
+    volumes:
+      - gitlab_config:/etc/gitlab
+      - gitlab_logs:/var/log/gitlab
+      - gitlab_data:/var/opt/gitlab
+    secrets:
+      - gitlab_root.pwd
+  deploy-target:
+    # https://docs.linuxserver.io/images/docker-openssh-server/
+    image: lscr.io/linuxserver/openssh-server:10.3_p1-r1-ls238
+    restart: always
+    environment:
+      USER_NAME: deployer
+      PUBLIC_KEY_FILE: /run/secrets/deployer.pub
+      PASSWORD_ACCESS: "false"
+      SUDO_ACCESS: "false"
+      DOCKER_MODS: linuxserver/mods:openssh-server-rsync
+    volumes:
+      - deploy_www:/config/www
+    secrets:
+      - deployer.pub
+
+secrets:
+  gitlab_root.pwd:
+    file: ./.secrets/gitlab_root.pwd
+  deployer.pub:
+    file: ./.secrets/deployer.pub
+
+volumes:
+  gitlab_config:
+  gitlab_logs:
+  gitlab_data:
+  deploy_www:
