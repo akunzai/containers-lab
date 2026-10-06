@@ -1,0 +1,10 @@
+# 免特權建置映像: rootless BuildKit, Runner 維持 privileged = false
+# 產出為 OCI tarball, 推送至 registry 時改用 --output type=image,push=true
+build-image:
+  image:
+    name: moby/buildkit:v0.33.1-rootless
+    entrypoint: [""]
+  variables:
+    BUILDKITD_FLAGS: --oci-worker-no-process-sandbox
+  script:
+    - buildctl-daemonless.sh build --frontend dockerfile.v0 --local context=. --local dockerfile=. --output type=oci,dest=/tmp/image.tar

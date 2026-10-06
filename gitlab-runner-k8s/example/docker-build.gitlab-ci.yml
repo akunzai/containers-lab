@@ -1,0 +1,14 @@
+# 在 Kubernetes executor 的 Job Pod 內以 DinD 建置映像 (Runner 須設定 privileged = true)
+# services 容器與 Job 同在一個 Pod, 以 localhost 存取
+build-image:
+  image: docker:29-cli
+  services:
+    - name: docker:29-dind
+      alias: docker
+  variables:
+    DOCKER_HOST: tcp://localhost:2375
+    DOCKER_TLS_CERTDIR: ""
+  script:
+    - for i in $(seq 1 30); do docker info >/dev/null 2>&1 && break; sleep 1; done
+    - docker build -t app:test .
+    - docker run --rm app:test

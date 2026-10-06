@@ -1,0 +1,28 @@
+# 範例專案 pipeline: 建置並以 rsync 部署至 deploy-target
+# 需設定專案 CI/CD 變數 (File 類型, Protected):
+#   SSH_PRIVATE_KEY  部署私鑰
+#   SSH_KNOWN_HOSTS  deploy-target 的 known_hosts 內容
+stages:
+  - build
+  - deploy
+
+build:
+  stage: build
+  image: node:22-alpine
+  script:
+    - npm config get registry
+    - time npm install --no-audit --no-fund left-pad
+    - mkdir dist && echo "built at $(date -u)" > dist/index.html
+  artifacts:
+    paths:
+      - dist/
+
+deploy:
+  stage: deploy
+  image: alpine:3
+  before_script:
+    - apk add --no-cache openssh-client rsync
+    - install -m 600 "$SSH_PRIVATE_KEY" /tmp/deploy_key
+    - mkdir -p ~/.ssh && install -m 644 "$SSH_KNOWN_HOSTS" ~/.ssh/known_hosts
+  script:
+    - rsync -avz -e "ssh -i /tmp/deploy_key -p 2222" dist/ deployer@deploy-target:/config/www/

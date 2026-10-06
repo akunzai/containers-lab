@@ -1,0 +1,38 @@
+# Job Pod 專用 namespace 與配額 (以 namespace + ResourceQuota 劃分配額)
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ci-jobs
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: ci-jobs
+  namespace: ci-jobs
+spec:
+  # 超過配額時 Pod 建立會被拒絕, Job 直接失敗 (runner_system_failure) 而不會排隊,
+  # 且刪除中 (Terminating) 的 Pod 仍會佔用配額, 因此配額須有餘裕:
+  # 約為 concurrent x 單一 Job Pod 用量的 2 倍, 排隊交給 concurrent 控制
+  # 單一 Job Pod: requests 0.6 CPU / 1.125Gi, limits 2.5 CPU / 2.25Gi, 4 個併發
+  hard:
+    pods: "12"
+    requests.cpu: "8"
+    requests.memory: 12Gi
+    limits.cpu: "20"
+    limits.memory: 20Gi
+---
+# 配額啟用後, 未宣告 requests / limits 的容器 (例如 services:) 會被拒絕建立, 以預設值補上
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: ci-jobs
+  namespace: ci-jobs
+spec:
+  limits:
+    - type: Container
+      defaultRequest:
+        cpu: 100m
+        memory: 128Mi
+      default:
+        cpu: "1"
+        memory: 1Gi

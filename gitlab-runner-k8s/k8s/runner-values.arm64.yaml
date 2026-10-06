@@ -1,0 +1,27 @@
+# 僅 Apple Silicon 等 arm64 主機環境使用
+# Kubernetes executor 預設假設 amd64, 需以 node_selector 指定架構才會選到對應的 helper image
+# https://docs.gitlab.com/runner/executors/kubernetes/#set-the-helper-image-architecture
+runners:
+  config: |
+    [[runners]]
+      clone_url = "http://gitlab:8929"
+      request_concurrency = 2
+      [runners.kubernetes]
+        namespace = "{{ .Values.runners.jobNamespace }}"
+        image = "alpine:3"
+        pull_policy = ["if-not-present"]
+        poll_timeout = 300
+        cpu_request = "500m"
+        cpu_limit = "2"
+        memory_request = "1Gi"
+        memory_limit = "2Gi"
+        helper_cpu_request = "100m"
+        helper_cpu_limit = "500m"
+        helper_memory_request = "128Mi"
+        helper_memory_limit = "256Mi"
+        service_cpu_request = "200m"
+        service_cpu_limit = "2"
+        service_memory_request = "512Mi"
+        service_memory_limit = "2Gi"
+        [runners.kubernetes.node_selector]
+          "kubernetes.io/arch" = "arm64"

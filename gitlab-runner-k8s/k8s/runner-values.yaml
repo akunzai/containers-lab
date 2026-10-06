@@ -1,0 +1,41 @@
+# https://docs.gitlab.com/runner/install/kubernetes/
+gitlabUrl: http://gitlab:8929
+# 以 Secret 提供 runner token (不寫入 values), 見 scripts/k8s-up.sh
+runners:
+  secret: gitlab-runner-token
+  # Job Pod 與 Runner 管理 Pod 分開 namespace, 以 ResourceQuota 控管 Job 總用量
+  jobNamespace: ci-jobs
+  config: |
+    [[runners]]
+      clone_url = "http://gitlab:8929"
+      request_concurrency = 2
+      # 不使用 S3 / 分散式快取: 不設定 [runners.cache] 即不啟用
+      [runners.kubernetes]
+        namespace = "{{ .Values.runners.jobNamespace }}"
+        image = "alpine:3"
+        pull_policy = ["if-not-present"]
+        poll_timeout = 300
+        cpu_request = "500m"
+        cpu_limit = "2"
+        memory_request = "1Gi"
+        memory_limit = "2Gi"
+        helper_cpu_request = "100m"
+        helper_cpu_limit = "500m"
+        helper_memory_request = "128Mi"
+        helper_memory_limit = "256Mi"
+        service_cpu_request = "200m"
+        service_cpu_limit = "2"
+        service_memory_request = "512Mi"
+        service_memory_limit = "2Gi"
+# 全域併發上限
+concurrent: 4
+rbac:
+  create: true
+serviceAccount:
+  create: true
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    memory: 256Mi
