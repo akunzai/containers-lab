@@ -14,8 +14,8 @@ services:
       - --providers.docker=true
       - --providers.docker.exposedByDefault=false
     ports:
-      - "127.0.0.1:8080:80"
-      - "127.0.0.1:8888:8080"
+      - "80:80"
+      - "8888:8080"
   whoami:
     # https://hub.docker.com/r/traefik/whoami/
     image: docker.io/traefik/whoami

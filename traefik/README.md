@@ -11,8 +11,8 @@
 # 在背景啟動並執行完整應用
 podman-compose up -d
 
-# 開啟網站
-npx open-cli http://localhost:8080
+# 開啟網站（使用通配位址 80:80 綁定，避免 macOS 限制非 root 綁定 127.0.0.1 特權埠）
+npx open-cli http://localhost
 ```
 
 ## [啟用 HTTPS 連線](https://doc.traefik.io/traefik/https/tls/)
@@ -35,6 +35,6 @@ podman secret create --replace dev.local.crt ./cert.pem
 # 啟用 TLS 加密連線
 podman-compose -f compose.yml -f compose.tls.yml up -d
 
-# 確認已正確啟用
-curl -v 'https://www.dev.local:8443'
+# 確認已正確啟用（443 埠直接提供服務）
+curl -v 'https://www.dev.local'
 ```
