@@ -1,16 +1,62 @@
+# Overlay: PostgreSQL reads its superuser password from a file its own Vault Agent renders.
+#   docker compose -f compose.yml -f compose.postgres.yml up -d
 services:
+  vault-init:
+    environment:
+      VAULT_AGENT_USERS: app=10001:10001 postgres=999:999
+    volumes:
+      - approle_postgres:/approle/postgres
+  vault-agent-postgres:
+    image: docker.io/hashicorp/vault:2.2
+    entrypoint: ["/bin/sh", "/vault/scripts/start-agent.sh"]
+    # The postgres user of the official image; its entrypoint reads POSTGRES_PASSWORD_FILE after
+    # dropping to that user.
+    user: "999:999"
+    environment:
+      VAULT_ADDR: https://vault:8200
+      VAULT_CACERT: /vault/tls-source/ca.crt
+      VAULT_MANIFEST: /vault/manifest/secrets.manifest
+      VAULT_AGENT_APP: postgres
+    volumes:
+      - ./scripts:/vault/scripts:ro
+      - ./secrets.manifest:/vault/manifest/secrets.manifest:ro
+      - ./certs/ca.crt:/vault/tls-source/ca.crt:ro
+      - approle_postgres:/approle
+      - secrets_postgres:/secrets
+    healthcheck:
+      test: ["CMD-SHELL", "while read -r f; do [ -f /secrets/$$f ] || exit 1; done < /tmp/agent/expected"]
+      interval: 2s
+      timeout: 2s
+      retries: 30
+    depends_on:
+      vault-init:
+        condition: service_completed_successfully
   postgres:
     # https://hub.docker.com/_/postgres
-    image: docker.io/library/postgres
-    restart: always
+    image: docker.io/library/postgres:18
+    restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
       POSTGRES_DB: app
-      POSTGRES_PASSWORD_FILE: /run/secrets/postgres.pwd
+      POSTGRES_PASSWORD_FILE: /run/secrets/POSTGRES_PASSWORD
     volumes:
-      - secrets_data:/run/secrets:ro
+      - secrets_postgres:/run/secrets:ro
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres", "-d", "app"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
     depends_on:
-      vault-agent:
+      vault-agent-postgres:
         condition: service_healthy
+
+volumes:
+  approle_postgres:
+  secrets_postgres:
+    driver: local
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+      o: "size=1m,mode=0700,uid=999,gid=999"

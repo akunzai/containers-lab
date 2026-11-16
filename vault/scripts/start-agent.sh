@@ -1,29 +1,18 @@
 #!/bin/sh
-set -u
+# Entry point of a vault-agent-<app> service: render this application's agent configuration from
+# the manifest, then run Vault Agent in the foreground. Runs as the application's uid, so the files
+# it renders (mode 0400) are readable by that uid only.
+set -eu
 
-# Wait for Vault to be ready and unsealed
-echo "[start-agent] Waiting for Vault to be ready and unsealed..."
-while true; do
-  STATUS=$(vault status 2>&1)
-  if echo "$STATUS" | grep -q "Sealed.*false"; then
-    echo "[start-agent] Vault is ready and unsealed"
-    break
-  fi
-  sleep 2
-done
+# shellcheck source=vault/scripts/vault-lib.sh
+. "$(dirname "$0")/vault-lib.sh"
 
-# Wait for AppRole credentials
-echo "[start-agent] Waiting for AppRole credentials..."
-while true; do
-  if [ -f /vault/approle/role-id ] && [ -f /vault/approle/secret-id ]; then
-    echo "[start-agent] AppRole credentials found"
-    break
-  fi
-  sleep 2
-done
+APP="${VAULT_AGENT_APP:?set VAULT_AGENT_APP}"
+SECRETS_DIR="${VAULT_SECRETS_DIR:-/secrets}"
+APPROLE_DIR="${VAULT_APPROLE_DIR:-/approle}"
 
-# Clean up previous ready marker if restarting
-rm -f /secrets/.ready
+mkdir -p /tmp/agent
+vl_agent_config "$APP" "$SECRETS_DIR" "$APPROLE_DIR" "$VAULT_ADDR" "$VAULT_CACERT" >/tmp/agent/agent.hcl
+vl_expected "$APP" >/tmp/agent/expected
 
-echo "[start-agent] Starting Vault Agent..."
-exec vault agent -log-level=info -config=/vault/config/agent.hcl
+exec vault agent -log-level=info -config=/tmp/agent/agent.hcl
