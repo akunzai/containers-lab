@@ -1,89 +1,119 @@
+# Run scripts/tls-certs.sh once before the first `up` (README.md).
+x-vault-image: &vault-image
+  # https://hub.docker.com/r/hashicorp/vault
+  # Pinned to 2.x: the break-glass steps in README.md depend on Vault 2.0 behaviour.
+  image: docker.io/hashicorp/vault:2.2
+x-vault-client-env: &vault-client-env
+  VAULT_ADDR: https://vault:8200
+  VAULT_CACERT: /vault/tls-source/ca.crt
+  VAULT_MANIFEST: /vault/manifest/secrets.manifest
+
 services:
   vault:
-    # https://hub.docker.com/r/hashicorp/vault
-    image: docker.io/hashicorp/vault
-    restart: always
+    <<: *vault-image
+    entrypoint: ["/bin/sh", "/vault/scripts/start-server.sh"]
+    # Root only to copy tls.key, which the image's vault user (uid 100) may not be able to read;
+    # the image entrypoint then drops to vault. The image has no setcap, which its entrypoint
+    # otherwise calls when started as root, and with mlock off (vault.hcl) there is no IPC_LOCK
+    # capability to grant.
+    user: "0:0"
+    environment:
+      SKIP_SETCAP: "true"
+      VAULT_ADDR: https://127.0.0.1:8200
+      VAULT_CACERT: /vault/tls-source/ca.crt
     ports:
-      - "8200:8200"
-    volumes:
-      - vault_data:/vault/file
-      - vault_logs:/vault/logs
-      - approle_data:/vault/approle
-      - ./config/vault.hcl:/vault/config/vault.hcl:ro
-      - ./scripts:/vault/scripts:ro
-    environment:
-      VAULT_ADDR: http://0.0.0.0:8200
-    command: sh /vault/scripts/start-vault.sh
-    cap_add:
-      - IPC_LOCK
-    healthcheck:
-      test: ["CMD", "sh", "-c", "vault status 2>&1 | grep -q 'Sealed.*false'"]
-      interval: 3s
-      timeout: 2s
-      retries: 10
-      start_period: 10s
-  vault-agent:
-    # https://hub.docker.com/r/hashicorp/vault
-    image: docker.io/hashicorp/vault
-    restart: always
-    environment:
-      VAULT_ADDR: http://vault:8200
-      VAULT_KV_PREFIX: secret
-      VAULT_APP_PATH: app
-      SECRET_FILE_MODE: "0444"
-    command: sh /vault/scripts/start-agent.sh
-    cap_add:
-      - IPC_LOCK
+      - "127.0.0.1:8200:8200"
     volumes:
       - ./config:/vault/config:ro
       - ./scripts:/vault/scripts:ro
-      - approle_data:/vault/approle:ro
-      - secrets_data:/secrets:rw
+      # File by file: certs/ also holds the CA's private key, which no container needs.
+      - ./certs/tls.crt:/vault/tls-source/tls.crt:ro
+      - ./certs/tls.key:/vault/tls-source/tls.key:ro
+      - ./certs/ca.crt:/vault/tls-source/ca.crt:ro
+      - vault_data:/vault/file
+      - vault_audit:/vault/audit
+    healthcheck:
+      # Up, sealed or not: vault-init is what unseals it. Exit code 1 means unreachable.
+      test: ["CMD-SHELL", "vault status >/dev/null 2>&1; [ $$? -ne 1 ]"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+  vault-init:
+    <<: *vault-image
+    entrypoint: ["/bin/sh", "/vault/scripts/init.sh"]
+    command: ["up"]
+    user: "0:0"
+    environment:
+      <<: *vault-client-env
+      # uid:gid each application's agent runs as; compose.postgres.yml adds postgres.
+      VAULT_AGENT_USERS: app=10001:10001
+    volumes:
+      - ./scripts:/vault/scripts:ro
+      - ./secrets.manifest:/vault/manifest/secrets.manifest:ro
+      - ./certs/ca.crt:/vault/tls-source/ca.crt:ro
+      - vault_state:/vault/state
+      - approle_app:/approle/app
     depends_on:
       vault:
         condition: service_healthy
+  vault-agent-app:
+    <<: *vault-image
+    entrypoint: ["/bin/sh", "/vault/scripts/start-agent.sh"]
+    # The uid the application runs as, so only it can read the rendered files.
+    user: "10001:10001"
+    environment:
+      <<: *vault-client-env
+      VAULT_AGENT_APP: app
+    volumes:
+      - ./scripts:/vault/scripts:ro
+      - ./secrets.manifest:/vault/manifest/secrets.manifest:ro
+      - ./certs/ca.crt:/vault/tls-source/ca.crt:ro
+      - approle_app:/approle
+      - secrets_app:/secrets
     healthcheck:
-      test: ["CMD", "test", "-f", "/secrets/.ready"]
-      interval: 3s
+      test: ["CMD-SHELL", "while read -r f; do [ -f /secrets/$$f ] || exit 1; done < /tmp/agent/expected"]
+      interval: 2s
       timeout: 2s
-      retries: 10
-      start_period: 5s
+      retries: 30
+    depends_on:
+      vault-init:
+        condition: service_completed_successfully
   app:
     # https://hub.docker.com/_/alpine
-    image: docker.io/library/alpine
-    restart: always
+    image: docker.io/library/alpine:3.24
+    user: "10001:10001"
+    restart: unless-stopped
+    # Prints names, modes and sizes only, never a value.
     command: >
       sh -c '
-        echo "[app] Secrets loaded successfully:";
-        ls -la /run/secrets;
         while true; do
-          echo "[app] $$(date -Iseconds) Reading secrets from /run/secrets:";
+          echo "[app] $$(date -Iseconds) /run/secrets:";
+          ls -ln /run/secrets;
           for f in /run/secrets/*; do
-            [ -f "$$f" ] || continue;
-            base="$$(basename "$$f")";
-            echo "  - $$base (bytes: $$(wc -c < "$$f"))";
+            echo "  $$(basename "$$f"): $$(wc -c < "$$f") bytes readable";
           done;
           sleep 30;
         done
       '
     volumes:
-      - secrets_data:/run/secrets:ro
+      - secrets_app:/run/secrets:ro
     depends_on:
-      vault-agent:
+      vault-agent-app:
         condition: service_healthy
 
 volumes:
   vault_data:
-  vault_logs:
-  approle_data:
+  vault_audit:
+  # Lab only: the unseal key, the delivery token and a secret-admin token (README.md).
+  vault_state:
+  # Not tmpfs: a tmpfs volume is emptied when its last container stops, which is vault-init's state
+  # before the agent starts. What lands here is a role_id and a wrapping token that works once,
+  # for 5 minutes, and that the agent deletes on reading.
+  approle_app:
+  # tmpfs: rendered secrets live in memory only, owned by the application's uid.
+  secrets_app:
     driver: local
     driver_opts:
       type: tmpfs
       device: tmpfs
-      o: "size=16m"
-  secrets_data:
-    driver: local
-    driver_opts:
-      type: tmpfs
-      device: tmpfs
-      o: "size=64m"
+      o: "size=1m,mode=0700,uid=10001,gid=10001"
