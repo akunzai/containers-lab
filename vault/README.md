@@ -136,6 +136,8 @@ Vault 每次啟動都處於 sealed 狀態（[Seal/Unseal](https://developer.hash
 
 **這是 Lab 才能接受的取捨**：key 與 Vault 資料在同一台主機上，對取得主機 root 的人沒有任何保護。正式環境應將 unseal key 分持給多人（`vault operator init` 的 `-key-shares`、`-key-threshold` 與 `-pgp-keys`），或改用 auto-unseal，把保護 unseal key 的責任交給 KMS、HSM 或 transit seal。備份 `vault_data` 時不要與 unseal key 放進同一份備份。
 
+多人共用、但仍不值得接 KMS 的開發或測試主機，可以取中間做法：key 不放在 volume，而是放在主機上只有 root 能讀的檔案（`root:root`、`600`），以唯讀方式掛進 `vault-init`；`vault-init` 只在 Vault sealed 時讀它，權限不是 `600` 或 `400` 時拒絕使用。主機重開機後一樣能自動恢復，key 也不會跟著 volume 備份或複製出去。少了這一步、只在部署時由保管人手動 unseal，主機一重開機，相依 Agent 的應用程式就會停在 `Created` 起不來。
+
 ### mlock
 
 `config/vault.hcl` 設定 `disable_mlock = true`，因此 `vault` 容器不需要 `IPC_LOCK` capability。Vault 官方不建議關閉 mlock，除非主機沒有 swap 或只使用加密的 swap（[`disable_mlock`](https://developer.hashicorp.com/vault/docs/configuration#disable_mlock)）。本 Lab 關閉的理由：unseal key 本來就放在同一顆磁碟上，讀得到 swap 的人也讀得到 key，mlock 擋不住什麼，卻要把整個 Vault 執行檔常駐鎖在記憶體裡。正式環境改用分持 key 或 auto-unseal 之後，要重新評估：保留 mlock，或關閉 swap／只用加密的 swap。
